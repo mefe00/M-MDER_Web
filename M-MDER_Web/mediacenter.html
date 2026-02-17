@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medya Merkezi - MÜMDER</title>
+  <meta name="description" content="MÜMDER'in güncel haberleri, etkinlikleri ve sosyal medya paylaşımları.">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+      <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+  <style>
+    /* === MODERN CSS DEĞİŞKENLERİ === */
+    :root {
+      --primary: #003057;      /* MÜMDER Lacivert */
+      --secondary: #1565c0;    /* MÜMDER Mavi */
+      --gold: #C5B358;         /* MÜMDER Altın */
+      --bg-light: #f4f7fa;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --radius: 16px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* === TEMEL AYARLAR === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Arka plan deseni */
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(var(--secondary) 0.5px, transparent 0.5px);
+      background-size: 24px 24px; opacity: 0.03; z-index: -1; pointer-events: none;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* === HEADER (Hero Section) === */
+    .header-section {
+      text-align: center;
+      padding: 4rem 1rem 3rem;
+      position: relative;
+    }
+    
+    .header-section h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .header-section h1::after {
+      content: ''; display: block; width: 60px; height: 5px;
+      background: var(--gold); border-radius: 3px;
+      margin: 10px auto 0;
+    }
+
+    .header-section p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* === HABER GRID === */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+      padding-bottom: 20px;
+    }
+
+    /* === HABER KARTI TASARIMI === */
+    .news-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0,0,0,0.04);
+      display: flex; flex-direction: column;
+      cursor: pointer;
+      position: relative;
+      height: 100%;
+    }
+
+    .news-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--gold);
+    }
+
+    /* Görsel Alanı */
+    .news-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .news-img-wrapper img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .news-card:hover .news-img-wrapper img {
+      transform: scale(1.1);
+    }
+
+    /* Tarih Rozeti */
+    .date-badge {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex; align-items: center; gap: 5px;
+    }
+    
+    /* İçerik Alanı */
+    .news-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex; flex-direction: column;
+    }
+
+    .news-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .news-desc {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      flex-grow: 1;
+    }
+
+    .read-more {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--secondary);
+      display: flex; align-items: center; gap: 6px;
+      margin-top: auto;
+      transition: gap 0.2s;
+    }
+    
+    .read-more::after { content: '→'; font-size: 1.2rem; line-height: 1; }
+    .news-card:hover .read-more { gap: 10px; color: var(--primary); }
+
+    /* === YÜKLENİYOR (SKELETON) === */
+    .loading-container { text-align: center; padding: 40px; width: 100%; grid-column: 1/-1; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid #e2e8f0; border-top-color: var(--secondary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* === MODAL (HABER OKUMA) === */
+    .modal {
+      position: fixed; inset: 0;
+      background: rgba(0, 48, 87, 0.6); /* Lacivert transparan */
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal.open { display: flex; animation: fadeIn 0.3s ease; }
+    
+    .modal-card {
+      background: #fff;
+      width: 100%; max-width: 800px;
+      max-height: 90vh;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      display: flex; flex-direction: column;
+      position: relative;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-header {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #eee;
+      flex-shrink: 0;
+    }
+    .modal-header img {
+      width: 100%; height: 100%; object-fit: contain; /* Resmin tamamı görünsün */
+      background: #000; /* Kenarlar boş kalırsa siyah olsun */
+    }
+
+    .modal-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
+      color: #fff; border: none; width: 44px; height: 44px;
+      border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: 0.2s;
+    }
+    .modal-nav:hover { background: rgba(255,255,255,0.4); }
+    .modal-prev { left: 15px; } .modal-next { right: 15px; }
+
+    .modal-close {
+      position: absolute; top: 15px; right: 15px;
+      background: #fff; color: #333;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; font-size: 1.5rem; font-weight: bold;
+      cursor: pointer; z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .modal-body {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .modal-date {
+      color: var(--secondary); font-weight: 600; font-size: 0.9rem;
+      margin-bottom: 0.5rem; display: block;
+    }
+
+    .modal-title {
+      font-size: 1.8rem; font-weight: 800; color: var(--primary);
+      margin-bottom: 1.2rem; line-height: 1.3;
+    }
+
+    .modal-desc {
+      font-family: 'Merriweather', serif; /* Okuma fontu */
+      color: #333; font-size: 1.05rem; line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .modal-actions { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee; }
+    .btn-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--primary); color: #fff;
+      padding: 12px 24px; border-radius: 50px; text-decoration: none;
+      font-weight: 600; transition: 0.2s;
+    }
+    .btn-link:hover { background: var(--secondary); transform: translateY(-2px); }
+
+    /* Animasyonlar */
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+    @media (max-width: 768px) {
+      .header-section h1 { font-size: 2rem; }
+      .news-img-wrapper { height: 180px; }
+      .modal-header { height: 200px; }
+      .modal-title { font-size: 1.4rem; }
+    }
+  </style>
+
+</head>
+<body>
+  <a href="#main-content" style="position:absolute;left:-9999px">Ana içeriğe geç</a>
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="container">
+    <header class="header-section">
+      <h1>Medya Merkezi</h1>
+      <p>Marmara Üniversitesi mezunları ve mensupları için en güncel haberler, duyurular ve etkinlikler.</p>
+    </header>
+
+    <main id="main-content" role="main">
+      <section class="media-section">
+        <div class="media-grid" id="mediaGrid">
+          <div id="haberler-loading" class="loading-container">
+            <div class="spinner"></div>
+            <div style="color:var(--text-light); font-weight:500;">Haberler yükleniyor...</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <div class="modal" id="newsModal" aria-hidden="true" role="dialog">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Kapat">×</button>
+      
+      <div class="modal-header">
+        <button class="modal-nav modal-prev" id="modalPrev" style="display:none">‹</button>
+        <img loading="lazy"id="modalImg" src="" alt="Haber Görseli">
+        <button class="modal-nav modal-next" id="modalNext" style="display:none">›</button>
+      </div>
+
+      <div class="modal-body">
+        <span id="modalDate" class="modal-date"></span>
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <div id="modalDesc" class="modal-desc"></div>
+        <div class="modal-actions">
+          <a id="modalLink" href="#" target="_blank" class="btn-link" style="display:none">
+            Haberi Kaynağında Oku <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/loadcomponents.js"></script>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      // KONFIGURASYON (Dokunma)
+      const CONFIG = {
+        SHEET_ID: "1o-ZE4RIiaKh52E7Y0qlegC1Yq_Dav1ne4N7wW6XL-30",
+        GID: "313657530",
+        MAX_RETRIES: 3
+      };
+
+      // DOM Elementleri
+      const elements = {
+        grid: document.getElementById('mediaGrid'),
+        loading: document.getElementById('haberler-loading'),
+        modal: document.getElementById('newsModal'),
+        modalImg: document.getElementById('modalImg'),
+        modalTitle: document.getElementById('modalTitle'),
+        modalDate: document.getElementById('modalDate'),
+        modalDesc: document.getElementById('modalDesc'),
+        modalLink: document.getElementById('modalLink'),
+        modalClose: document.getElementById('modalClose'),
+        modalPrev: document.getElementById('modalPrev'),
+        modalNext: document.getElementById('modalNext')
+      };
+
+      let state = { rowsRef: [], modalIdx: 0, imgIdx: 0, isLoading: false };
+
+      // YARDIMCI FONKSİYONLAR
+      const utils = {
+        humanDate: d => d ? d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : "",
+        
+        parseDate: raw => {
+          if (!raw) return null;
+          if (typeof raw === 'object' && ('f' in raw || 'v' in raw)) raw = raw.f || raw.v;
+          const s = String(raw).trim();
+          const p = s.split(/[\/\.\-]/);
+          // Google formatı genelde YYYY-MM-DD veya Date(xxxx)
+          // Basit parse:
+          if(s.includes('Date')) return new Date(eval("new " + s).getTime()); // Google JSON Date formatı
+          let Y, M, D;
+          if (p[0].length === 4) { Y = +p[0]; M = +p[1]; D = +p[2]; } 
+          else { D = +p[0]; M = +p[1]; Y = +p[2]; }
+          return new Date(Y, (M || 1) - 1, D || 1);
+        },
+
+        parseImages: value => {
+          if (!value) return [];
+          return String(value).split(",").map(s => s.trim()).filter(Boolean);
+        },
+
+        sanitizeHtml: str => {
+          const div = document.createElement('div');
+          div.textContent = str;
+          return div.innerHTML;
+        }
+      };
+
+      // DATA İŞLEME
+      const dataProcessor = {
+        pickCols: cols => cols.map(c => (c.label || "").toLowerCase()),
+
+        normalize: (json, cols) => {
+          try {
+            const idx = {
+              baslik: cols.indexOf("başlık"),
+              ozet: cols.indexOf("özet"),
+              gorseller: cols.indexOf("görsel url"),
+              link: cols.indexOf("bağlantı"),
+              tarih: cols.indexOf("yayın tarihi"),
+              yayinla: cols.indexOf("yayınla")
+            };
+
+            return (json.table.rows || []).map(r => {
+                const c = r.c;
+                if(!c) return null;
+                return {
+                    baslik: utils.sanitizeHtml((c[idx.baslik]?.v) ?? ""),
+                    ozet: utils.sanitizeHtml((c[idx.ozet]?.v) ?? ""),
+                    images: utils.parseImages((c[idx.gorseller]?.v) ?? ""),
+                    link: (c[idx.link]?.v) ?? "",
+                    tarih: utils.parseDate(c[idx.tarih]),
+                    yayinla: ((c[idx.yayinla]?.v) ?? "").toString().toLowerCase()
+                };
+              })
+              .filter(x => x && !(x.yayinla.includes("hayır") || x.yayinla === 'false'))
+              .sort((a, b) => (b.tarih || 0) - (a.tarih || 0));
+          } catch (error) {
+            console.error('Data error:', error);
+            return [];
+          }
+        }
+      };
+
+      // MODAL İŞLEMLERİ
+      const modal = {
+        open: i => {
+          state.modalIdx = i; state.imgIdx = 0;
+          const item = state.rowsRef[i];
+          if (!item) return;
+
+          const firstImg = item.images[0] || "";
+          elements.modalImg.src = firstImg;
+          elements.modalImg.style.display = firstImg ? 'block' : 'none';
+
+          elements.modalTitle.textContent = item.baslik;
+          elements.modalDate.textContent = utils.humanDate(item.tarih);
+          elements.modalDesc.textContent = item.ozet;
+
+          if (item.link && item.link !== "#") {
+            elements.modalLink.href = item.link;
+            elements.modalLink.style.display = 'inline-flex';
+          } else {
+            elements.modalLink.style.display = 'none';
+          }
+
+          const multi = item.images.length > 1;
+          elements.modalPrev.style.display = multi ? 'flex' : 'none';
+          elements.modalNext.style.display = multi ? 'flex' : 'none';
+
+          elements.modal.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        },
+        close: () => {
+          elements.modal.classList.remove('open');
+          document.body.style.overflow = '';
+        },
+        navImg: delta => {
+          const item = state.rowsRef[state.modalIdx];
+          if (!item || item.images.length < 2) return;
+          state.imgIdx = (state.imgIdx + delta + item.images.length) % item.images.length;
+          elements.modalImg.src = item.images[state.imgIdx];
+        }
+      };
+
+      // RENDER (GÖRÜNTÜLEME)
+      const render = rows => {
+        state.rowsRef = rows;
+        elements.loading?.remove();
+
+        if (!rows.length) {
+          elements.grid.innerHTML = '<div style="text-align:center; width:100%; padding:20px; color:#666;">Henüz haber yok.</div>';
+          return;
+        }
+
+        // YENİ KART TASARIMI HTML'İ BURADA
+        elements.grid.innerHTML = rows.map((item, i) => `
+          <article class="news-card" onclick="window.openNews(${i})">
+            <div class="news-img-wrapper">
+              <span class="date-badge">📅 ${item.tarih ? item.tarih.toLocaleDateString('tr-TR') : 'Tarihsiz'}</span>
+              ${item.images[0] 
+                ? `<img loading="lazy"src="${item.images[0]}" alt="${item.baslik}" loading="lazy">` 
+                : `<div style="width:100%;height:100%;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;">Görsel Yok</div>`
+              }
+            </div>
+            <div class="news-content">
+              <h3 class="news-title">${item.baslik}</h3>
+              <p class="news-desc">${item.ozet}</p>
+              <div class="read-more">Devamını Oku</div>
+            </div>
+          </article>
+        `).join('');
+      };
+
+      // GLOBAL FONKSİYON (HTML içinden çağırmak için)
+      window.openNews = (idx) => modal.open(idx);
+
+      // DATA ÇEKME
+      const fetchData = async () => {
+        if (state.isLoading) return;
+        state.isLoading = true;
+        
+        try {
+          const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&gid=${CONFIG.GID}`;
+          const res = await fetch(url);
+          const text = await res.text();
+          
+          // Google JSON temizleme
+          const json = JSON.parse(text.substr(47).slice(0, -2));
+          
+          const cols = dataProcessor.pickCols(json.table.cols);
+          const data = dataProcessor.normalize(json, cols);
+          
+          render(data);
+        } catch (error) {
+          console.error(error);
+          elements.grid.innerHTML = '<div style="color:red; text-align:center; width:100%;">Haberler yüklenirken hata oluştu.</div>';
+        } finally {
+          state.isLoading = false;
+        }
+      };
+
+      // INIT
+      const init = () => {
+        fetchData();
+        
+        // Modal Eventleri
+        elements.modalClose.onclick = modal.close;
+        elements.modal.onclick = (e) => { if(e.target === elements.modal) modal.close(); };
+        elements.modalPrev.onclick = () => modal.navImg(-1);
+        elements.modalNext.onclick = () => modal.navImg(1);
+        
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') modal.close();
+          if (elements.modal.classList.contains('open')) {
+            if(e.key === 'ArrowLeft') modal.navImg(-1);
+            if(e.key === 'ArrowRight') modal.navImg(1);
+          }
+        });
+      };
+
+      document.addEventListener('DOMContentLoaded', init);
+
+    })();
+  </script>
+</body>
+</html>

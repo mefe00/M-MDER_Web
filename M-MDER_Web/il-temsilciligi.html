@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İl Temsilcileri - MÜMDER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+    <style>
+        /* === TEMEL STİLLER === */
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #1976d2;
+            --background-gradient: linear-gradient(135deg, #f4f8fc 0%, #e3f2fd 100%);
+            --card-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
+            --card-hover-shadow: 0 16px 40px rgba(21, 101, 192, 0.15);
+            --header-font: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        #particles-js { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .main-content { padding: 4rem 1rem; position: relative; z-index: 1; }
+
+        .section-title {
+            font-family: var(--header-font); font-weight: 900;
+            font-size: clamp(2.2rem, 6vw, 3.5rem); text-align: center; margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .members-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem; max-width: 1400px; margin: 0 auto;
+        }
+
+        .member-card-container {
+            perspective: 1500px; min-height: 420px; opacity: 0;
+            animation: fadeInUp 0.8s ease-out both; animation-delay: var(--delay, 0s); position: relative;
+        }
+        .member-card-container::before {
+            content: ""; position: absolute; inset: -6px; border: 2.5px solid var(--secondary-color);
+            border-radius: 24px; opacity: 0.6; pointer-events: none;
+        }
+
+        .member-flip-card {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); transform-style: preserve-3d;
+        }
+        .member-card-container:hover .member-flip-card:not(.flipped) {
+            transform: rotateY(var(--rotateY, 0)) rotateX(var(--rotateX, 0));
+        }
+        .member-flip-card.flipped { transform: rotateY(180deg) !important; }
+
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; background: #fff; box-shadow: var(--card-shadow); border: 1px solid #e3f2fd;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            text-align: center; padding: 1.5rem; overflow: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg); justify-content: space-around;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: #fff;
+        }
+
+        .member-image {
+            width: 140px; height: 140px; object-fit: cover; border-radius: 50%;
+            border: 5px solid #fff; margin-bottom: 1rem; box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+            transition: all 0.4s ease; background-color: #e3f2fd;
+        }
+        .member-card-container:hover .member-image { transform: scale(1.05); }
+
+        .member-name {
+            font-family: var(--header-font); font-size: 1.3rem; font-weight: 700;
+            color: var(--primary-color); margin-bottom: 0.5rem;
+        }
+        .card-back .member-name { color: #fff; }
+
+        .member-position {
+            color: var(--secondary-color); font-weight: 500; font-size: 1rem; margin-bottom: 1rem;
+        }
+        .card-back .member-position { color: rgba(255,255,255,0.8); }
+
+        .member-description { font-size: 0.9rem; line-height: 1.6; color: #fff; }
+
+        .action-button {
+            background: transparent; border: 2px solid var(--secondary-color);
+            padding: 0.6rem 1.5rem; border-radius: 50px; color: var(--secondary-color);
+            font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-top: 1rem;
+        }
+        .action-button:hover { background: var(--secondary-color); color: #fff; }
+        .card-back .action-button { border-color: #fff; color: #fff; }
+        .card-back .action-button:hover { background: #fff; color: var(--secondary-color); }
+
+        /* Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(244, 248, 252, 0.8); backdrop-filter: blur(8px);
+        }
+        .modal.active {
+            display: flex; align-items: center; justify-content: center; animation: modalFadeIn 0.5s ease-out;
+        }
+        .modal-content {
+            background: #fff; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh;
+            overflow-y: auto; position: relative; border: 1px solid #e3f2fd;
+            box-shadow: 0 20px 60px rgba(21, 101, 192, 0.2);
+            animation: modalSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-header { padding: 1.5rem; text-align: center; }
+        .modal-image {
+            width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
+            margin: 0 auto 1.5rem; border: 4px solid var(--secondary-color); background-color: #e3f2fd;
+        }
+        .modal-name { font-family: var(--header-font); font-size: 1.8rem; color: var(--primary-color); }
+        .modal-position { color: var(--secondary-color); font-size: 1.1rem; margin: 0.5rem 0; }
+        
+        /* Modal Biyografi Stilleri */
+        .modal-bio { line-height: 1.7; font-size: 0.95rem; text-align: left; padding: 0 1.5rem 1.5rem; }
+        .modal-bio p { margin-bottom: 1rem; }
+        .modal-bio ul { list-style: none; padding-left: 0; margin-top: 0.5rem; }
+        .modal-bio li { margin-bottom: 0.5rem; display: flex; align-items: center; }
+        .modal-bio strong { color: var(--primary-color); }
+
+        .close-modal {
+            position: absolute; top: 1rem; right: 1rem; background: #f0f6ff; border: none;
+            color: var(--primary-color); width: 40px; height: 40px; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease;
+        }
+        .close-modal:hover { background: var(--secondary-color); color: #fff; transform: rotate(90deg); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalSlideIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        @media (min-width: 768px) { .main-content { padding: 4rem 2rem; } }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <h1 class="section-title">İL TEMSİLCİLERİ</h1>
+        <div class="members-grid" id="membersGrid"></div>
+    </main>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn" aria-label="Kapat">&times;</button>
+            <div class="modal-header">
+                <img id="modalImage" class="modal-image" src="" alt="">
+                <h2 id="modalName" class="modal-name"></h2>
+                <p id="modalPosition" class="modal-position"></p>
+            </div>
+            <div id="modalBio" class="modal-bio"></div>
+        </div>
+    </div>
+
+    <script>
+        const boardMembers = [
+            // Mevcut Görselli kişiler
+            {
+                id: 1,
+                name: 'Bekir Çete',
+                position: 'Balıkesir İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/bekir-çete.webp',
+                bio: `
+                    <p>Hatay İskenderun doğumlu. 1994 İskenderun İmam Hatip Lisesi mezunu, 2001 Marmara İlahiyat mezunu.</p>
+                    <p>İlk önce Bab-ı Alem Uluslararası Öğrenci Derneği'nde öğrenci başkanlığı, İHH İnsani Yardım Vakfı bölge koordinatörlüğü yaptı.</p>
+                    <p>Şu an Balıkesir merkezde Din Kültürü öğretmenliği ve aynı zamanda İHH İnsani Yardım Vakfı öğretmen akademisi sorumluluğu yapmaktadır.</p>
+                    <p>2 çocuk babası olarak Balıkesir merkezde yaşamaktadır.</p>
+                `
+            },
+            {
+                id: 2,
+                name: 'Recep Baysal',
+                position: 'Hatay İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/recep-baysal.webp',
+                bio: `
+                    <p>1976 yılında Payas'ta dünyaya geldi.</p>
+                    <p>İlk, orta ve lise eğitimini doğduğu şehirde tamamlayan Baysal, 1993 yılında Marmara Üniversitesi Kimya Öğretmenliği (İngilizce) bölümünü kazandı.</p>
+                    <p>1998 yılında İstanbul'da düzenlenen ve çeşitli İslam ülkelerinden çok sayıda akademisyen ve devlet adamının da katıldığı IIFSO (Uluslararası Müslüman Öğrenci Dernekleri Federasyonu) toplantılarında aktif olarak danışmanlık ve tercümanlık görevlerinde bulundu.</p>
+                    <p>1998 yılında İskenderun Barbaros Lisesi'nde öğretmenlik görevine başlayan Recep Baysal; İskenderun TSO Lisesi, İbni Sina Anadolu Lisesi ve İDÇ Anadolu Lisesi'nde görev yaptı.</p>
+                    <p>2006 yılında Hatay'da ilk olarak açılan Tosçelik Fen Lisesi'ne kurucu müdür olarak görevlendirildi. Kurucu müdürlükten sonra Kimya Öğretmeni olarak aynı okulda görevine devam etti.</p>
+                    <p>Millî Eğitim Bakanlığının Comenius projesi kapsamında 2009 yılında Almanya ve 2012 yılında Polonya ziyaretlerinde bulundu.</p>
+                    <p>Baysal, sosyal sorumluluk kapsamında gençlerimizin millî ve manevî değerlere uygun yetişmesi için Anadolu Gençlik Derneği (AGD) Payas İlçe Başkanlığı ve AGD İl Başkan Yardımcılığı görevlerinde bulundu.</p>
+                    <p>Tuba Hanım ile evli olan Baysal'ın Nurşen, İhsan ve Ahmet Salih isimlerinde üç evladı vardır.</p>
+                    <p>Baysal, iyi derecede İngilizce bilmektedir.</p>
+                `
+            },
+            {
+                id: 3,
+                name: 'Mehmet Yüzücü',
+                position: 'Sakarya İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/mehmet-yuzucu.webp',
+                bio: `
+                    <p>1980 Siverek / Şanlıurfa doğumlu. İlk, orta ve lise tahsilini Siverek'te tamamladı. Marmara Üniversitesi Türk Dili ve Edebiyat Öğretmenliği 2003 mezunudur.</p>
+                    <p>İstanbul'da farklı özel okullarda uzun yıllar Türk Dili ve Edebiyatı Öğretmenliği ve Zümre Başkanlığı yaptı. Sabahattin Zaim Üniversitesi Sosyoloji bölümünde yüksek lisans ders dönemini bitirdi. SAÜ Vakfı Özel Okullarında 1 yıl lise müdürlüğü, 2 yıl genel müdürlük yaptı.</p>
+                    <p>Sakarya Büyükşehir Belediyesi'nde 1 yıl Kültür ve Sosyal İşler Dairesi Koordinatörlüğü yaptı, ardından Sürdürülebilir Akıllı Şehirler Müdürlüğü görevinde bulundu. Halen Sakarya Büyükşehir Belediyesi'nde görev yapmaktadır.</p>
+                    <p>Çocuk edebiyatı alanında eserler üretmeyi ve şehirlere yönelik özgün projeler yapmayı; sinema, müzik ve edebiyatla ilgilenmeyi seviyor. Evli ve dört çocuk babasıdır.</p>
+                    <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+                    <strong><i class="fas fa-feather-alt" style="margin-right:5px;"></i> Eserleri:</strong>
+                    <ul style="margin-top:10px;">
+                        <li><i class="fas fa-book" style="color:#1976d2; margin-right:8px; font-size:0.8em;"></i> Gönül Tarifi (Şiir)</li>
+                        <li><i class="fas fa-book" style="color:#1976d2; margin-right:8px; font-size:0.8em;"></i> İstiklal Marşı Atlası</li>
+                        <li><i class="fas fa-book" style="color:#1976d2; margin-right:8px; font-size:0.8em;"></i> Sakarya'nın Se'si – Sakarya Deyince</li>
+                        <li><i class="fas fa-book" style="color:#1976d2; margin-right:8px; font-size:0.8em;"></i> Sakarya Şiir Ağacı (Şiir)</li>
+                    </ul>
+                `
+            },
+            {
+                id: 4,
+                name: 'Mehmet Çorak',
+                position: 'Konya İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/Mehmet_Corak.webp',
+                bio: `
+                   <p>Mehmet ÇORAK, 1977 yılında Konya'nın Seydişehir ilçesinde doğmuştur. İlköğrenimini Ketenli Kasabasında, Ortaöğrenimini Seydişehir Endüstri Meslek Lisesinde tamamlamıştır. 2000 yılında "Marmara Üniversitesi Teknik Eğitim Fakültesin'den" mezun olmuş, 2014 yılında Necmettin Erbakan Üniversitesinde "Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi" alanında yüksek lisansını tamamlamıştır.</p>
+                   <p>Meslek hayatına 2000–2002 yılları arasında Konya'da Milli Gençlik Vakfında Ortaöğretim Yurt Müdürü olarak başlayan ÇORAK, 2002 yılında Van Başkale'de sınıf öğretmeni olarak Millî Eğitim Bakanlığı bünyesinde göreve başlamıştır. 2005 yılında Konya'ya tayin olmuş, 2013 yılına kadar Konya'nın merkez ve taşra ilçelerinde Sınıf Öğretmeni olarak görev yapmıştır.</p>
+                   <p>2013–2014 yıllarında Konya İl Millî Eğitim Müdürlüğü AR-GE biriminde görev alan Mehmet ÇORAK, 2014 yılında alan değişikliği yaparak Metal Teknolojisi Öğretmeni olmuştur. Bu süreçte mesleki eğitim, okul gelişimi ve proje çalışmalarında aktif sorumluluk üstlenmiştir</p>
+                   <p>2014–2017 yılları arasında Ahi Evran Mesleki Eğitim Merkezinde Okul Müdürü olarak görev yapmış, bu dönemde "AHİYAN VE MESLEK AHLAKI" adlı kitabını yayımlamıştır. 2017–2023 yılları arasında ise Konya Otelcilik ve Turizm Meslek Lisesinde Okul Müdürlüğü görevini yürütmüştür.</p>
+                   <p>Konya'da Cihannüma ve ÖĞDER başta olmak üzere çeşitli Vakıf ve Derneklerin yönetimlerinde aktif görev alan Mehmet ÇORAK, 2023 yılından itibaren Konya Mesleki ve Teknik Anadolu Lisesinde başöğretmen olarak görevine devam etmektedir. Evli ve üç kız babasıdır.</p>
+                `
+            },
+            {
+                id: 5,
+                name: 'Yunus Esen',
+                position: 'Bingöl İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/Yunus_Esen.webp',
+                bio: `
+                <p>1979 yılında Elazığ'ın Palu ilçesinde doğdu. İlkokul, ortaokul ve liseyi Antalya'da okudu. 2001 yılında Marmara Üniversitesi Biyoloji Öğretmenliği Bölümü'nden mezun oldu. 2002 yılında Malatya'da Sınıf Öğretmeni olarak göreve başladı.</p>
+                <p>2005 yılında Elazığ'ın Arıcak Lisesi'nde Biyoloji Öğretmeni olarak göreve başladı. 2006 yılında Fırat Üniversitesi, Biyoloji Bölümü, Zooloji Anabilim Dalında yüksek lisansını, 2011 yılında ayn bölümde doktorasını tamamladı. 2013 yılında Bayburt Üniversitesi Eğitim Fakültesinde Yardımcı Doçent olarak atandı.</p>
+                <p>2016 yılında Bingöl Üniversitesi'ne geçti. 2015 yılında Biyoloji Bilim Dalı'nda Doçent, 2020 yılında Profesör unvanı aldı. Bingöl Üniversitesi'nde fakülte yönetim kurulu üyeliği, yüksekokul müdürlüğü, dekanlık gibi görevlerde bulundu. Mümder Bingöl il temsilciliği devam etmektedir. Evli ve iki çocuk babasıdır.</p>
+                `
+            },
+            {
+                id: 6,
+                name: 'Mehmet Hadi Öztürk',
+                position: 'Adana İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/Mehmet_Hadi_Ozturk.webp',
+                bio: `
+                <p>1970 doğumludur. İlkokul, ortaokul ve lise eğitimlerini Adana'da tamamladı. 1996 yılı Marmara üniversitesi Teknik Eğitim Fakültesi Metal Eğitimi bölümünden mezun oldu.</p>
+                <p>Mezun olduğu yıl Elâzığ'da öğretmenlik görevine başladı. Özbekistan'da 5 yıl yurtdışı öğretmenlik görevinde bulundu. Evli ve 4 çocuklu olup Adana'da okul müdürü olarak görev yapmaktadır.</p>
+                `
+            },
+            {
+                id: 7,
+                name: 'Hasan Torun',
+                position: 'Bursa İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/Hasan_Torun.webp',
+                bio: `
+                <p>01.07.1978 tarihinde Ş.Urfa / Siverek'te dünyaya geldi. İlk, orta ve Liseyi Siverek'te okudu. 1997-2001 yılları arasında Marmara Üniversitesi TEF Elektrik Öğretmenliğini okudu. Kısa bir süre İstanbul'da özel sektörde çalıştı.</p>        
+                <p>2004 yılında Bursa'ya yerleşti. 2005 yılında Baykal Makina firmasında Servis Mühendisi olarak çalışmaya başladı. 2014 yılında Teslamak Makine ve Teslabend firmalarının kurucu ortağı olarak Sac işleme makinaları imalatına başladı. Halen Teslamak Makine YKB olarak çalışmaya devam ediyor. Evli, 2 kız çocuğu babasıdır. Kendi derdini anlatacak kadar Türkçe, İngilizce ve Kürtçe konuşmaktadır.</p>
+                `   
+            },
+            {
+                id: 8,
+                name: 'Dr. Abdullah Yeşil',
+                position: 'Şanlıurfa İl Temsilcisi',
+                image: 'image/Kurumsal/İl-Temsilciligi/Abdullah_yeşil.webp',
+                bio: `
+                    <div class="bio-content">
+                        <h4 style="text-align: center; color: #333;">YEMİNLİ MALİ MÜŞAVİR<br>BAĞIMSIZ DENETÇİ<br>UZLAŞTIRMACI</h4>
+                        <hr>
+                        <h5>1) EĞİTİM</h5>
+                        <ul>
+                            <li><strong>DOKTORA:</strong> Aston American University Yönetim Bilimleri Ana Bilim Dalı'nda "Lider-Üye Etkileşimi İle İş Tatmini Arasındaki İlişkinin İncelenmesi Ve Bir Alan Araştırması" tezi ile Doktora Eğitimini tamamladı.</li>
+                            <li><strong>YÜKSEK LİSANS / MASTER:</strong> Marmara Üniversitesi Sosyal Bilimler Enstitüsü'nde "Doğu ve Batıda Yönetim Bilimi Düşüncesinin Öncüleri Machiavelli ve Nizamü'l Mülk Örneği" adlı tezi ile Master Eğitimini tamamladı.</li>
+                            <li><strong>LİSANS:</strong> Marmara Üniversitesi, İşletme Fakültesini bitirdi.</li>
+                            <li><strong>LİSE:</strong> Suruç İmam Hatip Lisesini bitirdi.</li>
+                        </ul>
+                        <h5>A) BİLDİĞİ DİLLER</h5>
+                        <ul><li>1) Türkçe</li><li>2) Kürtçe</li><li>3) Arapça</li><li>4) İngilizce</li><li>5) Osmanlıca Türkçesi</li></ul>
+                    </div>
+                `
+            },
+            // HTML'de olmayan, CSV'den eklenen yeni kişiler
+            { id: 14, name: 'Abdurrahim Doğan', position: 'Adıyaman İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AD', bio: '<p>Adıyaman il temsilcimiz Abdurrahim Doğan. Mesleği: Yönetici.</p>' },
+            { id: 15, name: 'Mehmet Şafi Erim', position: 'Ağrı İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MŞE', bio: '<p>Ağrı il temsilcimiz Mehmet Şafi Erim. Mesleği: GSB Uzman.</p>' },
+            { id: 16, 
+              name: 'Özgür Eryiğit', 
+              position: 'Amasya İl Temsilcisi', 
+              image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=ÖE', 
+              bio: `
+              <p>04.09.1979 Zonguldak/Ereğli doğumluyum.</p> 
+              <p>İlk, orta ve liseyi Ereğli’de tamamladım. 1998-2003 yılında Marmara Üniversitesi-Atatürk Eğitim Fakültesi Coğrafya öğretmenliği bölümünde lisans eğitimini tamamladım.</p> 
+              <p>2003 yılından itibaren Milli eğitim bakanlığında öğretmen olarak çalışmaktayım. Hali hazırda Amasya/Merkezde Coğrafya öğretmeni olarak çalışmaktayım. Çeşitli sivil toplum kuruluşlarında faal olarak çalışmalarımı sürdürmekteyim.</p>` },
+            { id: 17, name: 'Adem Doğan', position: 'Ankara İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AD', bio: '<p>Ankara il temsilcimiz Adem Doğan. Mesleği: Genel Müdür.</p>' },
+            { id: 18, name: 'Abdil Arı', position: 'Antalya İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AA', bio: '<p>Antalya il temsilcimiz Abdil Arı. Mesleği: Banka Müdürü.</p>' },
+          { 
+    id: 19, 
+    name: 'İbrahim Rüzgar', 
+    position: 'Batman İl Temsilcisi', 
+    image: 'image/Kurumsal/İl-Temsilciligi/ibrahim_ruzgar.webp', 
+    bio: `
+        <div class="bio-content" style="text-align: left;">
+            <div style="background: #f8fbff; border-left: 4px solid #1565c0; padding: 10px; margin-bottom: 15px;">
+                <h5 style="color: #1565c0; margin-bottom: 5px;"><i class="fas fa-file-alt"></i> ÖZGEÇMİŞ ÖZETİ</h5>
+                <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                    <tr><td style="padding: 2px; font-weight: bold; width: 40%;">Doğum Yeri/Tarihi:</td><td style="padding: 2px;">Batman / 23.09.1984</td></tr>
+                    <tr><td style="padding: 2px; font-weight: bold;">Medeni Durumu:</td><td style="padding: 2px;">Evli</td></tr>
+                    <tr><td style="padding: 2px; font-weight: bold;">İletişim Tlf:</td><td style="padding: 2px;">0 506 297 48 99</td></tr>
+                    <tr><td style="padding: 2px; font-weight: bold;">E-Posta:</td><td style="padding: 2px;">egoruzgar@gmail.com</td></tr>
+                </table>
+            </div>
+
+            <h5 style="color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 5px; margin-bottom: 10px;">
+                <i class="fas fa-user-graduate"></i> EĞİTİM BİLGİLERİ
+            </h5>
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 15px; font-size: 0.9rem;">
+                <li style="margin-bottom: 5px;"><i class="fas fa-university" style="color: #1976d2; width: 20px;"></i> <strong>Marmara Üniversitesi:</strong> Sınıf Öğretmenliği (2003-2007)</li>
+                <li style="margin-bottom: 5px;"><i class="fas fa-graduation-cap" style="color: #1976d2; width: 20px;"></i> <strong>Yüksek Lisans:</strong> Turizm İşletmeciliği (2022-2024)</li>
+                <li style="margin-bottom: 5px;"><i class="fas fa-school" style="color: #1976d2; width: 20px;"></i> <strong>Lise:</strong> Batman YDAL (1998-2002)</li>
+            </ul>
+
+            <h5 style="color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 5px; margin-bottom: 10px;">
+                <i class="fas fa-briefcase"></i> İŞ TECRÜBELERİ
+            </h5>
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 15px; font-size: 0.9rem;">
+                <li style="margin-bottom: 5px;"><i class="fas fa-arrow-right" style="color: #1565c0; width: 20px;"></i> <strong>Batman Gençlik Hizmetleri Müdürü</strong> (2019 - Devam)</li>
+                <li style="margin-bottom: 5px;"><i class="fas fa-arrow-right" style="color: #1565c0; width: 20px;"></i> <strong>Batman Büro Memur-Sen Şube Başkanı</strong> (2025 - Devam)</li>
+                <li style="margin-bottom: 5px;"><i class="fas fa-history" style="color: #757575; width: 20px;"></i> Kozluk Gençlik Merkezi Müdürü (2017 - 2019)</li>
+                <li style="margin-bottom: 5px;"><i class="fas fa-history" style="color: #757575; width: 20px;"></i> Sabri Ülker İ.Ö.O Sınıf Öğretmenliği (2007 - 2016)</li>
+            </ul>
+
+            <h5 style="color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 5px; margin-bottom: 10px;">
+                <i class="fas fa-language"></i> DİLLER
+            </h5>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span style="background: #1565c0; color: #fff; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem;">Türkçe</span>
+                <span style="background: #e3f2fd; color: #1565c0; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem; border: 1px solid #1565c0;">İngilizce (Orta-İleri)</span>
+                <span style="background: #e3f2fd; color: #1565c0; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem; border: 1px solid #1565c0;">Arapça (Orta)</span>
+                <span style="background: #e3f2fd; color: #1565c0; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem; border: 1px solid #1565c0;">Kürtçe</span>
+            </div>
+        </div>
+    ` 
+},
+            { id: 20, name: 'Murat Büyük', position: 'Çanakkale İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MB', bio: '<p>Çanakkale il temsilcimiz Murat Büyük. Mesleği: İl Müdür Yardımcısı.</p>' },
+            { id: 21, name: 'Selçuk Akıcı', position: 'Osmaniye İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=SA', bio: '<p>Osmaniye il temsilcimiz Selçuk Akıcı. Mesleği: Avukat.</p>' },
+            { id: 22, name: 'Bahadır Şimşek', position: 'Çorum İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=BŞ', bio: '<p>Çorum il temsilcimiz Bahadır Şimşek. Mesleği: Avukat.</p>' },
+            { id: 23, name: 'Bahattin Beyazoğlu', position: 'Denizli İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=BB', bio: '<p>Denizli il temsilcimiz Bahattin Beyazoğlu. Mesleği: Belediye Uzman.</p>' },
+            { id: 24, name: 'Cemil Keskin', position: 'Düzce İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=CK', bio: '<p>Düzce il temsilcimiz Cemil Keskin. Mesleği: Doktor-Yönetici.</p>' },
+            { id: 25, name: 'Mehmet Şirin Kaya', position: 'Edirne İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MŞK', bio: '<p>Edirne il temsilcimiz Mehmet Şirin Kaya. Mesleği: İmam.</p>' },
+            { id: 26, name: 'Yusuf Gökbakan', position: 'Elazığ İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=YG', bio: '<p>Elazığ il temsilcimiz Yusuf Gökbakan. Mesleği: Öğretmen.</p>' },
+            { id: 27, name: 'Ayetullah Araz', position: 'Erzurum İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AA', bio: '<p>Erzurum il temsilcimiz Ayetullah Araz. Mesleği: Müdür.</p>' },
+            { id: 28, name: 'Mustafa Bozgeyik', position: 'Gaziantep İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MB', bio: '<p>Gaziantep il temsilcimiz Mustafa Bozgeyik. Mesleği: Müdür.</p>' },
+            { id: 29, name: 'Nizamettin Bilici', position: 'Van İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=NB', bio: '<p>Van il temsilcimiz Nizamettin Bilici. Mesleği: Öğretmen.</p>' },
+            { id: 30, name: 'Selim Kılıç', position: 'Uşak İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=SK', bio: '<p>Uşak il temsilcimiz Selim Kılıç. Mesleği: İş İnsanı.</p>' },
+            { id: 31, name: 'Muzaffer Katar', position: 'Tokat İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MK', bio: '<p>Tokat il temsilcimiz Muzaffer Katar. Mesleği: Doçent Doktor.</p>' },
+            { id: 32, name: 'Mustafa Selçuk', position: 'Karaman İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MS', bio: '<p>Karaman il temsilcimiz Mustafa Selçuk. Mesleği: Okul Müdürü.</p>' },
+            { id: 33, name: 'Serkan Kocakır', position: 'Kocaeli İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=SK', bio: '<p>Kocaeli il temsilcimiz Serkan Kocakır. Mesleği: Öğretmen.</p>' },
+            { id: 34, name: 'Mehmet Arslanhan', position: 'Sivas İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MA', bio: '<p>Sivas il temsilcimiz Mehmet Arslanhan. Mesleği: İdareci.</p>' },
+            { id: 35, name: 'Mustafa Doğan', position: 'Tekirdağ İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MD', bio: '<p>Tekirdağ il temsilcimiz Mustafa Doğan. Mesleği: Teknisyen.</p>' },
+            { id: 36, name: 'Vacit Kip', position: 'Kayseri İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=VK', bio: '<p>Kayseri il temsilcimiz Vacit Kip. Mesleği: Avukat.</p>' },
+            { id: 37, name: 'Abdurrahman Çevik', position: 'Trabzon İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AÇ', bio: '<p>Trabzon il temsilcimiz Abdurrahman Çevik. Mesleği: Anestezi Teknikeri.</p>' },
+            { id: 38, name: 'Cengiz Dilsiz', position: 'Kütahya İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=CD', bio: '<p>Kütahya il temsilcimiz Cengiz Dilsiz. Mesleği: Öğretmen.</p>' },
+            { id: 39, name: 'İsmail Demir', position: 'Kahramanmaraş İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=İD', bio: '<p>Kahramanmaraş il temsilcimiz İsmail Demir. Mesleği: Okul Müdürü.</p>' },
+            { id: 40, name: 'Selçuk Torpil', position: 'Rize İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=ST', bio: '<p>Rize il temsilcimiz Selçuk Torpil. Mesleği: Milli Eğitim Müdür Yardımcısı.</p>' },
+            { id: 41, name: 'Erdal Eş', position: 'Samsun İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=EŞ', bio: '<p>Samsun il temsilcimiz Erdal Eş. Mesleği: Okul Müdürü.</p>' },
+            { id: 42, name: 'Sabit Kılıç', position: 'İzmir İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=SK', bio: '<p>İzmir il temsilcimiz Sabit Kılıç. Mesleği: Öğretmen.</p>' },
+            { id: 43, name: 'Resul Düzce', position: 'Ordu İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=RD', bio: '<p>Ordu il temsilcimiz Resul Düzce. Mesleği: Öğretmen.</p>' },
+            { id: 44, name: 'Mustafa Yüce', position: 'Karabük İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=MY', bio: '<p>Karabük il temsilcimiz Mustafa Yüce. Mesleği: İş İnsanı.</p>' },
+{ 
+    id: 45, // Listendeki sıraya göre ID'yi değiştirebilirsin
+    name: 'İbrahim Çekici', 
+    position: 'Kastamonu İl Temsilcisi', // Dosyada Kastamonu/Araç bilgisi geçtiği için bu şekilde belirledim
+    image: 'image/Kurumsal/İl-Temsilciligi/ibrahim_cekici.webp', 
+    bio: `
+        <div class="bio-content" style="text-align: left; font-family: 'Exo 2', sans-serif;">
+            <div style="background: #f0f7ff; border-radius: 10px; padding: 12px; margin-bottom: 15px; border: 1px solid #d1e3f8;">
+                <h5 style="color: #1565c0; margin-top:0; margin-bottom: 8px; font-size: 1rem; border-bottom: 1px solid #1565c0; display: inline-block;">
+                    <i class="fas fa-address-card"></i> ÖZGEÇMİŞ ÖZETİ
+                </h5>
+                <table style="width: 100%; font-size: 0.85rem; color: #333;">
+                    <tr><td style="font-weight: bold; width: 45%;">Ad Soyad:</td><td>İbrahim Çekici</td></tr>
+                    <tr><td style="font-weight: bold;">Doğum Yeri/Yılı:</td><td>Kastamonu - Araç / 1979</td></tr>
+                    <tr><td style="font-weight: bold;">Medeni Durumu:</td><td>Evli (2 Çocuk Babası)</td></tr>
+                    <tr><td style="font-weight: bold;">Görev:</td><td>Okul Müdürü</td></tr>
+                </table>
+            </div>
+
+            <h5 style="color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.95rem;">
+                <i class="fas fa-university"></i> EĞİTİM BİLGİLERİ
+            </h5>
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.5;">
+                <li style="margin-bottom: 6px;"><i class="fas fa-graduation-cap" style="color: #1976d2; width: 18px;"></i> <strong>Marmara Üniversitesi:</strong> Türk Dili ve Edebiyat Öğretmenliği (Yüksek Lisans - 2003)</li>
+                <li style="margin-bottom: 6px;"><i class="fas fa-school" style="color: #1976d2; width: 18px;"></i> <strong>Lise:</strong> Çankırı Nevzat Ayaz Anadolu Öğretmen Lisesi</li>
+            </ul>
+
+            <h5 style="color: #1565c0; border-bottom: 2px solid #e3f2fd; padding-bottom: 5px; margin-bottom: 10px; font-size: 0.95rem;">
+                <i class="fas fa-briefcase"></i> İŞ TECRÜBELERİ
+            </h5>
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 15px; font-size: 0.85rem; line-height: 1.5;">
+                <li style="margin-bottom: 6px;"><i class="fas fa-caret-right" style="color: #1565c0;"></i> <strong>İğdir Ortaokulu ve İmam Hatip Ortaokulu Müdürü</strong> (2014 - Devam)</li>
+                <li style="margin-bottom: 6px;"><i class="fas fa-history" style="color: #888;"></i> İğdir Ortaokulu - Türkçe Öğretmeni (2003 - 2014)</li>
+            </ul>
+
+            <div style="background: #fff9e6; padding: 10px; border-radius: 8px; border: 1px dashed #ffc107; font-size: 0.8rem; color: #666;">
+                <i class="fas fa-info-circle" style="color: #ffc107;"></i> 2003 yılında öğretmenlik hayatına başlamış, 2014'ten itibaren idarecilik görevini sürdürmektedir.
+            </div>
+        </div>
+    ` 
+},
+            { id: 46, name: 'Akın Demir', position: 'Gümüşhane İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AD', bio: '<p>Gümüşhane il temsilcimiz Akın Demir. Mesleği: Avukat.</p>' },
+            { id: 47, name: 'Avni Karahan', position: 'Giresun İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=AK', bio: '<p>Giresun il temsilcimiz Avni Karahan. Mesleği: Öğretmen.</p>' },
+            { id: 48, name: 'Hasan Uyar', position: 'Manisa İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=HU', bio: '<p>Manisa il temsilcimiz Hasan Uyar. Mesleği: Okul Müdürü.</p>' },
+            { id: 49, name: 'Kamuran Gökdağ', position: 'Mardin İl Temsilcisi', image: 'https://placehold.co/180x180/1565c0/FFFFFF?text=KG', bio: '<p>Mardin il temsilcimiz Kamuran Gökdağ. Mesleği: Doçent Doktor.</p>' }
+        ];
+
+        function createMemberCards() {
+            const grid = document.getElementById('membersGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            boardMembers.forEach((member, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'member-card-container';
+                cardContainer.style.setProperty('--delay', (index * 0.08) + 's');
+                
+                const plainTextBio = member.bio.replace(/<[^>]*>?/gm, '');
+
+                cardContainer.innerHTML = `
+                    <div class="member-flip-card" id="memberCard_${member.id}">
+                        <div class="card-face card-front">
+                            <div>
+                                <img loading="lazy" src="${member.image}" alt="${member.name}" class="member-image" onerror="this.src='https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER';">
+                                <h3 class="member-name">${member.name}</h3>
+                                <p class="member-position">${member.position}</p>
+                            </div>
+                            <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')">
+                                <i class="fas fa-info-circle"></i> Hakkında
+                            </button>
+                        </div>
+                        <div class="card-face card-back">
+                            <h3 class="member-name">${member.name}</h3>
+                            <p class="member-description">
+                                ${plainTextBio.substring(0, 140)}...
+                            </p>
+                            <div>
+                                <button class="action-button" onclick="event.stopPropagation(); openModal(${member.id})">
+                                    <i class="fas fa-expand"></i> Detaylar
+                                </button>
+                                <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')" style="margin-top: 10px;">
+                                    <i class="fas fa-arrow-left"></i> Geri
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardContainer);
+            });
+        }
+
+        function flipCard(cardId) {
+            const allCards = document.querySelectorAll('.member-flip-card');
+            const targetCard = document.getElementById(cardId);
+            allCards.forEach(card => {
+                if (card.id !== cardId) { card.classList.remove('flipped'); }
+            });
+            if (targetCard) { targetCard.classList.toggle('flipped'); }
+        }
+
+        function openModal(memberId) {
+            const member = boardMembers.find(m => m.id === memberId);
+            if (!member) return;
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = member.image;
+            modalImage.onerror = () => { modalImage.src = 'https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER'; };
+            document.getElementById('modalName').textContent = member.name;
+            document.getElementById('modalPosition').textContent = member.position;
+            document.getElementById('modalBio').innerHTML = member.bio;
+            document.getElementById('memberModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('memberModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleCardTilt() {
+            const cards = document.querySelectorAll('.member-card-container');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -20;
+                    const rotateY = (x / width - 0.5) * 20;
+                    const flipCardEl = card.querySelector('.member-flip-card');
+                    if (flipCardEl && !flipCardEl.classList.contains('flipped')) {
+                       flipCardEl.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+                    }
+                });
+                card.addEventListener('mouseleave', () => {
+                    const flipCardEl = card.querySelector('.member-flip-card');
+                    if(flipCardEl) { flipCardEl.style.transform = ''; }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            createMemberCards();
+            handleCardTilt();
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('memberModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#42a5f5" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5, "random": true },
+          "size": { "value": 3, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#1976d2", "opacity": 0.4, "width": 1 },
+          "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } },
+          "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+      });
+    </script>
+    <script src="js/loadcomponents.js"></script>
+</body>
+</html>

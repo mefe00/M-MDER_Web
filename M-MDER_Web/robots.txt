@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sistem dosyalarını gizle (Bunlar sunucuda olacak ama Google görmesin)
+Disallow: /js/loadcomponents.js
+Disallow: /navbar.html
+Disallow: /footer.html
+
+# Site Haritası
+Sitemap: https://mumder.org/sitemap.xml

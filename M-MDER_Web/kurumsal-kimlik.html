@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurumsal Kimlik - MÜMDER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #006699;
+            --accent-color: #0099cc;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1a202c;
+            --text-light: #64748b;
+            --shadow: 0 10px 30px rgba(0, 51, 102, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            min-height: 70vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: -6rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .logo-item {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .logo-item img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 12px rgba(0, 51, 102, 0.15));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-item p {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .download-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(0, 51, 102, 0.1);
+        }
+
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+        }
+
+        .download-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 51, 102, 0.4);
+        }
+
+        .download-button i {
+            font-size: 1.3rem;
+        }
+
+        .intro-text-section {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        .intro-text-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro-text-section h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-text-section p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 1.2rem;
+        }
+
+        .color-palette-section {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 1.2s both;
+        }
+
+        .color-palette-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .color-box {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .color-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .color-sample {
+            height: 120px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .color-box:hover .color-sample {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .color-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .color-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .color-code:hover {
+            background: #e2e8f0;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            position: relative;
+            text-align: center;
+            padding-top: 2rem;
+            animation: slideInUp 1s ease-out 1.4s both;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: cardFadeIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 153, 204, 0.1) 0%, rgba(0, 153, 204, 0) 70%);
+            transform: rotate(0deg);
+            transition: transform 0.5s ease-out;
+            z-index: 0;
+        }
+
+        .value-card:hover::before {
+            transform: rotate(30deg);
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 51, 102, 0.15);
+        }
+
+        .value-card i {
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            animation: iconPulse 1.5s infinite alternate;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .value-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .value-card p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .value-card:nth-child(1) { animation-delay: 1.6s; }
+        .value-card:nth-child(2) { animation-delay: 1.8s; }
+        .value-card:nth-child(3) { animation-delay: 2.0s; }
+        .value-card:nth-child(4) { animation-delay: 2.2s; }
+        .value-card:nth-child(5) { animation-delay: 2.4s; }
+        .value-card:nth-child(6) { animation-delay: 2.6s; }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: floatUp 8s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-20px) rotate(360deg); opacity: 0; }
+        }
+
+        .floating-element:nth-child(1) { left: 10%; animation-delay: -0.5s; animation-duration: 6s; }
+        .floating-element:nth-child(2) { left: 20%; animation-delay: -1s; animation-duration: 8s; }
+        .floating-element:nth-child(3) { left: 30%; animation-delay: -2s; animation-duration: 7s; }
+        .floating-element:nth-child(4) { left: 40%; animation-delay: -3s; animation-duration: 9s; }
+        .floating-element:nth-child(5) { left: 50%; animation-delay: -4s; animation-duration: 6s; }
+        .floating-element:nth-child(6) { left: 60%; animation-delay: -5s; animation-duration: 8s; }
+        .floating-element:nth-child(7) { left: 70%; animation-delay: -6s; animation-duration: 7s; }
+        .floating-element:nth-child(8) { left: 80%; animation-delay: -7s; animation-duration: 9s; }
+
+        .back-button {
+            position: fixed;
+            top: 100px;
+            left: 2rem;
+            z-index: 1000;
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 51, 102, 0.3);
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+            }
+            .value-card {
+                padding: 2rem;
+            }
+            .logo-container {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: 50vh;
+            }
+            .main-content {
+                margin-top: -4rem;
+                padding: 0 1rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .back-button {
+                top: 100px;
+                left: 1rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            .intro-text-section, .logo-section, .color-palette-section {
+                padding: 2rem 1.5rem;
+            }
+            .logo-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .color-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Kurumsal Kimlik</h1>
+            <!-- <p class="hero-subtitle">MÜMDER'in vizyonunu, misyonunu ve değerlerini yansıtan benzersiz yüzü.</p> -->
+        </div>
+        <div class="scroll-indicator" onclick="document.querySelector('.main-content').scrollIntoView({behavior: 'smooth'})">
+            <i class="fas fa-chevron-down" style="font-size: 2rem;"></i>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <section class="logo-section">
+            <h2 style="font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MÜMDER Logosu</h2>
+            
+            <div class="logo-container">
+                <div class="logo-item">
+                    <img loading="lazy"src="image/mumder-logo-vectorel-dikey.webp" alt="MÜMDER Logo Dikey" >
+                    <p>Dikey Kullanım</p>
+                </div>
+                <div class="logo-item">
+                    <img loading="lazy"src="image/mumder-logo-vectorel-yatay.webp" alt="MÜMDER Logo Yatay">
+                    <p>Yatay Kullanım</p>
+                </div>
+            </div>
+
+            <div class="download-section">
+                <a href="downloads/mumder-logo-seti.rar" class="download-button" download>
+                    <i class="fas fa-download"></i>
+                    Logo Setini İndir
+                </a>
+            </div>
+        </section>
+
+        <section class="intro-text-section">
+            <h2>Logomuzun Anlamı</h2>
+            <p>Marmara Üniversitesi Mezun ve Mensupları Derneği (MÜMDER) logosu, derneğimizin köklü geçmişini, güçlü aidiyetini ve vizyoner geleceğini ifade eden çok katmanlı bir anlam taşımaktadır. MÜMDER logosu, derneğimizin misyonunu, değerlerini ve köklü geçmişini yansıtan güçlü bir semboldür.</p>
+
+            <h3>1. Sekiz Köşeli Yıldız (Selçuklu Motifi)</h3>
+            <p>Logonun dış çerçevesini oluşturan sekiz köşeli yıldız, Türk-İslam medeniyetinde birlik, adalet, hikmet ve erdemi temsil eder. Aynı zamanda köklü mazimizi ve medeniyetimizin kadim değerlerini geleceğe taşıma irademizi simgeler.</p>
+
+            <h3>2. Merkezdeki "m" Harfi</h3>
+            <p>Ortadaki stilize "m", hem Marmara Üniversitesi'ni hem de MÜMDER'i ifade eder. Bu, logomuzun kalbinde Marmara Üniversitesi'nden doğan bir aidiyetin, mensubiyetin ve birlikteliğin yer aldığını gösterir.</p>
+
+            <h3>3. Bütünlük ve Dayanışma</h3>
+            <p>Yıldızın kesintisiz ve kenetlenen hatları, mezunlarımız ile öğrencilerimiz arasında kurduğumuz güçlü bağı, dayanışmayı ve sürekliliği yansıtır.</p>
+
+            <h3>4. Renk ve Sadelik</h3>
+            <p>Siyah–beyaz kontrastı, ciddiyet, kurumsallık ve istikrarı; minimalist çizgiler ise MÜMDER’in sade ama güçlü kimliğini temsil etmektedir.</p>
+
+            <h3>5. Mavi Renk</h3>
+            <p>Logomuzda hâkim olan mavi renk, ilmi, irfanı ve derinliği temsil eder. Mezunlarımızın bilgi ve hikmetle donanmış bireyler olarak yetişmesini sembolize eder.</p>
+
+            <h3>6. Beyaz Renk</h3>
+            <p>Beyaz renk, saflığı, şeffaflığı ve samimiyeti ifade eder. Derneğimizin çalışmalarında adalet ve güveni esas aldığının bir göstergesidir. Siyah–beyaz kontrastı, ciddiyet, kurumsallık ve istikrarı; minimalist çizgiler ise MÜMDER'in sade ama güçlü kimliğini temsil etmektedir.</p>
+
+            <h3>7. Dikey ve Yatay Kullanım</h3>
+            <p>Logomuz hem yatay hem de dikey olarak kullanılabilmektedir. Dikey kullanım, yükselişi, istikameti ve ideallerimize doğru kararlı yürüyüşümüzü temsil eder. Yatay kullanım ise toplumsal dayanışmayı, mezunlarımızla öğrencilerimizi aynı çatı altında buluşturan bütünlüğü ifade eder.</p>
+        </section>
+
+        <section class="color-palette-section">
+            <h2>Renk Paletimiz</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">MÜMDER kurumsal kimliğinde kullanılan renk kodları. Kopyalamak için renk koduna tıklayın.</p>
+            
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-sample" style="background: #003366;"></div>
+                    <div class="color-name">Lacivert (Ana Renk)</div>
+                    <div class="color-code" onclick="copyToClipboard('#003366')" title="Kopyalamak için tıklayın">#003366</div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #006699;"></div>
+                    <div class="color-name">Koyu Mavi</div>
+                    <div class="color-code" onclick="copyToClipboard('#006699')" title="Kopyalamak için tıklayın">#006699</div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #0099cc;"></div>
+                    <div class="color-name">Açık Mavi</div>
+                    <div class="color-code" onclick="copyToClipboard('#0099cc')" title="Kopyalamak için tıklayın">#0099cc</div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #ffffff; border: 2px solid #e2e8f0;"></div>
+                    <div class="color-name">Beyaz</div>
+                    <div class="color-code" onclick="copyToClipboard('#ffffff')" title="Kopyalamak için tıklayın">#ffffff</div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #1a202c;"></div>
+                    <div class="color-name">Koyu Gri (Metin)</div>
+                    <div class="color-code" onclick="copyToClipboard('#1a202c')" title="Kopyalamak için tıklayın">#1a202c</div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #64748b;"></div>
+                    <div class="color-name">Açık Gri (İkincil Metin)</div>
+                    <div class="color-code" onclick="copyToClipboard('#64748b')" title="Kopyalamak için tıklayın">#64748b</div>
+                </div>
+            </div>
+        </section>
+
+        <h2 class="section-title">Kurumsal Kimliğimizin Temel Unsurları</h2>
+        <div class="content-grid">
+            <div class="value-card">
+                <i class="fas fa-award"></i>
+                <h3>Logo ve Amblem</h3>
+                <p>Kurumumuzun görsel sembolü ve ilk izlenimi. Değerlerimizi, misyonumuzu ve vizyonumuzu tek bir bakışta yansıtan özgün tasarımımız.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-palette"></i>
+                <h3>Renk Paleti</h3>
+                <p>Kurumsal iletişimimizde kullandığımız özel renkler, kimliğimizin duygusal ve görsel bütünlüğünü sağlar, ayırt edici bir kimlik oluşturur.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-font"></i>
+                <h3>Tipografi</h3>
+                <p>Tüm yazılı ve dijital materyallerimizde kullandığımız yazı karakterleri, mesajlarımızın profesyonel ve tutarlı bir şekilde algılanmasını sağlar.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-images"></i>
+                <h3>Görsel Materyaller</h3>
+                <p>Kartvizit, antetli kağıt, zarf, broşür, rapor ve sunum gibi basılı ve dijital tüm materyallerimizdeki grafik öğeler ve genel görsel stilimiz.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-comments"></i>
+                <h3>İletişim Dili ve Slogan</h3>
+                <p>Kurumumuzun iç ve dış iletişiminde benimsediği dil tonu, anlatım biçimi ve temel mesajımızı özetleyen akılda kalıcı ifademiz.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-globe"></i>
+                <h3>Dijital Ayak İzi</h3>
+                <p>Web sitemiz, sosyal medya hesaplarımız ve diğer tüm dijital platformlardaki varlığımız, etkileşimlerimiz ve tutarlı sunumumuz.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.createElement('div');
+                notification.textContent = 'Renk kodu kopyalandı: ' + text;
+                notification.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #003366; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; font-weight: 600;';
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 2000);
+            }).catch(() => {
+                alert('Kopyalama başarısız. Lütfen manuel olarak kopyalayın: ' + text);
+            });
+        }
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.hero-title, .hero-subtitle, .section-title, .value-card, .logo-section, .intro-text-section, .color-palette-section').forEach(el => {
+            observer.observe(el);
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroSection = document.querySelector('.hero-section');
+            const rate = scrolled * -0.5;
+            
+            if (heroSection) {
+                heroSection.style.transform = `translateY(${rate}px)`;
+            }
+        });
+
+        function createFloatingElement() {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.style.left = Math.random() * 100 + '%';
+            element.style.width = element.style.height = (Math.random() * 4 + 2) + 'px';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            
+            document.querySelector('.floating-elements').appendChild(element);
+            
+            setTimeout(() => {
+                element.remove();
+            }, (parseFloat(element.style.animationDuration) * 1000) + (parseFloat(element.style.animationDelay) * 1000) + 1000);
+        }
+
+        setInterval(createFloatingElement, 2000);
+    </script>
+</body>
+</html>

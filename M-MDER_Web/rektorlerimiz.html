@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rektörlerimiz - Marmara Üniversitesi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+    <style>
+        /* Örnek dosyadaki CSS yapısı birebir korundu */
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #1976d2;
+            --accent-color: #ffd700;
+            --background-gradient: linear-gradient(135deg, #f4f8fc 0%, #e3f2fd 100%);
+            --header-font: 'Poppins', sans-serif;
+            --body-font: 'Exo 2', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--body-font);
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-content { padding: 2rem; position: relative; max-width: 1600px; margin: 0 auto; }
+
+        .section-title {
+            font-family: var(--header-font);
+            font-weight: 900;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            text-align: center;
+            margin: 4rem 0 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            padding-bottom: 4rem;
+        }
+
+        .member-card-container {
+            perspective: 1500px;
+            height: 480px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out both;
+            animation-delay: var(--delay, 0s);
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-card-container::before {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            border: 2.25px solid var(--secondary-color);
+            border-radius: 24px;
+            opacity: 0.55;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .member-card-container:hover::before { opacity: 0.8; }
+
+        .member-flip-card {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .member-flip-card.flipped { transform: rotateY(180deg) !important; }
+
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; background: #fff; 
+            box-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
+            border: 1px solid #e3f2fd; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; 
+            padding: 1.5rem; overflow: hidden;
+        }
+
+        .card-back { 
+            transform: rotateY(180deg); 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            color: #fff; 
+            justify-content: space-between;
+            padding: 2rem 1.5rem;
+        }
+
+        .member-image {
+            width: 160px; height: 160px; object-fit: cover; border-radius: 50%;
+            border: 5px solid #fff; margin-bottom: 1.5rem; 
+            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+            transition: transform 0.4s ease;
+        }
+
+        .member-name { font-family: var(--header-font); font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem; line-height: 1.2; }
+        .member-position { color: var(--secondary-color); font-weight: 500; font-size: 1rem; margin-bottom: 1rem; }
+        .member-description { font-size: 0.9rem; line-height: 1.5; color: #fff; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
+
+        .button-group { display: flex; gap: 10px; margin-top: auto; width: 100%; justify-content: center; }
+        .action-button {
+            background: transparent; border: 2px solid var(--secondary-color);
+            padding: 0.6rem 1.2rem; border-radius: 50px; 
+            color: var(--secondary-color); font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .action-button:hover { background: var(--secondary-color); color: #fff; }
+        .card-back .action-button { border-color: #fff; color: #fff; flex: 1; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 3000; inset: 0; background: rgba(21, 101, 192, 0.4); backdrop-filter: blur(8px); }
+        .modal.active { display: flex; align-items: center; justify-content: center; animation: modalFadeIn 0.4s ease-out; }
+        .modal-content { 
+            background: #fff; border-radius: 24px; max-width: 700px; width: 90%; 
+            max-height: 85vh; overflow-y: auto; position: relative; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-header { padding: 2.5rem 2rem 1rem; text-align: center; }
+        .modal-image { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin: 0 auto 1rem; border: 4px solid var(--secondary-color); }
+        .modal-name { font-family: var(--header-font); font-size: 2rem; color: var(--primary-color); }
+        .modal-bio { padding: 2rem; line-height: 1.8; color: #444; font-size: 1.05rem; text-align: justify; }
+        
+        .close-modal { 
+            position: absolute; top: 1.5rem; right: 1.5rem; 
+            background: #f0f6ff; border: none; color: var(--primary-color); 
+            width: 40px; height: 40px; border-radius: 50%; 
+            font-size: 1.2rem; cursor: pointer; display: grid; place-items: center;
+        }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalSlideIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        #particles-js { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <h2 class="section-title">Rektörlerimiz</h2>
+        <div class="members-grid" id="rectorsGrid"></div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <div id="rectorModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <img loading="lazy" id="modalImage" src="" alt="" class="modal-image">
+                <h3 id="modalName" class="modal-name"></h3>
+                <p id="modalPosition" class="modal-position" style="color:var(--secondary-color); font-weight:600;"></p>
+            </div>
+            <div class="modal-bio" id="modalBio"></div>
+        </div>
+    </div>
+    
+    <script src="js/loadcomponents.js" defer></script>
+    <script>
+        // Görseldeki liste: Yeniden Eskiye sıralandı
+        const rectors = [
+            { id: 'okur', name: 'Prof. Dr. Emin Okur', position: '2025 - Günümüz', image: 'image/Kurumsal/Rektorlerimiz/emin-okur.webp', bio: `2025 yılı itibarıyla Marmara Üniversitesi Rektörü olarak göreve başlamıştır.` },
+            { id: 'kurt', name: 'Prof. Dr. Mustafa Kurt', position: '2021 - 2025', image: 'image/Kurumsal/Rektorlerimiz/mustafa-kurt.webp', bio: `2021-2025 yılları arasında Marmara Üniversitesi Rektörlüğü görevini yürütmüştür.` },
+            { id: 'ozvar', name: 'Prof. Dr. Erol Özvar', position: '2018 - 2021', image: 'image/Kurumsal/Rektorlerimiz/erol-ozvar.webp', bio: `2018-2021 yılları arasında Rektörlük yapmış, ardından YÖK Başkanı olarak atanmıştır.` },
+            { id: 'arat', name: 'Prof. Dr. M. Emin Arat', position: '2014 - 2018', image: 'image/Kurumsal/Rektorlerimiz/emin-arat.webp', bio: `2014-2018 yılları arasında Marmara Üniversitesi Rektörü olarak görev yapmıştır.` },
+            { id: 'gul', name: 'Prof. Dr. Zafer Gül', position: '2010 - 2014', image: 'image/Kurumsal/Rektorlerimiz/zafer-gul.webp', bio: `2010-2014 yılları arasında üniversitemizin rektörlük makamında bulunmuştur.` },
+            { id: 'pur', name: 'Prof. Dr. Necla Pur', position: '2006 - 2010', image: 'image/Kurumsal/Rektorlerimiz/necla-pur.webp', bio: `2006-2010 yılları arasında Rektörlük görevini üstlenmiştir.` },
+            { id: 'erem', name: 'Prof. Dr. Tunç Erem', position: '2002 - 2006', image: 'image/Kurumsal/Rektorlerimiz/tunc-erem.webp', bio: `2002-2006 yılları arasında Marmara Üniversitesi Rektörü olarak görev yapmıştır.` },
+            { id: 'yardimci', name: 'Prof. Dr. Turay Yardımcı', position: '1999 - 2002', image: 'image/Kurumsal/Rektorlerimiz/turay-yardimci.webp', bio: `1999-2002 yılları arasında üniversitemizde rektörlük görevini yürütmüştür.` },
+            { id: 'batirel', name: 'Prof. Dr. Ömer Faruk Batırel', position: '1992 - 1999', image: 'image/Kurumsal/Rektorlerimiz/omer-faruk-batirel.webp', bio: `1992-1999 yılları arasında Rektörlük görevini ifa etmiştir.` },
+            { id: 'oguz', name: 'Prof. Dr. Orhan Oğuz', position: '1982 - 1992', image: 'image/Kurumsal/Rektorlerimiz/orhan-oguz.webp', bio: `Marmara Üniversitesi'nin kurucu rektörüdür. 1982-1992 yılları arasında görev yapmıştır.` }
+        ];
+
+        function createRectorCards() {
+            const grid = document.getElementById('rectorsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            rectors.forEach((rector, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'member-card-container';
+                cardContainer.style.setProperty('--delay', (index * 0.08) + 's');
+
+                cardContainer.innerHTML = `
+                    <div class="member-flip-card" id="card_${rector.id}">
+                        <div class="card-face card-front">
+                            <img loading="lazy" src="${rector.image}" alt="${rector.name}" class="member-image" onerror="this.src='https://placehold.co/180x180/e3f2fd/1565c0?text=REKTÖR';">
+                            <h3 class="member-name">${rector.name}</h3>
+                            <p class="member-position">${rector.position}</p>
+                            <button class="action-button" onclick="event.stopPropagation(); flipCard('card_${rector.id}')">
+                                <i class="fas fa-info-circle"></i> Hakkında
+                            </button>
+                        </div>
+                        <div class="card-face card-back">
+                            <div style="width:100%">
+                                <h3 class="member-name">${rector.name}</h3>
+                                <p class="member-description">${rector.bio}</p>
+                            </div>
+                            <div class="button-group">
+                                <button class="action-button" onclick="event.stopPropagation(); flipCard('card_${rector.id}')">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                                <button class="action-button" onclick="event.stopPropagation(); openModal('${rector.id}')">
+                                    <i class="fas fa-expand"></i> Detay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardContainer);
+            });
+        }
+
+        window.flipCard = function(cardId) {
+            const targetCard = document.getElementById(cardId);
+            if (targetCard) targetCard.classList.toggle('flipped');
+        }
+
+        window.openModal = function(id) {
+            const rector = rectors.find(r => r.id === id);
+            if (!rector) return;
+            
+            document.getElementById('modalImage').src = rector.image;
+            document.getElementById('modalName').textContent = rector.name;
+            document.getElementById('modalPosition').textContent = rector.position;
+            document.getElementById('modalBio').innerHTML = rector.bio;
+
+            const modal = document.getElementById('rectorModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('rectorModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            createRectorCards();
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('rectorModal').addEventListener('click', (e) => { 
+                if (e.target === e.currentTarget) closeModal(); 
+            });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#42a5f5" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.4, "random": true },
+          "size": { "value": 3, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#1976d2", "opacity": 0.3, "width": 1 },
+          "move": { "enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" } },
+          "modes": { "bubble": { "distance": 200, "size": 6, "duration": 2, "opacity": 0.8 }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+      });
+    </script>
+</body>
+</html>

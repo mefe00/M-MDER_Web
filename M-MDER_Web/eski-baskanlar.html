@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eski Başkanlar - MÜMDER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+    <style>
+        /* * ==============================================
+         * TEMEL STİLLER VE DEĞİŞKENLER
+         * ==============================================
+         */
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #1976d2;
+            --background-gradient: linear-gradient(135deg, #f4f8fc 0%, #e3f2fd 100%);
+            --card-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
+            --card-hover-shadow: 0 16px 40px rgba(21, 101, 192, 0.15);
+            --header-font: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* * ==============================================
+         * PARTİCULES.JS ARKA PLAN
+         * ==============================================
+         */
+        #particles-js {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* * ==============================================
+         * ANA İÇERİK VE BAŞLIK
+         * ==============================================
+         */
+        .main-content {
+            padding: 4rem 1rem; /* Mobil için padding ayarlandı */
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: var(--header-font);
+            font-weight: 900;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* * ==============================================
+         * KART GRİD YAPISI (RESPONSIVE)
+         * ==============================================
+         */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .member-card-container {
+            perspective: 1500px;
+            min-height: 420px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out both;
+            animation-delay: var(--delay, 0s);
+            position: relative;
+        }
+    
+
+.member-card-container::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 2.5px solid var(--secondary-color);
+  border-radius: 24px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+
+        .member-flip-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .member-card-container:hover .member-flip-card:not(.flipped) {
+            transform: rotateY(var(--rotateY, 0)) rotateX(var(--rotateX, 0));
+        }
+
+        .member-flip-card.flipped {
+            transform: rotateY(180deg) !important;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e3f2fd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            justify-content: space-around;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+        }
+
+        .member-image {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+            transition: all 0.4s ease;
+            background-color: #e3f2fd;
+        }
+        
+        .member-card-container:hover .member-image {
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-family: var(--header-font);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-back .member-name {
+            color: #fff;
+        }
+
+        .member-position {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-back .member-position {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .member-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .action-button {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            color: var(--secondary-color);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .action-button:hover {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+        
+        .card-back .action-button {
+            border-color: #fff;
+            color: #fff;
+        }
+        
+        .card-back .action-button:hover {
+            background: #fff;
+            color: var(--secondary-color);
+        }
+
+        /* * ==============================================
+         * MODAL (POP-UP) PENCERESİ (RESPONSIVE)
+         * ==============================================
+         */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(244, 248, 252, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: modalFadeIn 0.5s ease-out;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid #e3f2fd;
+            box-shadow: 0 20px 60px rgba(21, 101, 192, 0.2);
+            animation: modalSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-header { padding: 1.5rem; text-align: center; }
+        .modal-image {
+            width: 150px; height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--secondary-color);
+            background-color: #e3f2fd;
+        }
+        .modal-name { font-family: var(--header-font); font-size: 1.8rem; color: var(--primary-color); }
+        .modal-position { color: var(--secondary-color); font-size: 1.1rem; margin: 0.5rem 0; }
+        .modal-bio { line-height: 1.7; font-size: 0.95rem; text-align: left; padding: 0 1.5rem 1.5rem; }
+        .close-modal {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: #f0f6ff; border: none;
+            color: var(--primary-color);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .close-modal:hover { background: var(--secondary-color); color: #fff; transform: rotate(90deg); }
+
+        /* * ==============================================
+         * ANİMASYONLAR
+         * ==============================================
+         */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        @keyframes modalSlideIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* * ==============================================
+         * RESPONSIVE İYİLEŞTİRMELERİ
+         * ==============================================
+         */
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 4rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <h2 class="section-title">Görev Yapmış Diğer Başkanlar</h2>
+        <div class="members-grid" id="membersGrid">
+            <!-- Kartlar JavaScript ile buraya eklenecek -->
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            <div class="modal-header">
+                <img loading="lazy"id="modalImage" src="" alt="" class="modal-image">
+                <h3 id="modalName" class="modal-name"></h3>
+                <p id="modalPosition" class="modal-position"></p>
+            </div>
+            <div class="modal-bio" id="modalBio"></div>
+        </div>
+    </div>
+    
+    <!-- Bileşenleri Yükleyen Script -->
+    <script src="js/loadcomponents.js"></script>
+
+    <script>
+        // ESKİ BAŞKANLAR VERİSİ
+        const boardMembers = [
+            { id: 1, name: "HASAN GÜNEŞ", position: "1994-1996 | 1999-2003", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=HG", bio: "Hasan Güneş, derneğimizin kurucu başkanlarından olup, 1994-1996 ve 1999-2003 dönemlerinde başkanlık yapmıştır." },
+            { id: 2, name: "İSMAİL KARABULUT", position: "1996-1997", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=İK", bio: "İsmail Karabulut, 1996-1997 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 3, name: "HAMDİ TOPÇU", position: "1997-1999", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=HT", bio: "Hamdi Topçu, 1997-1999 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 4, name: "ŞAHİN AVŞAR", position: "2003-2005", image: "image/Kurumsal/yonetim-kurulu/Sahin-Avsar.webp", bio: "05 Ağustos 1969 ‘da Sivas ’da doğdu. Babasının adı Bahattin, annesinin adı Ünzile ’dir. Bağımsız Denetçi, Mali Müşavir; Marmara Üniversitesi iktisadi ve idari Bilimler Fakültesi Çalışma Ekonomisi ve Endüstri İlişkiler bölümünü bitirdi. Marmara Üniversitesi Bankacılık ve Sigortaclık Enstitüsü Sigortacılık Bölümünde Sosyal Güvenlik alanında yüksek lisans yaptı. Halen Bağımsız Denetçi /Ortak olarak ve SMMM olarak çalışma hayatını sürdürmektedir. Çeşitli dernek ve platformlarda yöneticilik yapan Avşar siyasi parti programların da İşsizlik ve Sosyal Güvenliğe Devlet Katkısı konularında tez çalışmaları bulunmaktadır. Halen Müşavirlik / Bağımsız Denetçi görevini yürüten Avşar, İngilizce ve Arapça bilmekte olup, evli ve üç çocuk babasıdır." },
+            { id: 5, name: "K.SADİ BİRBİLEN", position: "2005-2007", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=KSB", bio: "K. Sadi Birbilen, 2005-2007 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 6, name: "ÖMER FARUK KARABUL", position: "2007-2011", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=ÖFK", bio: "Ömer Faruk Karabul, 2007-2011 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 7, name: "ZEKERİYA ARSLANTÜRK", position: "2011-2013", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=ZA", bio: "Zekeriya Arslantürk, 2011-2013 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 8, name: "ABDULLAH DEMİR", position: "2013-2015", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=AD", bio: "Abdullah Demir, 2013-2015 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 9, name: "ADEM CEYLAN", position: "2015-2019", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=AC", bio: "Adem Ceylan, 2015-2019 döneminde derneğimizin başkanlık görevini yürütmüştür." },
+            { id: 10, name: "ENGİN GENÇ", position: "2019-2024", image: "https://placehold.co/180x180/1565c0/FFFFFF?text=EG", bio: "Engin Genç, 2019-2024 döneminde derneğimizin başkanlık görevini yürütmüştür." }
+        ];
+
+        function createMemberCards() {
+            const grid = document.getElementById('membersGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            boardMembers.forEach((member, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'member-card-container';
+                cardContainer.style.setProperty('--delay', (index * 0.08) + 's');
+                
+                cardContainer.innerHTML = `
+                    <div class="member-flip-card" id="memberCard_${member.id}">
+                        <div class="card-face card-front">
+                            <div>
+                                <img loading="lazy"src="${member.image}" alt="${member.name}" class="member-image" onerror="this.src='https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER';">
+                                <h3 class="member-name">${member.name}</h3>
+                                <p class="member-position">${member.position}</p>
+                            </div>
+                            <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')">
+                                <i class="fas fa-info-circle"></i> Hakkında
+                            </button>
+                        </div>
+                        <div class="card-face card-back">
+                            <h3 class="member-name">${member.name}</h3>
+                            <p class="member-description">
+                                ${member.bio.substring(0, 150)}...
+                            </p>
+                            <div>
+                                <button class="action-button" onclick="event.stopPropagation(); openModal(${member.id})">
+                                    <i class="fas fa-expand"></i> Detaylar
+                                </button>
+                                <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')" style="margin-top: 10px;">
+                                    <i class="fas fa-arrow-left"></i> Geri
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardContainer);
+            });
+        }
+
+        function flipCard(cardId) {
+            const allCards = document.querySelectorAll('.member-flip-card');
+            const targetCard = document.getElementById(cardId);
+            allCards.forEach(card => {
+                if (card.id !== cardId) {
+                    card.classList.remove('flipped');
+                }
+            });
+            if (targetCard) {
+                targetCard.classList.toggle('flipped');
+            }
+        }
+
+        function openModal(memberId) {
+            const member = boardMembers.find(m => m.id === memberId);
+            if (!member) return;
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = member.image;
+            modalImage.onerror = () => { modalImage.src = 'https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER'; };
+            document.getElementById('modalName').textContent = member.name;
+            document.getElementById('modalPosition').textContent = member.position;
+            document.getElementById('modalBio').textContent = member.bio;
+            document.getElementById('memberModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('memberModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleCardTilt() {
+            const cards = document.querySelectorAll('.member-card-container');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -20;
+                    const rotateY = (x / width - 0.5) * 20;
+                    const flipCardEl = card.querySelector('.member-flip-card');
+                    if (flipCardEl && !flipCardEl.classList.contains('flipped')) {
+                       flipCardEl.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+                    }
+                });
+                card.addEventListener('mouseleave', () => {
+                    const flipCardEl = card.querySelector('.member-flip-card');
+                    if(flipCardEl) {
+                        flipCardEl.style.transform = '';
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            createMemberCards();
+            handleCardTilt();
+            
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('memberModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#42a5f5" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5, "random": true },
+          "size": { "value": 3, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#1976d2", "opacity": 0.4, "width": 1 },
+          "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } },
+          "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+      });
+    </script>
+</body>
+</html>

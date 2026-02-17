@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MÜMDER - Burs Programı</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+    <style>
+        :root {
+            --marmara-dark: #003057;
+            --marmara-blue: #005696;
+            --marmara-gold: #C5B358;
+            --marmara-gold-light: #e6dca8;
+            --bg-light: #f4f7fa;
+            --white: #ffffff;
+            --radius-lg: 24px;
+            --shadow-soft: 0 10px 40px rgba(0, 48, 87, 0.08);
+            --shadow-hover: 0 20px 60px rgba(0, 48, 87, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            background-image: 
+                radial-gradient(circle at 5% 5%, rgba(197, 179, 88, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 95% 95%, rgba(0, 48, 87, 0.05) 0%, transparent 20%);
+            color: var(--marmara-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            text-align: center;
+            padding: 5rem 0 3rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--marmara-dark) 0%, var(--marmara-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::after {
+            content: ''; display: block; width: 40%; height: 6px;
+            background: var(--marmara-gold);
+            border-radius: 3px; margin: 10px auto 0;
+            opacity: 0.8;
+        }
+
+        .hero p {
+            color: #555;
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* === ACTION CARDS (BURS VER / AL) === */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0 5rem;
+        }
+
+        .action-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Gold Card (Bağışçı) */
+        .card-donor { border-top: 6px solid var(--marmara-gold); }
+        .card-donor:hover { border-color: var(--marmara-gold); }
+
+        /* Blue Card (Öğrenci) */
+        .card-student { border-top: 6px solid var(--marmara-dark); }
+        .card-student:hover { border-color: var(--marmara-dark); }
+
+        .card-image-wrapper {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .action-card:hover img { transform: scale(1.1); }
+
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            opacity: 0.6;
+        }
+
+        .card-content {
+            padding: 2.5rem;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            margin-top: -3.5rem; /* Resmin içine girsin */
+            position: relative; z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .icon-donor { background: var(--marmara-gold); color: var(--marmara-dark); }
+        .icon-student { background: var(--marmara-dark); color: var(--white); }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--marmara-dark);
+        }
+
+        .card-text {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-gold {
+            background: var(--marmara-gold);
+            color: var(--marmara-dark);
+            box-shadow: 0 4px 15px rgba(197, 179, 88, 0.3);
+        }
+        .btn-gold:hover { background: #d4c26a; transform: scale(1.05); }
+
+        .btn-dark {
+            background: var(--marmara-dark);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 48, 87, 0.3);
+        }
+        .btn-dark:hover { background: var(--marmara-blue); transform: scale(1.05); }
+
+        /* === ANNOUNCEMENT BOX (Kazananlar) === */
+        .announcement-section {
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .announcement-card {
+            background: linear-gradient(135deg, var(--white) 0%, #f0f4f8 100%);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            text-align: center;
+            border: 2px solid rgba(197, 179, 88, 0.2); /* Hafif gold çerçeve */
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announcement-card::before {
+            content: '\f091'; /* Trophy Icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -20px; right: -20px;
+            font-size: 10rem;
+            color: var(--marmara-gold);
+            opacity: 0.05;
+            transform: rotate(15deg);
+        }
+
+        .announcement-title {
+            font-size: 2rem;
+            color: var(--marmara-dark);
+            margin-bottom: 1.5rem;
+            display: flex; align-items: center; justify-content: center; gap: 1rem;
+        }
+
+        .announcement-text {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .announcement-text p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: rgba(0, 48, 87, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--marmara-dark);
+            font-weight: 600;
+        }
+
+        /* === LEGAL ACCORDION === */
+        .legal-section {
+            max-width: 900px;
+            margin: 0 auto 5rem;
+        }
+
+        .legal-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--marmara-dark);
+            margin-bottom: 2rem;
+            font-weight: 800;
+        }
+
+        .accordion-item {
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 1px solid #eef2f6;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: #f8fafc;
+        }
+
+        .accordion-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--marmara-dark);
+            display: flex; align-items: center; gap: 0.8rem;
+        }
+
+        .accordion-icon {
+            font-size: 1.2rem;
+            color: var(--marmara-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fdfdfd;
+        }
+
+        .accordion-inner {
+            padding: 2rem;
+            color: #666;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .accordion-inner p { margin-bottom: 1rem; }
+        .accordion-inner strong { color: var(--marmara-dark); }
+
+        .accordion-item.active {
+            border-color: var(--marmara-blue);
+            box-shadow: 0 8px 20px rgba(0, 86, 150, 0.1);
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+            color: var(--marmara-blue);
+        }
+
+        /* === ANIMATIONS === */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 900px) {
+            .action-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .card-image-wrapper { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <section class="hero fade-up">
+        <div class="container">
+            <h1>Geleceğin Liderlerine Burs Desteği</h1>
+            <p>Eğitim hayatında başarılı olan öğrencilerimizi desteklemek ve hayallerine ulaşmalarında yardımcı olmak için buradayız.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        
+        <div class="action-grid">
+            
+            <div class="action-card card-donor fade-up">
+                <div class="card-image-wrapper">
+                    <img loading="lazy"src="image/Burs/burs-ver-gorsel.webp" alt="Burs Ver">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="card-icon icon-donor"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3 class="card-title">Geleceğe Destek Olun</h3>
+                    <p class="card-text">
+                        İmkânları kısıtlı fakat hayalleri büyük öğrencilerimizin yanında olun. Yapacağınız her katkı, onların hayatında yeni bir kapı aralayabilir.
+                    </p>
+                    <a href="Projeler.html" class="btn btn-gold">
+                        Burs Ver <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="action-card card-student fade-up" style="transition-delay: 0.1s;">
+                <div class="card-image-wrapper">
+                    <img loading="lazy"src="image/Burs/destek-al-gorsel.webp" alt="Burs Al">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="card-icon icon-student"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="card-title">Hayallerin İçin Destek Al</h3>
+                    <p class="card-text">
+                        Eğitim hayatında maddi zorluk yaşayan öğrenciler için buradayız. Burs başvurusu yaparak bu desteğe sen de ulaşabilirsin.
+                    </p>
+                    <a href="BURAYA_GOOGLE_FORM_LINKI_GELECEK" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+    Burs Al <i class="fas fa-external-link-alt"></i>
+</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="announcement-section fade-up">
+            <div class="announcement-card">
+                <h2 class="announcement-title">
+                    <i class="fas fa-trophy" style="color:var(--marmara-gold)"></i> 
+                    Burs Kazanan Öğrenciler
+                </h2>
+                <div class="announcement-text">
+                    <p>2025-2026 Eğitim öğretim döneminde Mümder bursu almaya hak kazanan adaylarımızı tebrik ederiz. Siz değerli öğrencilerin öğrenim hayatlarını daha konforlu hale getirmek adına kısıtlı imkanlar nedeniyle sadece 300 öğrencimizi sevindirebiliyoruz. Emeği geçen herkese teşekkürlerimizi borç biliriz.</p>
+                    <p>Burs almaya hak kazanan adayların bursları Iban hesaplarına yatırılmıştır. Kişisel veri olduğu için burs listemiz sitemizde yayınlanmamaktadır.</p>
+                </div>
+                <div class="highlight-box">
+                    Hayırlara vesile olması temennisi ile…
+                </div>
+            </div>
+        </div>
+
+        <div class="legal-section fade-up">
+            <h2 class="legal-title">Yasal Belgeler</h2>
+            
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-title"><i class="fas fa-file-contract"></i> Burs Başvuru Aydınlatma Metni</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <p><strong>Kişisel Verilerin Korunması Kanunu Kapsamında Aydınlatma Metni</strong></p>
+                        <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verilerinizin işlenmesi hakkında sizleri bilgilendirmek isteriz.</p>
+                        <p><strong>Veri Sorumlusu:</strong> Mümder Derneği</p>
+                        <p><strong>İşlenen Kişisel Veriler:</strong> Ad, soyad, TC kimlik numarası, telefon numarası, e-posta adresi, adres bilgileri, öğrenim bilgileri, gelir durumu ile ilgili belgeler</p>
+                        <p><strong>Kişisel Verilerin İşlenme Amacı:</strong> Burs başvurunuzun değerlendirilmesi, burs ödemelerinin yapılması, istatistiksel analiz çalışmaları</p>
+                        <p><strong>Kişisel Verilerin Aktarılacağı Üçüncü Kişiler:</strong> Yasal yükümlülükler çerçevesinde ilgili kamu kurumları</p>
+                        <p><strong>Kişisel Veri Sahibinin Hakları:</strong> KVKK'nın 11. maddesi kapsamında kişisel verileriniz ile ilgili bilgi talep etme, düzeltme, silme ve işlemenin durdurulmasını talep etme haklarınız bulunmaktadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-title"><i class="fas fa-check-circle"></i> Burs Başvuru Rıza Metni</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <p><strong>Açık Rıza Metni</strong></p>
+                        <p>6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında;</p>
+                        <p>Burs başvurum kapsamında paylaştığım kişisel verilerimin, burs başvurumun değerlendirilmesi, burs ödemelerinin gerçekleştirilmesi, istatistiksel analiz çalışmaları ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla Mümder Derneği tarafından işlenmesine,</p>
+                        <p>Bu kapsamda paylaştığım kişisel verilerimin, yukarıda belirtilen amaçlar doğrultusunda, yasal yükümlülükler çerçevesinde yetkili kamu kurumları ile paylaşılmasına,</p>
+                        <p>Kişisel verilerimin işlenmesi ve aktarılması konusunda KVKK'nın 11. maddesinde sayılan haklarımın bulunduğunu bildiğimi kabul ettiğimi,</p>
+                        <p><strong>Açık rızamı verdiğimi beyan ederim.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/loadcomponents.js"></script>
+    <script>
+        // === Accordion Logic ===
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const content = item.querySelector('.accordion-content');
+                const isActive = item.classList.contains('active');
+
+                // Close all others
+                document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.accordion-content').style.maxHeight = null;
+                });
+
+                // Toggle current
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        });
+
+        // === Scroll Animation Observer ===
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

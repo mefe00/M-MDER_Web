@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Anlaşmalı Kurumlar</title>
+    <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+<style>
+  :root {
+    --marmara-dark: #003057; /* Kurumsal Lacivert */
+    --marmara-blue: #005696;
+    --marmara-gold: #C5B358; /* Kurumsal Altın */
+    --text-dark: #333;
+    --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--marmara-dark);
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Başlık Alanı */
+  .header-section {
+    text-align: center;
+    padding: 3rem 1rem 1rem;
+  }
+
+  h2 {
+    color: var(--marmara-dark);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Başlık Altı Çizgisi */
+  h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--marmara-gold);
+    margin: 10px auto 0;
+    border-radius: 2px;
+  }
+  
+  .intro-text {
+    max-width: 800px;
+    margin: 0 auto 3rem auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    font-weight: 500;
+  }
+  
+  /* Kart Izgarası */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 4rem auto;
+    padding: 0 1.5rem;
+  }
+  
+  /* KART TASARIMI */
+  .card {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden; /* Taşmaları gizle */
+    box-shadow: 0 10px 20px rgba(0, 48, 87, 0.08); /* Hafif lacivert gölge */
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Kart Hover Efekti (Yukarı Kalkma) */
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 48, 87, 0.15);
+    border-color: var(--marmara-gold); /* Kenarlık altın rengi olsun */
+  }
+  
+  /* Resim Alanı */
+  .img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f9f9f9;
+  }
+
+  .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Logolar kesilmesin */
+    padding: 1rem; /* Logolar kenarlara yapışmasın */
+    transition: transform 0.5s ease;
+  }
+  
+  /* Resme Zoom Efekti */
+  .card:hover img {
+    transform: scale(1.1);
+  }
+
+  /* İndirim Rozeti (Mavi Overlay Yerine) */
+  .discount-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--marmara-gold);
+    color: var(--marmara-dark);
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+
+  /* Kart Başlığı */
+  .card-title {
+    padding: 1.2rem 1rem 0.5rem;
+    text-align: center;
+    font-weight: 700;
+    color: var(--marmara-dark);
+    font-size: 1.25rem;
+    z-index: 2;
+    background: #fff;
+  }
+  
+  /* Kart Alt Bilgisi (Kısa Açıklama) */
+  .card-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+
+  /* Açılan Detay Alanı (Hover ile Çalışır) */
+  .card-details {
+    max-height: 0; /* Başlangıçta kapalı */
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    background: #fff;
+    color: #444;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+    transition: all 0.5s ease; /* Yumuşak açılış */
+    border-top: 1px solid transparent;
+  }
+  
+  /* HOVER DURUMU: Detaylar Açılır */
+  .card:hover .card-details {
+    max-height: 200px; /* Yeterli yükseklik */
+    opacity: 1;
+    padding-bottom: 1.5rem;
+    border-top-color: #eee; /* İnce bir çizgi belirsin */
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .card-grid { grid-template-columns: 1fr; }
+    h2 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="header-section">
+    <h2>Anlaşmalı Kurumlarımız</h2>
+    <p class="intro-text">
+      MÜMDER ailesine özel ayrıcalıklar! Anlaşmalı olduğumuz kurumlarla yaptığımız iş birlikleri sayesinde, mezun ve mensuplarımıza özel indirim fırsatları sunuyoruz.
+    </p>
+  </div>
+
+  <div class="card-grid">
+    
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%25 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/MEDIPOL-Hastaneleri.webp" alt="Medipol Hastaneleri" />
+      </div>
+      <div class="card-title">Medipol Hastaneleri</div>
+      <div class="card-subtitle">Sağlık Hizmetleri</div>
+      <div class="card-details">
+        İstanbul genelinde geçerlidir. Tüm muayene ve sağlık hizmetlerinde MÜMDER üyelerine özel %25 indirim avantajı sağlanmaktadır.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%50 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/Melita-Cafe.webp" alt="Melita Cafe" />
+      </div>
+      <div class="card-title">Melita Cafe</div>
+      <div class="card-subtitle">Yeme & İçme</div>
+      <div class="card-details">
+        4. Levent ve Kavacık şubelerinde geçerlidir. Tüm yiyecek ve içeceklerde %50 indirim fırsatı sizi bekliyor.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%20 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/safak-kirtasiye.webp" alt="Perpa Şafak Ozalit" />
+      </div>
+      <div class="card-title">Perpa Şafak Ozalit</div>
+      <div class="card-subtitle">Baskı & Kırtasiye</div>
+      <div class="card-details">
+        Perpa Ticaret Merkezi'nde geçerlidir. Tüm dijital baskı ve ozalit hizmetlerinde %20 indirim uygulanır.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%20 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/besiktas-kitapevi.webp" alt="Beşiktaş Kitapevi" />
+      </div>
+      <div class="card-title">Beşiktaş Kitapevi</div>
+      <div class="card-subtitle">Kitap & Yayın</div>
+      <div class="card-details">
+        Beşiktaş şubesinde geçerlidir. Kültür, sanat ve akademik kitap alışverişlerinizde %20 indirim avantajı.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%25 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/derindere-hastanesi.webp" alt="Derindere Hastanesi" />
+      </div>
+      <div class="card-title">Derindere Hastanesi</div>
+      <div class="card-subtitle">Sağlık Hizmetleri</div>
+      <div class="card-details">
+        Kağıthane'de hizmet vermektedir. Muayene ve tetkik ücretlerinde %25 indirim ayrıcalığı sunulmaktadır.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%25 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/zumrut-kitapevi.webp" alt="Zümrüt Kırtasiye" />
+      </div>
+      <div class="card-title">Zümrüt Kırtasiye</div>
+      <div class="card-subtitle">Ofis & Kırtasiye</div>
+      <div class="card-details">
+        Kağıthane şubesinde geçerlidir. Tüm kırtasiye ve ofis malzemelerinde %25 indirim fırsatı.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%30 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/podoterapi-ayak-bakim-merkezi.webp" alt="Perpa Ayak Sağlığı" />
+      </div>
+      <div class="card-title">Perpa Ayak Sağlığı</div>
+      <div class="card-subtitle">Sağlık & Bakım</div>
+      <div class="card-details">
+        Perpa'da hizmet vermektedir. Podoloji ve ayak sağlığı tedavilerinde %30 indirim uygulanmaktadır.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%25 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/nazim-kitapevi.webp" alt="Nazım Kitapevi" />
+      </div>
+      <div class="card-title">Nazım Kitapevi</div>
+      <div class="card-subtitle">Kitap & Yayın</div>
+      <div class="card-details">
+        Kadıköy, Beşiktaş, Bakırköy ve Ataşehir şubelerinde geçerlidir. Tüm kitap çeşitlerinde %25 indirim.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="img-wrapper">
+        <span class="discount-badge">%25 İndirim</span>
+        <img loading="lazy"src="image/Anlasmali-Kurumlar/akademi-okullari.webp" alt="Çözüm Okulları" />
+      </div>
+      <div class="card-title">Çözüm Okulları</div>
+      <div class="card-subtitle">Eğitim</div>
+      <div class="card-details">
+        Kağıthane kampüsünde geçerlidir. Eğitim materyalleri ve kayıt ücretlerinde %25 indirim sağlanmaktadır.
+      </div>
+    </div>
+
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/loadcomponents.js"></script>
+</body>
+</html>

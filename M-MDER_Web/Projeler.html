@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <title>MÜMDER Projeleri | Eğitim, Burs ve Sosyal Sorumluluk</title>
+  
+  <meta name="description" content="MÜMDER'in geleceği inşa eden projelerini keşfedin. EduSupport Bursu, Future Leaders Academy, Mentorluk programı ve sosyal sorumluluk faaliyetlerimiz hakkında bilgi alın ve destek olun.">
+  
+  <meta name="keywords" content="MÜMDER, MÜMDER projeleri, burs başvurusu, öğrenci mentorluğu, liderlik akademisi, kurban bağışı, Marmara Üniversitesi mezunları, STK projeleri">
+  
+  <meta name="author" content="MÜMDER - Marmara Üniversitesi Mezun ve Mensupları Derneği">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mumder.org.tr/Projeler.html">
+  <meta property="og:title" content="MÜMDER Projeleri - Geleceği Birlikte İnşa Ediyoruz">
+  <meta property="og:description" content="EduSupport Bursu, Campus Power, Liderlik Okulu ve Yardım Faaliyetleri. Projelerimizi inceleyin ve bir öğrencinin hayatına dokunun.">
+  <meta property="og:image" content="https://mumder.org.tr/image/Projeler/ogrenci-destek.webp">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MÜMDER Projeleri | Geleceğe Yatırım">
+  <meta name="twitter:description" content="Eğitimden sosyal hayata, insanı merkeze alan projelerimizle tanışın.">
+  <meta name="twitter:image" content="https://mumder.org.tr/image/Projeler/ogrenci-destek.webp">
+  
+  <meta name="robots" content="index, follow">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+  <script src="js/loadcomponents.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    /* === MODERN TASARIM DEĞİŞKENLERİ === */
+    :root {
+      --marmara-dark: #003057;      /* Ana Lacivert */
+      --marmara-blue: #005696;      /* Açık Mavi */
+      --marmara-gold: #C5B358;      /* Altın Sarısı */
+      --marmara-gold-light: #e6dca8;
+      --bg-light: #f4f7fa;
+      --white: #ffffff;
+      --shadow-soft: 0 10px 40px rgba(0, 48, 87, 0.08);
+      --shadow-hover: 0 20px 60px rgba(0, 48, 87, 0.15);
+      --radius-lg: 24px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      font-family: 'Outfit', 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(197, 179, 88, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(0, 48, 87, 0.05) 0%, transparent 20%);
+      color: var(--marmara-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 2; }
+
+    /* === HEADER === */
+    .header {
+      text-align: center;
+      padding: 4rem 0 3rem;
+      position: relative;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--marmara-dark) 0%, var(--marmara-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .header h1::after {
+      content: ''; display: block; width: 60%; height: 6px;
+      background: var(--marmara-gold);
+      border-radius: 3px; margin: 5px auto 0;
+      opacity: 0.8;
+    }
+
+    .header p {
+      color: #555;
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* === BANKA KARTI (Bağış Alanı) === */
+    .donation-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 4rem;
+      perspective: 1000px;
+    }
+
+    .bank-card {
+      background: linear-gradient(135deg, var(--marmara-dark) 0%, var(--marmara-blue) 100%);
+      width: 100%;
+      max-width: 500px;
+      border-radius: 24px;
+      padding: 2rem;
+      color: white;
+      box-shadow: 0 25px 50px rgba(0, 48, 87, 0.3);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s ease;
+    }
+
+    .bank-card:hover { transform: translateY(-10px) rotateX(2deg); }
+
+    .bank-card::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+    .chip { width: 50px; height: 35px; background: linear-gradient(135deg, #ffd700, #b8860b); border-radius: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); }
+    .contactless i { font-size: 2rem; opacity: 0.8; }
+    .card-number { font-family: 'Courier New', monospace; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .card-details { display: flex; justify-content: space-between; align-items: flex-end; }
+    .card-label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px; display: block; }
+    .card-value { font-weight: 600; font-size: 1rem; }
+    .copy-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+    .copy-btn:hover { background: var(--marmara-gold); color: var(--marmara-dark); }
+
+    /* === PROJELER GRID === */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 5rem;
+    }
+
+    .project-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0,0,0,0.03);
+      position: relative;
+      display: flex; flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-12px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--marmara-gold);
+    }
+
+    .project-image-wrapper {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+    }
+
+    .project-image {
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      transition: transform 0.6s ease;
+    }
+
+    .project-card:hover .project-image { transform: scale(1.1); }
+
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,48,87,0.8), transparent);
+      opacity: 0.7;
+    }
+
+    .project-tag {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--white); color: var(--marmara-dark);
+      padding: 0.4rem 1rem; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .project-content {
+      padding: 2rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-title {
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--marmara-dark); margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .project-slogan {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      color: var(--marmara-gold);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .project-description {
+      color: #555; font-size: 1rem; line-height: 1.7;
+      margin-bottom: 1.5rem; flex-grow: 1;
+    }
+
+    .project-footer {
+      margin-top: auto; padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .support-btn {
+      background: var(--marmara-dark);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600; font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+
+    .support-btn:hover {
+      background: var(--marmara-gold);
+      color: var(--marmara-dark);
+      transform: translateX(5px);
+    }
+
+    .project-meta {
+      color: #888; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* === TAAHHÜT FORMU === */
+    .pledge-section {
+      background: var(--white);
+      border-radius: 30px;
+      padding: 4rem 2rem;
+      box-shadow: var(--shadow-hover);
+      margin: 4rem auto;
+      max-width: 900px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pledge-section::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+      background: linear-gradient(90deg, var(--marmara-dark), var(--marmara-gold));
+    }
+
+    .pledge-header { text-align: center; margin-bottom: 3rem; }
+    .pledge-header h2 { font-size: 2.2rem; color: var(--marmara-dark); font-weight: 800; margin-bottom: 0.5rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--marmara-dark); }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 1rem; border: 2px solid #eef2f6; border-radius: 12px;
+      background: #f8fafc; font-size: 1rem; transition: all 0.3s ease;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--marmara-blue); background: #fff;
+    }
+
+    .amount-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem; }
+    .amount-btn {
+      flex: 1 1 calc(25% - 0.8rem); padding: 0.8rem;
+      border: 2px solid #eef2f6; background: #fff; border-radius: 50px;
+      cursor: pointer; font-weight: 600; color: #666; transition: 0.2s;
+    }
+    .amount-btn:hover, .amount-btn.active {
+      border-color: var(--marmara-gold); background: var(--marmara-dark); color: var(--marmara-gold);
+    }
+
+    /* DÜZELTİLEN BUTON STİLİ */
+    .submit-btn {
+      display: block;
+      width: auto;
+      min-width: 250px;
+      margin: 2rem auto 0; /* Ortalamak için */
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--marmara-dark), var(--marmara-blue));
+      color: #fff; 
+      border: none; 
+      border-radius: 50px; /* Tam oval */
+      font-size: 1.1rem; 
+      font-weight: 700;
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0,48,87,0.2);
+      position: relative; 
+      overflow: hidden;
+    }
+    .submit-btn:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 15px 30px rgba(0,48,87,0.3); 
+    }
+
+    /* Loading Spinner */
+    .submit-btn.loading .btn-text { opacity: 0; }
+    .btn-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
+    .submit-btn.loading .btn-spinner { display: block; }
+    .spinner { width: 24px; height: 24px; animation: spin 1s linear infinite; }
+    .spinner .path { stroke: #fff; stroke-width: 4; fill: none; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; gap: 1rem; }
+      .header h1 { font-size: 2.2rem; }
+    }
+
+    /* === POPUP === */
+    #successModal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 10000; }
+    #successModal .box { background: #fff; padding: 2.5rem; border-radius: 24px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: popIn 0.4s ease; }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #successModal .close-btn { background: var(--marmara-dark); color: var(--marmara-gold); border: none; padding: 0.8rem 2rem; border-radius: 50px; font-weight: 700; cursor: pointer; }
+
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="container">
+    
+    <div class="header">
+      <h1>Projelerimiz</h1>
+      <p>MÜMDER olarak eğitimden sosyal hayata, akademiden gönül coğrafyasına uzanan geniş bir perspektifte, insanı merkeze alan projeler üretiyoruz.</p>
+    </div>
+
+    <div class="donation-wrapper">
+      <div class="bank-card">
+        <div class="card-top">
+          <div class="chip"></div>
+          <div class="contactless"><i class="fas fa-wifi"></i></div>
+        </div>
+        <div class="card-number" id="ibanText">TR35 0020 5000 0912 8488 6000 01</div>
+        <div class="card-details">
+          <div>
+            <span class="card-label">Hesap Adı</span>
+            <span class="card-value">Marmara Üniversitesi Mezun ve Mensupları Derneği</span>
+          </div>
+          <div style="text-align: right;">
+            <span class="card-label">Banka</span>
+            <span class="card-value">Kuveyt Türk</span>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyIBAN()">
+          <i class="far fa-copy"></i> IBAN'ı Kopyala
+        </button>
+      </div>
+    </div>
+
+    <div class="projects-grid">
+      
+      <div class="project-card">
+        <div class="project-tag">Eğitim & Burs</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Projeler/ogrenci-destek.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">EduSupport – Burs Köprüsü</h3>
+          <span class="project-slogan">“Geleceğe yatırım, öğrenciye destek.”</span>
+          <p class="project-description">
+MÜMDER olarak, imkânları sınırlı öğrencilerimizin eğitim yolculuğunu destekliyoruz. EduSupport projesi ile burs köprüsü kuruyor, gençlerimizin hayallerine ulaşmasına katkı sağlıyoruz. Bu proje sayesinde öğrenciler sadece maddi destek değil, aynı zamanda aidiyet ve güven duygusu da kazanıyor.          </p>
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-hand-holding-heart"></i> Burs Desteği</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Kulüp & Sosyal</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Projeler/dernek-faaliyetleri.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">Campus Power</h3>
+          <span class="project-slogan">“Fikirden projeye, projeden geleceğe.”</span>
+          <p class="project-description">
+Üniversite yıllarının en önemli dinamizmi olan öğrenci kulüplerini güçlendirmek için Campus Power projesini hayata geçiriyoruz. Bu program ile kulüplerin etkinliklerini, sosyal projelerini ve kültürel faaliyetlerini destekliyor, gençlerin üretkenliğini artırıyoruz.
+          </p>
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-users"></i> Kulüp Desteği</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Liderlik & Vizyon</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Projeler/basari-bursu.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">Future Leaders Academy</h3>
+          <span class="project-slogan">“Bugünün öğrencisi, yarının lideri.”</span>
+          <p class="project-description">
+MÜMDER’in vizyon projelerinden biri olan Future Leaders Academy, gençlerin liderlik vasıflarını geliştirmeyi hedefliyor. Eğitim seminerleri, atölyeler, mentorluk programları ve uluslararası vizyon çalışmaları ile öğrencilerimizi geleceğin öncü isimleri olmaya hazırlıyoruz.          </p>
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-chess-king"></i> Liderlik Okulu</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Kariyer & Mentorluk</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Anasayfa/kariyer.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">One-to-One Mentor</h3>
+          <span class="project-slogan">“Bir mezun, bir öğrenci; güçlü bağlar.”</span>
+          <p class="project-description">
+One-to-One Mentor projesi ile öğrenciler ile mezunlar birebir eşleştirilir. Mezunlar; bilgi, tecrübe ve mesleki birikimlerini öğrencilerle paylaşarak yol gösterici olur. Bu sayede mezun-öğrenci ilişkisi kalıcı ve güçlü bir dayanışma ağına dönüşür.
+
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-user-friends"></i> Mentorluk</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Kültür & Gelişim</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Projeler/Ogrencilikten-Profesorluge-Giden-Akademik-Kariyer-Basamaklari-Kapak.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">Read & Lead</h3>
+          <span class="project-slogan">“Bilgiyle büyü, paylaşarak liderleş.”</span>
+          <p class="project-description">
+Bilginin paylaşıldıkça çoğaldığı anlayışıyla hayata geçirilen Read & Lead, gençleri okumaya, düşünmeye ve öğrendiklerini paylaşmaya teşvik eder. Kitap buluşmaları, söyleşiler ve etkileşimli programlar aracılığıyla öğrencilerin entelektüel ve kişisel gelişimine katkı sağlanır.          </p>
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-book-reader"></i> Kültür Sanat</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Yardımlaşma</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background-image:url('image/Projeler/kurban.webp')"></div>
+          <div class="project-overlay"></div>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title">Bir Hilal Bir Umut</h3>
+          <span class="project-slogan">“Bir kurban, bir umut; bin dua.”</span>
+          <p class="project-description">
+Bir Hilal Bir Umut, MÜMDER üyelerinin emanet ettiği kurban bağışlarıyla, gönül coğrafyamızda ihtiyaç sahibi kardeşlerimize ulaştırılan bir kardeşlik ve paylaşma projesidir. Bu çalışma, kurban ibadetini yalnızca bir yardım faaliyeti olarak değil; emanet bilinci, vefa ve ümmet şuuru ile yerine getirilen bir gönül hareketi olarak ele alır.
+Her bağış; bir sofraya bereket, bir kalbe umut, bir coğrafyaya kardeşlik taşır.
+
+          </p>
+          <div class="project-footer">
+            <span class="project-meta"><i class="fas fa-globe-africa"></i> İnsani Yardım</span>
+            <a href="#pledge-section" class="support-btn">Destek Ol <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pledge-section" id="pledge-section">
+      <div class="pledge-header">
+        <h2>Taahhütte Bulun</h2>
+        <p>Projelerimize destek olmak ve iyiliği büyütmek için formu doldurabilirsiniz.</p>
+      </div>
+
+      <form class="pledge-form" id="pledgeForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Ad Soyad</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Adınız Soyadınız" required/>
+          </div>
+          <div class="form-group">
+            <label for="email">E-posta</label>
+            <input type="email" id="email" name="email" placeholder="ornek@email.com" required/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required/>
+          </div>
+          <div class="form-group">
+            <label for="customAmount">Tutar (₺)</label>
+            <input type="number" id="customAmount" name="customAmount" placeholder="Örn: 500" min="1" required/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Hızlı Tutar Seçimi</label>
+          <div class="amount-buttons">
+            <button type="button" class="amount-btn" data-amount="100">100 ₺</button>
+            <button type="button" class="amount-btn" data-amount="250">250 ₺</button>
+            <button type="button" class="amount-btn" data-amount="500">500 ₺</button>
+            <button type="button" class="amount-btn" data-amount="1000">1000 ₺</button>
+            <button type="button" class="amount-btn" data-amount="2500">2500 ₺</button>
+            <button type="button" class="amount-btn" data-amount="other">Diğer</button>
+          </div>
+        </div>
+
+        <div class="form-group" id="otherAmountGroup" style="display:none">
+          <label for="otherAmount">Diğer Tutar</label>
+          <input type="number" id="otherAmount" name="otherAmount" min="1" placeholder="Tutarı giriniz"/>
+        </div>
+
+        <div class="form-group" style="margin-top:1.5rem;">
+          <label for="project">Desteklenecek Proje</label>
+          <select id="project" name="project" required>
+            <option value="">Seçiniz...</option>
+            <option value="EduSupport">EduSupport – Burs Köprüsü</option>
+            <option value="CampusPower">Campus Power – Kulüp Destek</option>
+            <option value="FutureLeaders">Future Leaders Academy</option>
+            <option value="Mentorluk">One-to-One Mentor</option>
+            <option value="ReadLead">Read & Lead</option>
+            <option value="BirHilalBirUmut">Bir Hilal Bir Umut (Kurban)</option>
+            <option value="GenelBagis">Genel Bağış</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-top:1.5rem;">
+          <label for="message">Mesajınız (Opsiyonel)</label>
+          <textarea id="message" name="message" rows="3" placeholder="Eklemek istedikleriniz..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text">Taahhüdü Gönder <i class="fas fa-paper-plane"></i></span>
+          <span class="btn-spinner">
+            <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20"></circle></svg>
+          </span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <div id="successModal" aria-hidden="true">
+    <div class="box" role="dialog" aria-modal="true">
+      <span class="emoji">🎉</span>
+      <h3>Teşekkürler!</h3>
+      <p>Taahhüdünüz başarıyla alındı. En kısa sürede sizinle iletişime geçeceğiz.</p>
+      <button class="close-btn" id="closeModalBtn">Tamam</button>
+    </div>
+  </div>
+
+  <script>
+    // IBAN Kopyalama
+    function copyIBAN() {
+      const iban = "TR35 0020 5000 0912 8488 6000 01";
+      navigator.clipboard.writeText(iban).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Kopyalandı!';
+        setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+      });
+    }
+
+    // — EmailJS Konfigürasyonu —
+    const EMAILJS_PUBLIC_KEY  = "k_d6txnZPFqTeyC4g";
+    const EMAILJS_SERVICE_ID  = "service_9laz129";
+    const EMAILJS_TEMPLATE_ID = "template_snn3hyj";
+
+    function toast(msg, ok=true){
+      const d=document.createElement('div');
+      d.textContent=msg;
+      d.style.cssText='position:fixed;right:16px;bottom:16px;padding:12px 14px;border-radius:10px;color:#fff;z-index:10001;background:'+(ok?'#16a34a':'#b91c1c')+';box-shadow:0 6px 20px rgba(0,0,0,.2);transition:all .3s';
+      document.body.appendChild(d);
+      setTimeout(()=>{ d.style.opacity='0'; d.style.transform='translateY(6px)'; },3200);
+      setTimeout(()=> d.remove(),3700);
+    }
+
+    function openModal(){ document.getElementById('successModal').style.display='flex'; }
+    function closeModal(){ document.getElementById('successModal').style.display='none'; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch(e){ console.warn('EmailJS init:', e); }
+
+      const amountButtons     = document.querySelectorAll('.amount-btn');
+      const customAmountInput = document.getElementById('customAmount');
+      const otherAmountGroup  = document.getElementById('otherAmountGroup');
+      const otherAmountInput  = document.getElementById('otherAmount');
+      const submitBtn         = document.getElementById('submitBtn');
+      const pledgeForm        = document.getElementById('pledgeForm');
+
+      amountButtons.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          amountButtons.forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          if(btn.dataset.amount === 'other'){
+            otherAmountGroup.style.display='block';
+            customAmountInput.value='';
+            otherAmountInput.focus();
+          }else{
+            otherAmountGroup.style.display='none';
+            customAmountInput.value=btn.dataset.amount;
+            otherAmountInput.value='';
+          }
+        });
+      });
+
+      otherAmountInput.addEventListener('input', ()=>{
+        if(otherAmountInput.value) customAmountInput.value = otherAmountInput.value;
+      });
+
+      customAmountInput.addEventListener('input', ()=>{
+        const activeBtn = document.querySelector('.amount-btn.active');
+        if(activeBtn && activeBtn.dataset.amount!=='other'){
+          amountButtons.forEach(b=>b.classList.remove('active'));
+        }
+      });
+
+      pledgeForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        submitBtn.classList.add('loading');
+
+        try{
+          const ad      = document.getElementById('fullName').value.trim();
+          const email   = document.getElementById('email').value.trim().toLowerCase();
+          const telefon = document.getElementById('phone').value.trim();
+          const proje   = document.getElementById('project').value;
+          const iletiniz= document.getElementById('message').value.trim() || '-';
+          
+          let tutarStr = (customAmountInput.value || '').toString().trim();
+          if(!tutarStr){
+            const active = document.querySelector('.amount-btn.active');
+            if(active && active.dataset.amount!=='other') tutarStr = active.dataset.amount;
+            if(!tutarStr && otherAmountInput.value) tutarStr = otherAmountInput.value.toString().trim();
+          }
+          const tutar = Number(tutarStr);
+
+          if(!ad || !email || !telefon || !proje || !tutar || Number.isNaN(tutar) || tutar<=0){
+            throw new Error('Lütfen zorunlu alanları doldurun.');
+          }
+
+          const params = {
+            name: ad, email: email, phone: telefon,
+            project: proje, amount: tutar, message: iletiniz
+          };
+
+          const ready = EMAILJS_PUBLIC_KEY!=="PUBLIC_KEYIN"; 
+          if(ready){
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+          } else {
+            const subject = encodeURIComponent(`Yeni Taahhüt: ${ad} - ${tutar} TL`);
+            window.location.href = `mailto:info@mumder.org.tr?subject=${subject}`;
+          }
+
+          pledgeForm.reset();
+          amountButtons.forEach(b=>b.classList.remove('active'));
+          otherAmountGroup.style.display='none';
+          openModal();
+
+        }catch(err){
+          console.error(err);
+          toast('Hata: ' + (err?.message || 'Bilinmeyen hata'), false);
+        }finally{
+          submitBtn.classList.remove('loading');
+        }
+      });
+
+      document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+      document.getElementById('successModal')?.addEventListener('click', (e)=>{ if(e.target.id==='successModal') closeModal(); });
+
+      if(window.location.hash === '#pledge-section') {
+        setTimeout(() => {
+          const section = document.getElementById('pledge-section');
+          if(section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 500);
+      }
+    });
+  </script>
+</body>
+</html>

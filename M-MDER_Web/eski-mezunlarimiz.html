@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanınmış Mezunlar - MÜMDER</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp" type="image/png">
+
+    <style>
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #1976d2;
+            --accent-color: #ffd700;
+            --background-gradient: linear-gradient(135deg, #f4f8fc 0%, #e3f2fd 100%);
+            --header-font: 'Poppins', sans-serif;
+            --body-font: 'Exo 2', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--body-font);
+            background: var(--background-gradient);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-content { padding: 2rem; position: relative; max-width: 1600px; margin: 0 auto; }
+
+        .section-title {
+            font-family: var(--header-font);
+            font-weight: 900;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            text-align: center;
+            margin: 4rem 0 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* GRID YAPISI */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            padding-bottom: 4rem;
+        }
+
+        .member-card-container {
+            perspective: 1500px;
+            height: 480px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out both;
+            animation-delay: var(--delay, 0s);
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-card-container::before {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            border: 2.25px solid var(--secondary-color);
+            border-radius: 24px;
+            opacity: 0.55;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .member-card-container:hover::before { opacity: 0.8; }
+
+        .member-flip-card {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+        }
+        
+        /* ÇEVİRME EFEKTİ İÇİN KRİTİK CSS */
+        .member-flip-card.flipped { transform: rotateY(180deg) !important; }
+
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; background: #fff; 
+            box-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
+            border: 1px solid #e3f2fd; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; 
+            padding: 1.5rem; overflow: hidden;
+        }
+
+        .card-back { 
+            transform: rotateY(180deg); 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            color: #fff; 
+            justify-content: space-between;
+            padding: 2rem 1.5rem;
+        }
+
+        .member-image {
+            width: 160px; height: 160px; object-fit: cover; border-radius: 50%;
+            border: 5px solid #fff; margin-bottom: 1.5rem; 
+            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+            transition: transform 0.4s ease;
+        }
+        .member-card-container:hover .member-image { transform: scale(1.05); }
+
+        .member-name { font-family: var(--header-font); font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem; line-height: 1.2; }
+        .card-back .member-name { color: #fff; margin-bottom: 0.2rem; }
+
+        .member-position { color: var(--secondary-color); font-weight: 500; font-size: 1rem; margin-bottom: 1rem; }
+        .card-back .member-position { color: rgba(255,255,255,0.9); font-size: 0.9rem; margin-bottom: 0.5rem; }
+
+        .member-description { font-size: 0.9rem; line-height: 1.5; color: #fff; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
+
+        .social-links { display: flex; gap: 15px; margin: 0 0 15px 0; justify-content: center; }
+        .social-link { color: rgba(255,255,255,0.9); font-size: 1.3rem; transition: all 0.3s ease; text-decoration: none; display: grid; place-items: center;}
+        .social-link:hover { color: var(--accent-color); transform: translateY(-3px); }
+
+        .button-group { display: flex; gap: 10px; margin-top: auto; width: 100%; justify-content: center; }
+        .action-button {
+            background: transparent; border: 2px solid var(--secondary-color);
+            padding: 0.6rem 1.2rem; border-radius: 50px; 
+            color: var(--secondary-color); font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .action-button:hover { background: var(--secondary-color); color: #fff; }
+        .card-back .action-button { border-color: #fff; color: #fff; flex: 1; }
+        .card-back .action-button:hover { background: #fff; color: var(--secondary-color); }
+
+        .member-card-container.featured {
+            grid-column: 1 / -1; width: min(700px, 100%); height: 550px; place-self: center; z-index: 10;
+        }
+        .featured .member-image { width: 190px; height: 190px; }
+        .featured .member-name { font-size: 1.8rem; }
+        .featured .member-description { -webkit-line-clamp: 7; font-size: 1rem; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 3000; inset: 0; background: rgba(21, 101, 192, 0.4); backdrop-filter: blur(8px); }
+        .modal.active { display: flex; align-items: center; justify-content: center; animation: modalFadeIn 0.4s ease-out; }
+        
+        .modal-content { 
+            background: #fff; border-radius: 24px; max-width: 700px; width: 90%; 
+            max-height: 85vh; overflow-y: auto; position: relative; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .modal-header { padding: 2.5rem 2rem 1rem; text-align: center; background: linear-gradient(to bottom, #f8fbff, #fff); }
+        .modal-image { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin: 0 auto 1rem; border: 4px solid var(--secondary-color); }
+        .modal-name { font-family: var(--header-font); font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
+        .modal-position { color: var(--secondary-color); font-size: 1.1rem; font-weight: 600; }
+        .modal-bio { padding: 2rem; line-height: 1.8; color: #444; font-size: 1.05rem; text-align: justify; }
+        
+        .close-modal { 
+            position: absolute; top: 1.5rem; right: 1.5rem; 
+            background: #f0f6ff; border: none; color: var(--primary-color); 
+            width: 40px; height: 40px; border-radius: 50%; 
+            font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; 
+            display: grid; place-items: center;
+        }
+        .close-modal:hover { background: var(--secondary-color); color: #fff; transform: rotate(90deg); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalSlideIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; margin: 3rem 0; }
+            .member-card-container, .member-card-container.featured { height: 500px; width: 100%; }
+            .modal-content { width: 95%; max-height: 90vh; }
+        }
+
+        #particles-js { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <h2 class="section-title">Tanınmış Mezunlarımız</h2>
+        <div class="members-grid" id="membersGrid"></div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <img loading="lazy" id="modalImage" src="" alt="" class="modal-image">
+                <h3 id="modalName" class="modal-name"></h3>
+                <p id="modalPosition" class="modal-position"></p>
+                <div id="modalSocials" class="social-links" style="margin-top: 1rem; justify-content: center; display: flex;"></div>
+            </div>
+            <div class="modal-bio" id="modalBio"></div>
+        </div>
+    </div>
+    
+    <script src="js/loadcomponents.js" defer></script>
+    <script>
+        const alumni = [
+            { 
+                id: 'erdogan', 
+                name: 'Recep Tayyip Erdoğan', 
+                position: 'Türkiye Cumhuriyeti Cumhurbaşkanı', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/recep-tayyip-erdogan.webp', 
+                // İstenilen Biyografi (Temizlenmiş formatta)
+                bio: `Aslen Rizeli olan Recep Tayyip Erdoğan, 26 Şubat 1954’te İstanbul’da doğdu. 1965 yılında Kasımpaşa Piyale İlkokulu’ndan, 1973 yılında ise İstanbul İmam Hatip Lisesi’nden mezun oldu. Fark dersleri sınavını vererek Eyüp Lisesi’nden de diploma aldı. Üniversiteyi Marmara Üniversitesi İktisadî ve Ticarî Bilimler Fakültesi’nde okuyan Erdoğan, bu okuldan 1981 yılında mezun oldu.<br><br>Gençlik yıllarından itibaren sosyal hayat ve siyasetle iç içe bir yaşamı tercih eden Erdoğan, disiplinli ekip çalışmasının ve takım ruhunun önemini kendisine çok genç yaşlarda öğreten futbolla 1969-1982 yılları arasında amatör olarak ilgilendi. Aynı zamanda bu yıllar, genç bir idealist olarak memleket meseleleri ve toplumsal sorunlarla ilgilenen Recep Tayyip Erdoğan’ın aktif politikaya adım attığı döneme rastlamaktadır. Lise ve üniversite yıllarında Millî Türk Talebe Birliği öğrenci kollarında aktif görev alan Recep Tayyip Erdoğan, 1976 yılında MSP Beyoğlu Gençlik Kolu Başkanlığı’na ve aynı yıl MSP İstanbul Gençlik Kolları Başkanlığı’na seçildi. 1980 yılına kadar bu görevlerini sürdüren Erdoğan, siyasi partilerin kapatıldığı 12 Eylül döneminde, özel sektörde bir süre müşavirlik ve üst düzey yöneticilik yaptı.<br><br>1983 yılında kurulan Refah Partisi ile fiilî siyasete geri dönen Recep Tayyip Erdoğan, 1984 yılında Refah Partisi Beyoğlu İlçe Başkanı, 1985 yılında ise Refah Partisi İstanbul İl Başkanı ve Refah Partisi MKYK üyesi oldu. İstanbul İl Başkanlığı görevi sırasında diğer siyasi partiler için de model olan yeni bir örgütsel yapı geliştiren Erdoğan, bu dönemde özellikle kadınların ve gençlerin siyasete katılımını artırmaya yönelik çalışmalar yaptı; siyasetin tabana yayılarak geniş halk kitleleri tarafından benimsenip itibar görmesi yolunda önemli adımlar attı. Bu yapılanma, mensubu bulunduğu Refah Partisi’ne 1989 Beyoğlu yerel seçimlerinde büyük bir başarı kazandırırken, yurt genelinde de parti çalışmaları için örnek teşkil etti.<br><br>27 Mart 1994 yerel seçimlerinde İstanbul Büyükşehir Belediye Başkanı seçilen Recep Tayyip Erdoğan, siyasî yeteneği, ekip çalışmasına verdiği önem, insan kaynakları ve malî konulardaki başarılı yönetimiyle dünyanın en önemli metropollerinden biri olan İstanbul’un kronikleşmiş sorunlarına doğru teşhis ve çözümler üretti. Su sorunu, yüzlerce kilometrelik yeni boru hatlarının döşenmesiyle; çöp sorunu ise dönemin en modern geri-dönüşüm tesislerinin kurulmasıyla çözümlendi. Hava kirliliği sorunu Erdoğan döneminde geliştirilen doğalgaza geçiş projeleriyle son bulurken, kentin trafik ve ulaşım açmazına karşı 50’den fazla köprü, geçit ve çevre yolu inşa edildi; sonraki dönemlere ışık tutacak birçok proje geliştirildi. Belediye kaynaklarının doğru kullanımı ve yolsuzluğun önlenmesi amacıyla olağanüstü önlemler alan Erdoğan, 2 milyar dolar borçla devraldığı İstanbul Büyükşehir Belediyesi’nin borçlarını büyük ölçüde ödedi ve bu arada 4 milyar dolarlık yatırım gerçekleştirdi. Böylece, Türkiye’nin belediyecilik tarihinde yeni bir çığır açan Erdoğan, bir yandan diğer belediyelere örnek olurken, bir yandan da halk nezdinde büyük bir güven kazandı.<br><br>Recep Tayyip Erdoğan, 12 Aralık 1997’de Siirt’te halka hitaben yaptığı konuşma sırasında, Millî Eğitim Bakanlığı tarafından öğretmenlere tavsiye edilen ve bir devlet kuruluşu tarafından yayınlanan bir kitaptaki şiiri okuduğu için hapis cezasına mahkûm edildi ve İstanbul Büyükşehir Belediye Başkanlığı görevine son verildi. Recep Tayyip Erdoğan, 4 ay kaldığı cezaevinden çıktıktan sonra kamuoyunun ısrarlı talebi ve gelişen demokratik sürecin bir sonucu olarak 14 Ağustos 2001’de arkadaşlarıyla birlikte Adalet ve Kalkınma Partisi’ni (AK Parti) kurdu ve Kurucular Kurulu tarafından AK Parti’nin Kurucu Genel Başkanı seçildi. Milletin teveccüh ve güveni AK Parti’yi daha kuruluşunun ilk yılında Türkiye’nin en geniş halk desteğine sahip siyasî hareketi hâline getirdi ve 2002 yılı genel seçimlerinde üçte ikiye yakın parlamento çoğunluğuyla (363 milletvekili) tek başına iktidara taşıdı.<br><br>Hakkındaki mahkeme kararı nedeniyle 3 Kasım 2002 seçimlerinde milletvekili adayı olamayan Erdoğan, yapılan yasal düzenlemeyle milletvekili adaylığının önündeki yasal engelin kalkması üzerine, 9 Mart 2003’te Siirt ili milletvekili yenileme seçimine katıldı. Bu seçimde oyların yüzde 85’ini alan Erdoğan, 22. Dönem Siirt Milletvekili olarak parlamentoya girdi. 15 Mart 2003 tarihinde Başbakanlık görevini üstlenen Recep Tayyip Erdoğan, aydınlık ve sürekli kalkınan bir Türkiye idealiyle, hayatî öneme sahip birçok reform paketini kısa süre içinde uygulamaya koydu. Demokratikleşme, şeffaflaşma ve yolsuzlukların engellenmesi yolunda büyük mesafeler katedildi. Buna paralel olarak ülke ekonomisi ve toplum psikolojisini olumsuz yönde etkileyen ve on yıllardır çözülemeyen enflasyon kontrol altına alındı, itibarını yeniden kazanan Türk Lirası’ndan 6 sıfır atıldı. Devletin borçlanma faiz oranları aşağı çekildi, kişi başına düşen millî gelirde büyük artış gerçekleştirildi. Ülke tarihinde daha önce görülmemiş hız ve sayıda baraj, konut, okul, yol, hastane ve enerji santrali hizmete girdi. Bütün bu olumlu gelişmeler, bazı yabancı gözlemciler ve Batılı liderler tarafından "Sessiz Devrim" olarak adlandırıldı.<br><br>Recep Tayyip Erdoğan, Avrupa Birliği’ne giriş sürecinde ülke tarihinin dönüm noktası olarak nitelenen başarılı girişimlerine ek olarak, akılcı dış politikası ve yoğun ziyaret-temas trafiğiyle Kıbrıs sorununun kalıcı çözüme kavuşturulması ve dünyanın çeşitli ülkeleriyle verimli ilişkiler geliştirilmesi konularında önemli adımlar attı. Tesis edilen istikrar ortamı iç dinamikleri harekete geçirirken, Türkiye’yi bir merkez ülke hâline getirdi. Türkiye’nin ticaret hacmi ve siyasal gücü, yalnız içinde bulunduğu coğrafî bölgede değil, uluslararası alanda da hissedilir düzeyde arttı.<br><br>Recep Tayyip Erdoğan, 22 Temmuz 2007 genel seçimlerinde %46,6 oy alarak büyük bir zafer kazanan AK Parti’nin Genel Başkanı olarak Türkiye Cumhuriyeti’nin 60. Hükûmeti’ni kurdu ve tekrar güvenoyu aldı. Recep Tayyip Erdoğan, 12 Haziran 2011 seçimlerinden de daha büyük bir zaferle çıktı ve %49,8 oy alarak 61. Hükûmeti kurdu. 10 Ağustos 2014 Pazar günü, Türk siyasi tarihinde ilk kez doğrudan halkın oylarıyla ve ilk turda 12. Cumhurbaşkanı seçildi. 16 Nisan 2017 tarihindeki halk oylamasında kabul edilen Anayasa değişikliği ile Cumhurbaşkanının partili olabilmesinin önünün açılmasının ardından Recep Tayyip Erdoğan, 21 Mayıs 2017 tarihinde gerçekleştirilen 3. Olağanüstü Büyük Kongrede, kurucusu olduğu AK Parti’nin Genel Başkanlığına yeniden seçildi.<br><br>24 Haziran 2018 Pazar günü yapılan Cumhurbaşkanlığı seçimlerinde %52,59 oy oranıyla yeniden Cumhurbaşkanı seçildi. 16 Nisan 2017’de kabul edilen Anayasa değişikliği ile hayata geçirilen Cumhurbaşkanlığı Hükûmet Sistemi’nin ilk Cumhurbaşkanı olarak 9 Temmuz 2018 tarihinde yemin ederek görevine başladı. 28 Mayıs 2023 Pazar günü yapılan Cumhurbaşkanlığı ikinci tur seçimlerinde %52,18 oy oranıyla yeniden Cumhurbaşkanı seçildi. 3 Haziran 2023 tarihinde Türkiye Büyük Millet Meclisinde yemin etmesinin ardından, Cumhurbaşkanlığı Külliyesinde düzenlenen törenle görevine başladı. Recep Tayyip Erdoğan, evli ve 4 çocuk babasıdır.`,
+                social: {
+                    twitter: 'https://twitter.com/RTErdogan',
+                    instagram: 'https://instagram.com/rterdogan',
+                    facebook: 'https://facebook.com/RTErdogan'
+                }
+            },
+            {
+                id: 'bolat',
+                name: 'Prof. Dr. Ömer Bolat',
+                position: 'T.C. Ticaret Bakanı',
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/ömer_bolat.webp',
+                bio: `Ticaret Bakanı Prof. Dr. Ömer Bolat, 30 Ağustos 1963 tarihinde İstanbul'da doğdu. Marmara Üniversitesi İktisadi ve İdari Bilimler Fakültesi Uluslararası Ekonomik İlişkiler bölümünden 1984 yılında mezun oldu. Yüksek lisans eğitimini Avrupa entegrasyonu alanında Amsterdam Üniversitesi Avrupa Enstitüsünde tamamladı. Ayrıca Almanya-Kiel Üniversitesi Dünya Ekonomisi Enstitüsü'nün yüksek lisans düzeyindeki Uluslararası Ekonomi ve İşletme Programı'ndan mezun oldu.<br><br>Marmara Üniversitesi Avrupa Topluluğu Enstitüsü'nden "Avrupa Para Sistemi" konusundaki doktorasını 1989'da tamamladı. 2014 yılında "Doçent", 2019 yılında ise "Profesörlük" ünvanlarını aldı. MÜSİAD Genel Sekreterliği ve Genel Başkanlığı görevlerinde bulundu. 4 Haziran 2023 tarihinde Cumhurbaşkanlığı Kararı ile Ticaret Bakanı olarak atanan Prof. Dr. Ömer Bolat, evli ve 2 çocuk babasıdır.`,
+                social: {
+                    twitter: 'https://twitter.com/omerbolatTR',
+                    instagram: 'https://instagram.com/omerbolattr',
+                    facebook: 'https://facebook.com/omerbolatTR'
+                }
+            },
+              {
+                id: 'gurlek',
+                name: 'Akın Gürlek',
+                position: 'T.C. Adalet Bakanı',
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/akin_gürlek.webp',
+                bio: `1982 yılında Nevşehir'de doğdu. 2005 yılında Marmara Üniversitesi Hukuk Fakültesinden mezun oldu. Türkiye'nin farklı bölgelerinde hâkimlik görevlerinde bulunan Gürlek, 2021 yılında birinci sınıf hakimliğe terfi etti. İstanbul 26. Ağır Ceza Mahkemesi, 37. Ağır Ceza Mahkemesi ve 14. Ağır Ceza Mahkemesi başkanlığı görevlerini yürüttüğü dönemde aldığı kararlarla Türkiye gündeminde yer aldı.<br><br>İstanbul 26. Ağır Ceza Mahkemesi Başkanı olarak görev yaptığı dönemde Selahattin Demirtaş ve Sırrı Süreyya Önder'in yargılandığı davalarda heyet başkanlığı yaptı. Çağdaş Hukukçular Derneği (ÇHD) davası, Şebnem Korur Fincancı ve Canan Kaftancıoğlu'nun yargılandığı davalar ile Sözcü gazetesi yöneticilerinin davası da görev yaptığı dönemde sonuçlandı. İstanbul 14. Ağır Ceza Mahkemesi Başkanı olarak, Anayasa Mahkemesi'nin Enis Berberoğlu hakkında verdiği ihlal kararının uygulanması sürecinde mahkeme başkanlığı yaptı. MİT TIR'ları davası kapsamında Can Dündar hakkında "kaçak" kararı verilmesine hükmetti. Hrant Dink suikastına ilişkin davada heyet başkanlığı yaptı.<br><br>2 Haziran 2022'de Adalet Bakan Yardımcılığı görevine atandı. 2 Ekim 2024'te Hâkimler ve Savcılar Kurulu kararıyla İstanbul Cumhuriyet Başsavcısı oldu. 11 Şubat 2026 tarihli Cumhurbaşkanı atama kararıyla Türkiye Cumhuriyeti Adalet Bakanı olarak atandı. Elif Gülşah Gürlek ile evlidir ve bir çocuğu vardır.`,
+                social: {
+                    twitter: 'https://x.com/akingurlek_tr',
+                    instagram: 'https://www.instagram.com/akingurlek_tr'
+                }
+            },
+            {
+                id: 'suver',
+                name: 'Hasan Suver',
+                position: 'Cumhurbaşkanı Başdanışmanı - Çevre, Şehircilik ve İklim Değişikliği Bakan Yardımcısı',
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/hasan_suver.webp',
+                bio: `1961 yılında Sürmene'de doğdu. İlk ve ortaokul eğitimini Trabzon'da, liseyi Samsun'da tamamladı. Marmara Üniversitesi Siyasal Bilgiler Fakültesi Uluslararası İlişkiler Bölümü'nden mezun oldu. İstanbul Üniversitesi Sosyal Bilimler Enstitüsü Sosyal Yapı ve Sosyal Değişme Ana Bilim Dalında yüksek lisans yaptı ve aynı okulda 'Aydınlar ve Sosyal Değişme' konulu tez çalışması oldu.<br><br>1978 yılından beri Fatih'te ikamet etmektedir. Kurduğu şirkette gıda, temizlik ve inşaat işleriyle ilgilendi. Lise, fakülte, yüksek lisans ve iş hayatında aktif siyasetin içinde oldu. AK Parti Fatih İlçe Teşkilatının 2 nolu kurucu üyesidir. 2002'de AK Parti'den Milletvekili aday adayı oldu. Mart 2004 yerel seçimlerinde Fatih Belediyesi Meclis üyesi seçildi. Mart 2004'ten Nisan 2018'e kadar üç dönem Fatih Belediyesi Başkan Yardımcılığı, Meclis I. Başkan Vekilliği ve Fatih Kent Konseyi Genel Sekreterliği görevlerini sürdürdü. 2018 – 2019 tarihleri arasında ise Fatih Belediyesi Başkanlığı görevinde bulundu.<br><br>Marmara Üniversitesi Mezunları ve Mensupları Derneği (MÜMDER), Adnan Kahveci Kültür Yardımlaşma Derneği, Fatih Kızılay Derneği ve Dil ve Edebiyat Derneği gibi STK'larda yönetim kurulu üyeliği yaptı. İngilizce bilen Suver'in; 'Fatihin Kültürel Mirası', 'Tarihin Tebessümü', 'Denemeler' ve 'Duyguların İzinde' (Şiirler) adlı kitapları dahil toplam beş eseri bulunmaktadır. 26 Aralık 2019 tarihinden itibaren Çevre ve Şehircilik Bakanlığında Bakan Yardımcısı olarak görevlendirilmiştir. Evli ve 3 çocuk babasıdır.`,
+                social: {
+                    twitter: 'https://x.com/hasansuver',
+                    instagram: 'https://www.instagram.com/hasan_suver'
+                }
+            },
+            {
+                id: 'kasapoglu',
+                name: 'Dr. Mehmet Muharrem Kasapoğlu',
+                position: 'Eski Gençlik ve Spor Bakanı - İzmir Milletvekili',
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/muharrem-kasapoglu.webp',
+                bio: `1976 yılında İstanbul'da doğdu. Marmara Üniversitesi İktisadi ve İdari Bilimler Fakültesi İşletme Bölümü'nden mezun olmuştur. Aynı üniversitede mahalli idareler ve yerinden yönetim programında yüksek lisans yapmış, ABD'deki Florida State Üniversitesi İşletme Fakültesi'nde yönetim organizasyonu alanında araştırmacı, uzman ve proje koordinatörü olarak çalışmıştır. Palm Beach Atlantic Üniversitesi'nde işletme yüksek lisansını tamamlamış ve İstanbul Üniversitesi'nden yerel istihdam konusu ile doktora derecesi almıştır.<br><br>Kariyerine 2009 yılında Başbakanlık Müşavirliğine atanarak başlamış; ardından Çalışma ve Sosyal Güvenlik Bakanlığı, Milli Eğitim Bakanlığı ile Gençlik ve Spor Bakanlığı'nda çeşitli görevler üstlenmiştir. Spor Toto Teşkilat Başkanlığı görevinde bulunarak Türkiye'nin spor altyapısının güçlendirilmesine yönelik projeler yürütmüştür. 9 Temmuz 2018 tarihinde Cumhurbaşkanlığı Hükümet Sistemi'nin ilk Gençlik ve Spor Bakanı olarak atanmıştır.<br><br>Bakanlık dönemi boyunca gençlik merkezlerinin yaygınlaştırılması ve sporun tabana yayılması konularında çalışmalar yürütmüştür. 2023 Türkiye genel seçimlerinde AK Parti'den İzmir milletvekili seçilmiştir. İyi derecede İngilizce ve Arapça bilen Kasapoğlu, evli ve iki çocuk babasıdır.`,
+                social: {
+                    twitter: 'https://x.com/kasapoglu',
+                    instagram: 'https://www.instagram.com/kasapoglu'
+                }
+            },
+            {
+                id: 'aydogdu',
+                name: 'Fuzuli Aydoğdu',
+                position: 'HSK Başkanvekili - Yargıtay Üyesi',
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/fuzuli-aydogdu.webp',
+                bio: `1968 yılında Sivas'ın Suşehri ilçesinde doğdu. İlköğretimini Suşehri'nde, lise eğitimini ise Suşehri İmam-Hatip Lisesi'nde tamamladı. 1994 yılında Marmara Üniversitesi Hukuk Fakültesi'nden mezun oldu. Savcılık kariyerine Sivas/Koyulhisar'da başladı; ardından Mardin/Dargeçit, Kırklareli/Pınarhisar ve Bursa/Karacabey adliyelerinde Cumhuriyet Savcısı olarak görev yaptı.<br><br>2008 yılında Fatih Cumhuriyet Savcılığına, 2011 yılında İstanbul Savcılığına atandı. 2012 yılında Terörle Mücadele Kanunu (TMK) 10. Madde ile görevli Cumhuriyet Savcısı olarak görevlendirildi. 17-25 Aralık operasyonları sonrası kritik soruşturma dosyalarında görev aldı. 15 Ocak 2015 tarihli kararname ile İstanbul Cumhuriyet Başsavcı Vekili oldu. 14 Haziran 2017'de HSK Genel Sekreterliği görevine atandı.<br><br>27 Kasım 2020 tarihinde Hâkimler ve Savcılar Kurulu (HSK) tarafından Yargıtay üyeliğine seçildi. 20 Mayıs 2025 tarihinde TBMM Genel Kurulu'nda yapılan oylama ile HSK üyeliğine seçilmiş, 16 Haziran 2025'te ise HSK Başkanvekilliği ve 2. Daire Başkanlığı görevine getirilmiştir. Evli ve üç çocuk babasıdır.`,
+                social: null
+            },
+            { 
+                id: 'sunal', 
+                name: 'Kemal Sunal', 
+                position: 'Türk Sinemasının Usta İsmi', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/kemal-sunal.webp', 
+                bio: `Türk sinemasının efsanevi ismi Kemal Sunal, 1944 yılında İstanbul’da doğdu. Vefa Lisesi’nden mezun olduktan sonra sanat hayatına tiyatro ile başladı. Sinemaya Ertem Eğilmez’in keşfiyle adım atan Sunal, "İnek Şaban" tiplemesiyle Türk halkının gönlünde taht kurdu. Hababam Sınıfı, Tosun Paşa, Süt Kardeşler ve Kibar Feyzo gibi sayısız başyapıtta rol alarak toplumsal sorunları mizahi bir dille beyazperdeye taşıdı.<br><br>Kemal Sunal, sanatçı kimliğinin yanı sıra eğitime verdiği önemle de tanınır. Şöhretinin zirvesindeyken üniversite eğitimine devam etme kararı aldı. Marmara Üniversitesi İletişim Fakültesi Radyo-Televizyon ve Sinema Bölümü’nden 1995 yılında mezun oldu. Ardından yüksek lisans eğitimini "TV ve Sinemada Kemal Sunal Güldürüsü" başlıklı teziyle tamamladı. 2000 yılında aramızdan ayrılan usta sanatçı, hem filmleriyle hem de akademik azmiyle gelecek nesillere örnek olmaya devam etmektedir.`,
+                social: null // Rahmetli olduğu için boş
+            },
+            { 
+                id: 'topbas', 
+                name: 'Kadir Topbaş', 
+                position: 'Eski İstanbul B.Ş. Belediye Başkanı', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/Kadir-Topbas.webp', 
+                bio: `1945 yılında Artvin’in Yusufeli ilçesinde doğan Kadir Topbaş, İstanbul’un modernleşme sürecine damga vuran isimlerden biridir. Eğitim hayatına çok yönlü bir bakış açısıyla yaklaşan Topbaş, 1972 yılında Marmara Üniversitesi İlahiyat Fakültesi’nden, 1974 yılında ise Mimar Sinan Üniversitesi Mimarlık Bölümü’nden mezun oldu. Doktora tezini "İstanbul Hidiv Kasrı ve Boğaziçi Sivil Mimarisindeki Yeri" üzerine tamamlayarak "Doktor" unvanını aldı.<br><br>Siyasi kariyerine Beyoğlu Belediye Başkanlığı ile başlayan Topbaş, 2004 yılında İstanbul Büyükşehir Belediye Başkanı seçildi. 2004-2017 yılları arasında aralıksız sürdürdüğü bu görev süresince İstanbul’un ulaşım altyapısı, çevre düzenlemeleri ve kültürel mirasının korunması konularında önemli projelere imza attı.`,
+                social: null // Rahmetli olduğu için boş
+            },
+            { 
+                id: 'aksener', 
+                name: 'Meral Akşener', 
+                position: 'İYİ Parti Kurucu Genel Başkanı', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/Meral_Akşener.webp', 
+                bio: `1956 yılında İzmit’te doğan Meral Akşener, Türk siyasetinin ve akademi dünyasının önemli kadın figürlerinden biridir. İstanbul Üniversitesi Edebiyat Fakültesi Tarih Bölümü’nden mezun olduktan sonra akademik kariyerine Marmara Üniversitesi Sosyal Bilimler Enstitüsü’nde devam etti. Burada yüksek lisans ve doktorasını tamamlayarak "Tarih Doktoru" unvanını kazandı.<br><br>Siyasete atıldıktan sonra 1996-1997 yılları arasında İçişleri Bakanlığı görevini üstlenerek Türkiye Cumhuriyeti tarihinin ilk kadın İçişleri Bakanı oldu. Uzun yıllar TBMM Başkanvekilliği görevini yürüten Akşener, 2017 yılında İYİ Parti’yi kurarak Türk siyasetinde yeni bir hareket başlattı.`,
+                social: {
+                    twitter: 'https://twitter.com/meral_aksener',
+                    instagram: 'https://instagram.com/meralaksener',
+                    facebook: 'https://facebook.com/meralaksener'
+                }
+            },
+            { 
+                id: 'zeybekci', 
+                name: 'Nihat Zeybekci', 
+                position: 'Eski Ekonomi Bakanı', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/Nihat-Zeybekci.webp', 
+                bio: `1961 yılında Denizli’nin Tavas ilçesinde doğan Nihat Zeybekci, iş dünyası ve siyasetin içinden gelen bir isimdir. Marmara Üniversitesi İktisadi ve İdari Bilimler Fakültesi İşletme Bölümü’nden mezun olduktan sonra İstanbul Üniversitesi’nde Uluslararası İlişkiler alanında yüksek lisans yaptı. İş hayatına atılarak tekstil sektöründe ihracat odaklı başarılı bir şirket kurdu.<br><br>Siyasi kariyerine 2004 yılında Denizli Belediye Başkanı seçilerek başladı. 2011 yılında milletvekili seçilerek parlamentoya girdi. Türkiye Cumhuriyeti Ekonomi Bakanı olarak görev aldığı dönemlerde ihracatın artırılması, yatırım teşvikleri ve serbest ticaret anlaşmaları konularında önemli politikalara yön verdi.`,
+                social: {
+                    twitter: 'https://twitter.com/zntnihatzeybekci',
+                    instagram: 'https://instagram.com/nihatzeybekci',
+                    facebook: 'https://facebook.com/nihatzeybekci'
+                }
+            },
+            { 
+                id: 'sarigul', 
+                name: 'Mustafa Sarıgül', 
+                position: 'Siyasetçi', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/mustafa-sarigul.webp', 
+                bio: `1956 yılında Erzincan’ın İliç ilçesinde doğan Mustafa Sarıgül, Türk yerel yönetimciliğinde kendine has tarzıyla bilinen bir siyasetçidir. Yükseköğrenimini Marmara Üniversitesi Eğitim Fakültesi’nde tamamladı. Genç yaşta siyasete atılarak CHP Gençlik Kolları’nda görev aldı ve Türkiye’nin en genç milletvekillerinden biri olarak 1987 yılında meclise girdi.<br><br>Sarıgül’ün siyasi kariyerindeki en belirgin dönem, 1999-2014 yılları arasında yürüttüğü Şişli Belediye Başkanlığı görevidir. "Değişim Şişli’den Başlar" sloganıyla yürüttüğü projelerle Şişli’yi bir marka haline getirdi.`,
+                social: {
+                    twitter: 'https://twitter.com/M_Sarigul',
+                    instagram: 'https://instagram.com/mustafasarigul_',
+                    facebook: 'https://facebook.com/mustafasarigul'
+                }
+            },
+            { 
+                id: 'dogan', 
+                name: 'Aydın Doğan', 
+                position: 'Doğan Holding Onursal Başkanı', 
+                image: 'image/Kurumsal/Eski-Mezunlarimiz/Aydin-Dogan.webp', 
+                bio: `1936 yılında Gümüşhane’nin Kelkit ilçesinde doğan Aydın Doğan, Türk iş dünyasının duayen isimlerinden biridir. Yükseköğrenimini Marmara Üniversitesi’nin temelini oluşturan İstanbul İktisadi ve Ticari İlimler Akademisi’nde tamamladı. İş hayatına 1958 yılında lastik, bisiklet, radyo ve ticari araç bayilikleri ile adım attı. 1979 yılında Milliyet Gazetesi’ni satın alarak medya sektörüne girdi.<br><br>Enerji, perakende, sanayi, gayrimenkul ve turizm gibi birçok sektörde faaliyet gösteren Doğan Holding’in kurucusu olarak binlerce kişiye istihdam sağladı. Aydın Doğan Vakfı aracılığıyla eğitim, kültür ve sanat alanlarında önemli sosyal sorumluluk projelerine imza attı.`,
+                social: {
+                    // Aydın Doğan şahsi hesap kullanmaz, Holding/Vakıf hesapları eklendi
+                    twitter: 'https://twitter.com/dogan_holding',
+                    instagram: 'https://instagram.com/aydindoganvakfi',
+                    facebook: 'https://facebook.com/doganholding'
+                }
+            }
+        ];
+
+        // Kart oluşturma
+        function createMemberCards() {
+            const grid = document.getElementById('membersGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const sorted = [...alumni].sort((a, b) => {
+                if (a.id === 'erdogan') return -1;
+                if (b.id === 'erdogan') return 1;
+                if (a.id === 'bolat') return -1;
+                if (b.id === 'bolat') return 1;
+                return 0;
+            });
+
+            sorted.forEach((member, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'member-card-container' + (member.id === 'erdogan' ? ' featured' : '');
+                cardContainer.style.setProperty('--delay', (index * 0.08) + 's');
+
+                let socialHtml = '';
+                if (member.social) {
+                    socialHtml = '<div class="social-links">';
+                    // X İkonu için fa-brands fa-x-twitter kullanıldı
+                    if(member.social.twitter) socialHtml += `<a href="${member.social.twitter}" target="_blank" class="social-link" onclick="event.stopPropagation()"><i class="fa-brands fa-x-twitter"></i></a>`;
+                    if(member.social.instagram) socialHtml += `<a href="${member.social.instagram}" target="_blank" class="social-link" onclick="event.stopPropagation()"><i class="fab fa-instagram"></i></a>`;
+                    if(member.social.facebook) socialHtml += `<a href="${member.social.facebook}" target="_blank" class="social-link" onclick="event.stopPropagation()"><i class="fab fa-facebook"></i></a>`;
+                    socialHtml += '</div>';
+                }
+
+                cardContainer.innerHTML = `
+                    <div class="member-flip-card" id="memberCard_${member.id}">
+                        <div class="card-face card-front">
+                            <img loading="lazy" src="${member.image}" alt="${member.name}" class="member-image" onerror="this.src='https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER';">
+                            <h3 class="member-name">${member.name}</h3>
+                            <p class="member-position">${member.position}</p>
+                            <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')">
+                                <i class="fas fa-info-circle"></i> Hakkında
+                            </button>
+                        </div>
+                        <div class="card-face card-back">
+                            <div style="width:100%">
+                                <h3 class="member-name">${member.name}</h3>
+                                ${socialHtml}
+                                <p class="member-description">${member.bio.replace(/<br>/g, ' ').substring(0, 130)}...</p>
+                            </div>
+                            <div class="button-group">
+                                <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                                <button class="action-button" onclick="event.stopPropagation(); openModal('${member.id}')">
+                                    <i class="fas fa-expand"></i> Detay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardContainer);
+            });
+        }
+
+        // Global fonksiyon tanımlamaları
+        window.flipCard = function(cardId) {
+            const allCards = document.querySelectorAll('.member-flip-card');
+            const targetCard = document.getElementById(cardId);
+            
+            allCards.forEach(card => { 
+                if (card.id !== cardId) card.classList.remove('flipped'); 
+            });
+            
+            if (targetCard) targetCard.classList.toggle('flipped');
+        }
+
+        window.openModal = function(memberId) {
+            const member = alumni.find(m => m.id === memberId);
+            if (!member) return;
+            
+            const modalImage = document.getElementById('modalImage');
+            const modalName = document.getElementById('modalName');
+            const modalPosition = document.getElementById('modalPosition');
+            const modalBio = document.getElementById('modalBio');
+            const socialContainer = document.getElementById('modalSocials');
+
+            if(modalImage) modalImage.src = member.image;
+            if(modalName) modalName.textContent = member.name;
+            if(modalPosition) modalPosition.textContent = member.position;
+            if(modalBio) modalBio.innerHTML = member.bio;
+
+            if(socialContainer) {
+                socialContainer.innerHTML = '';
+                if (member.social) {
+                    if(member.social.twitter) socialContainer.innerHTML += `<a href="${member.social.twitter}" target="_blank" class="social-link" style="color:var(--primary-color)"><i class="fa-brands fa-x-twitter"></i></a>`;
+                    if(member.social.instagram) socialContainer.innerHTML += `<a href="${member.social.instagram}" target="_blank" class="social-link" style="color:#E1306C"><i class="fab fa-instagram"></i></a>`;
+                    if(member.social.facebook) socialContainer.innerHTML += `<a href="${member.social.facebook}" target="_blank" class="social-link" style="color:#1877F2"><i class="fab fa-facebook"></i></a>`;
+                }
+            }
+
+            const modal = document.getElementById('memberModal');
+            if(modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('memberModal');
+            if(modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function handleCardTilt() {
+            if (window.innerWidth < 1024) return;
+
+            const cards = document.querySelectorAll('.member-card-container');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const flipCard = card.querySelector('.member-flip-card');
+                    if (flipCard && flipCard.classList.contains('flipped')) return;
+
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; 
+                    const y = e.clientY - rect.top;
+                    
+                    const rotateX = (y / rect.height - 0.5) * -10;
+                    const rotateY = (x / rect.width - 0.5) * 10;
+                    
+                    if (flipCard) {
+                        flipCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const flipCard = card.querySelector('.member-flip-card');
+                    if (flipCard && !flipCard.classList.contains('flipped')) {
+                        flipCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            createMemberCards();
+            handleCardTilt();
+            
+            const closeBtn = document.getElementById('closeModalBtn');
+            if(closeBtn) closeBtn.addEventListener('click', closeModal);
+            
+            const modal = document.getElementById('memberModal');
+            if(modal) {
+                modal.addEventListener('click', (e) => { 
+                    if (e.target === e.currentTarget) closeModal(); 
+                });
+            }
+            
+            document.addEventListener('keydown', (e) => { 
+                if (e.key === 'Escape') closeModal(); 
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#42a5f5" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.4, "random": true },
+          "size": { "value": 3, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#1976d2", "opacity": 0.3, "width": 1 },
+          "move": { "enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" } },
+          "modes": { "bubble": { "distance": 200, "size": 6, "duration": 2, "opacity": 0.8 }, "push": { "particles_nb": 4 } }
+        },
+        "retina_detect": true
+      });
+    </script>
+</body>
+</html>

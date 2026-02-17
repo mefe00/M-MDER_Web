@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MÜMDER - Marmara Üniversitesi Mezun ve Mensupları Derneği</title>
+  <meta name="description" content="MÜMDER ile güçlü bir network oluşturun. Marmara Üniversitesi mezunları için burs programları, kariyer desteği ve networking imkanları." />
+  <meta name="keywords" content="mümder, marmara üniversitesi, mezunlar derneği, burs, kariyer, networking, mezun, kamu yararı" />
+  <meta name="author" content="MÜMDER" />
+
+  <link rel="icon" type="image/x-icon" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp">
+  <link rel="icon" type="image/png" sizes="32x32" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp">
+  <link rel="icon" type="image/png" sizes="16x16" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp">
+  <link rel="apple-touch-icon" sizes="180x180" href="image/cropped-mumder-logo-vectorel-yatay-180x180.webp">
+  <meta name="theme-color" content="#1565c0">
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mumder.org.tr/" />
+  <meta property="og:title" content="MÜMDER - Marmara Üniversitesi Mezunları" />
+  <meta property="og:description" content="Güçlü bir network ile geleceğinizi şekillendiriyoruz" />
+  <meta property="og:image" content="https://mumder.org/image/mumder-logo-vectorel-yatay.webp" />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://mumder.org.tr/" />
+  <meta property="twitter:title" content="MÜMDER - Marmara Üniversitesi Mezunları" />
+  <meta property="twitter:description" content="Güçlü bir network ile geleceğinizi şekillendiriyoruz" />
+  <meta property="twitter:image" content="https://mumder.org.tr/image/mumder-logo-vectorel-yatay.webp" />
+
+  <link rel="canonical" href="https://mumder.org.tr/" />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://docs.google.com" />
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === RESET & BASE === */
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:#1565c0;line-height:1.6;overflow-x:hidden;min-height:100vh;position:relative}
+
+    :root{
+      --navbar-height: 80px;
+      --marmara-dark: #003057;
+      --marmara-gold: #C5B358;
+      --paper-color: #fdfbf7;
+    }
+
+    body.menu-open .side-banners{display:none !important}
+    .skip-link{position:absolute;top:-40px;left:6px;background:#1565c0;color:#fff;padding:8px;text-decoration:none;border-radius:4px;z-index:1000;transition:top .3s}
+    .skip-link:focus{top:6px}
+
+    /* === OPTIMIZATION HELPER === */
+    /* Ekran dışındaki içerikleri render etmeyi ertele */
+    .render-lazy { content-visibility: auto; contain-intrinsic-size: 800px; }
+
+    /* === HERO SECTION === */
+    .hero {
+        min-height:70vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        position:relative;
+        background-color:#000;
+        max-width:98%;
+        margin:1rem auto;
+        border-radius:20px;
+        overflow:hidden;
+        z-index:1;
+        contain: content; /* Browser optimization hint */
+    }
+
+    .hero-video-background { 
+        position:absolute; 
+        inset:0; 
+        width:100%; 
+        height:100%; 
+        object-fit:cover; 
+        z-index:1;
+    }
+    
+    .hero .hero-content { 
+        position:relative; 
+        z-index:2; 
+        background: rgba(0,0,0,0.5); 
+        border-radius: 15px; 
+        padding: 2rem; 
+        max-width:700px;
+        margin:0 auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.6);
+        will-change: transform, opacity; /* GPU acceleration hint */
+    }
+
+    /* Hero Animations */
+    @keyframes containerPopUp {
+        0% { opacity: 0; transform: scale(0.6); visibility: hidden; }
+        60% { opacity: 1; transform: scale(1.05); visibility: visible; } 
+        100% { opacity: 1; transform: scale(1); visibility: visible; }
+    }
+    @keyframes dropDownHero {
+        from { transform: translateY(-50px); opacity: 0; visibility: hidden; }
+        to { transform: translateY(0); opacity: 1; visibility: visible; }
+    }
+    @keyframes slideInRightHero {
+        from { transform: translateX(50px); opacity: 0; visibility: hidden; }
+        to { transform: translateX(0); opacity: 1; visibility: visible; }
+    }
+
+    .hero-content h1, .hero-content .social-inline a { opacity: 0; visibility: hidden; }
+    
+    /* Animation Classes Applied by JS */
+    .hero-anim-container { animation: containerPopUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important; }
+    .hero-anim-text { animation: dropDownHero 1s ease-out forwards !important; }
+    .hero-anim-social { animation: slideInRightHero 0.6s ease-out forwards !important; }
+    
+    .hero h1{font-size:3rem;margin-bottom:1rem;background:linear-gradient(45deg,#fff,#e3f2fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;overflow:hidden}
+    .hero h1::before{content:'';position:absolute;left:-75%;top:0;width:50%;height:100%;background:linear-gradient(120deg,rgba(255,255,255,0.1) 0%,rgba(255,255,255,0.7) 50%,rgba(255,255,255,0.1) 100%);transform:skewX(-20deg);animation:shine 3s infinite}
+    @keyframes shine{0%{left:-75%}100%{left:120%}}
+    .hero p{font-size:1.25rem;margin-bottom:2rem;color:#e3f2fd;opacity:.95;}
+    
+    .cta-buttons{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:2rem;align-items:center}
+
+    /* Social Icons */
+    .social-inline{display:flex;gap:.8rem;align-items:center}
+    .social-inline a{width:45px;height:45px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.35);text-decoration:none;transition:transform .2s, background .2s, border-color .2s}
+    .social-inline a:hover{transform:translateY(-3px);background:#fff;border-color:#fff}
+    .social-inline svg{width:22px;height:22px;fill:#fff}
+    .social-inline a:hover svg{fill:#1565c0}
+
+   /* === PINNED SECTION === */
+    .pinned-notice-section {
+      padding: 4rem 1rem;
+      background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+      position: relative;
+      z-index: 2;
+    }
+    .pinned-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .pinned-paper {
+      flex: 1 1 350px;
+      background: var(--paper-color);
+      background-image: linear-gradient(to bottom right, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0) 100%);
+      color: #333;
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2), 0 10px 25px rgba(0,0,0,0.15), inset 0 0 40px rgba(0,0,0,0.02);
+      border-radius: 2px;
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .paper-left { transform: rotate(-2deg); }
+    .paper-right { transform: rotate(1.5deg); }
+    .pinned-paper::before {
+      content: '📌'; font-size: 2rem; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); text-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10;
+    }
+    .notice-title { font-size: 1.4rem; font-weight: 700; color: var(--marmara-dark); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .notice-text { font-size: 1.15rem; line-height: 1.6; font-weight: 500; margin-bottom: 1.5rem; }
+    .pin-btn {
+      display: inline-block; padding: 10px 25px; background: var(--marmara-dark); color: var(--marmara-gold); text-decoration: none; font-weight: bold; font-family: 'Segoe UI', sans-serif; border-radius: 50px; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid transparent;
+    }
+    .pin-btn:hover { background: #fff; color: var(--marmara-dark); border-color: var(--marmara-dark); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+
+    /* === PRESIDENT MESSAGE === */
+    .president-message { padding: 5rem 0; background: #f8f9fa; position: relative; z-index: 1; overflow: hidden; }
+    .president-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; gap: 4rem; }
+    .president-photo { flex: 0 0 450px; width: 450px; position: relative; display: flex; flex-direction: column; align-items: center; opacity: 0; transform: translateX(-150px); transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .president-photo.animated { opacity: 1; transform: translateX(0); }
+    .president-photo img { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,48,87,0.25); border: 6px solid #fff; }
+    .president-card-info { text-align: center; margin-top: 1.5rem; width: 100%; }
+    .president-card-info h3 { color: var(--marmara-dark); font-size: 2rem; margin-bottom: 0.3rem; font-weight: 800; }
+    .president-card-info p { color: var(--marmara-gold); font-size: 1.1rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    
+    .president-content { flex: 1; opacity: 0; transform: translateX(50px); transition: all 1s ease-out 0.3s; }
+    .president-content.animated { opacity: 1; transform: translateX(0); }
+    .president-content h2 { font-size: 2.2rem; color: var(--marmara-dark); margin-bottom: 0.5rem; font-weight: 800; }
+    .president-motto { font-family: 'Caveat', cursive; font-size: 2.4rem; color: var(--marmara-gold); margin-bottom: 1.5rem; display: block; transform: rotate(-2deg); text-shadow: 1px 1px 0px rgba(0,0,0,0.1); }
+    .president-text { font-size: 1.15rem; color: #555; line-height: 1.8; margin-bottom: 2rem; }
+    .read-more-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 1rem 2.5rem; background: var(--marmara-dark); color: var(--marmara-gold); text-decoration: none; font-weight: 700; border-radius: 50px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,48,87,0.2); }
+    .read-more-btn:hover { background: #fff; color: var(--marmara-dark); box-shadow: 0 8px 25px rgba(0,48,87,0.3); transform: translateY(-3px); }
+
+    /* === FEATURES === */
+    .features{padding:5rem 0;position:relative;color:white;overflow:hidden;z-index:1}
+    .features::before{content:'';position:absolute;top:-1px;left:0;right:0;height:50px;background:linear-gradient(135deg,#e3f2fd 0%,#fff 100%);clip-path:polygon(0 0,100% 0,100% 80%,0 100%)}
+    .section-title{text-align:center;font-size:2.5rem;margin-bottom:3rem;background:linear-gradient(45deg,#1565c0,#1976d2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:2rem}
+    .feature-card {position: relative;height: 320px;border-radius: 20px;overflow: hidden;display: flex;flex-direction: column;justify-content: flex-end;padding: 25px;text-align: left;box-shadow: 0 10px 30px rgba(0,0,0,0.15);cursor: pointer;transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);border: none;background: #003057;}
+    .feature-card:hover {transform: translateY(-10px);box-shadow: 0 20px 40px rgba(0, 48, 87, 0.3);}
+    .feature-card .card-bg {position: absolute;top: 0; left: 0; width: 100%; height: 100%;object-fit: cover;transition: transform 0.6s ease;z-index: 0;}
+    .feature-card:hover .card-bg {transform: scale(1.1);}
+    .feature-card .card-overlay {position: absolute;top: 0; left: 0; width: 100%; height: 100%;background: linear-gradient(to top, rgba(0, 48, 87, 0.95) 0%, rgba(0, 48, 87, 0.4) 60%, transparent 100%);z-index: 1;}
+    .feature-content {position: relative;z-index: 2;color: #fff;}
+    .feature-icon {font-size: 2.5rem;margin-bottom: 0.5rem;display: inline-block;filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));}
+    .feature-card h3 {font-size: 1.5rem;margin-bottom: 0.5rem;font-weight: 700;color: #C5B358;}
+    .feature-card p { font-size: 0.95rem; opacity: 0.9; line-height: 1.4; }
+
+    /* === SUPPORT & NEWS === */
+    .support-block{background:linear-gradient(270deg,#539df1a8 0%,#65a9ee9c 10%,#3d93daa1 90%,#2f84c0ad 100%);padding:6rem 0;position:relative;z-index:2}
+    .support-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+    .support-text h2{color:#222;font-size:2rem;font-weight:700;margin-bottom:1rem}
+    .support-text p{color:#222;font-size:1.15rem;font-style:italic;margin:0}
+    .support-btn{background:linear-gradient(90deg,#1565c0 0%,#1976d2 100%);color:#fff;border-radius:14px;padding:1rem 2.2rem;font-weight:800;font-size:1.08rem;text-decoration:none;display:inline-block;letter-spacing:1.2px;box-shadow:0 4px 16px rgba(21,101,192,0.18);border:none;outline:none;text-align:center;position:relative;overflow:hidden;transition:all .25s cubic-bezier(.4,2,.6,1)}
+    .support-btn:hover{background:linear-gradient(90deg,#1976d2 0%,#1565c0 100%);transform:translateY(-2px)}
+
+    .news{padding:4rem 0;z-index:1;position:relative}
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:2rem;margin-top:3rem}
+    .news-card{background:#fff;border-radius:15px;overflow:hidden;transition:transform 0.4s cubic-bezier(.4,2,.6,1),box-shadow 0.3s,border-color 0.3s;box-shadow:0 5px 15px rgba(21,101,192,0.08);border:1px solid #e3f2fd;cursor:pointer}
+    .news-card:hover{transform:scale(1.03) translateY(-6px) rotate(0.5deg);box-shadow:0 16px 40px rgba(21,101,192,0.18);border-color:#1976d2}
+    .news-card-content{padding:16px 16px 18px}
+    .news-img-wrap{position:relative;width:100%;background:#f3f4f6;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:180px}
+    .news-img-wrap img{display:block;max-width:100%;height:auto;object-fit:contain;}
+    .news-date{font:500 12px/1.2 system-ui;color:#6b7280;margin:10px 0 6px}
+    .news-title{color:#1565c0;font-weight:800;font-size:20px;line-height:1.3;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}
+    .news-description{color:#333;font-size:14.5px;line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;overflow-wrap:anywhere}
+    .news-btn-link{display:inline-block;padding:8px 12px;border:1px solid #111;border-radius:8px;color:#111;text-decoration:none;transition:all .2s}
+    .news-btn-link:hover{background:#111;color:#fff}
+    .view-all-news-btn{display:inline-block;padding:0.9rem 2.4rem;background:linear-gradient(90deg,#1565c0 0%,#1976d2 100%);color:#fff;border:none;border-radius:40px;font-size:1.1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(21,101,192,0.12);letter-spacing:1px;transition:all 0.3s cubic-bezier(.4,2,.6,1);position:relative;overflow:hidden}
+    .view-all-news-btn:hover{background:linear-gradient(90deg,#1976d2 0%,#1565c0 100%);transform:scale(1.05) translateY(-2px);box-shadow:0 8px 24px rgba(21,101,192,0.18)}
+    
+    .animate-on-scroll{opacity:0;transform:translateY(40px) scale(0.98);transition:all 0.7s cubic-bezier(.4,2,.6,1);will-change:opacity,transform}
+    .animate-on-scroll.animated{opacity:1;transform:translateY(0) scale(1)}
+
+    /* === LIGHTWIDGET & MISC === */
+    .social-media-section{padding:3.5rem 0;position:relative;z-index:1}
+    .social-media-section .section-title{margin-bottom:1.25rem}
+    .blue-frame{--b: clamp(1px, 0.35vw, 2px);--r: clamp(16px, 2.2vw, 26px);--c1: #1e88e5; --c2: #64b5f6;max-width:1200px;margin:0 auto;padding: var(--b);border-radius: calc(var(--r) + var(--b));background: linear-gradient(135deg, var(--c1), var(--c2));box-shadow:0 22px 65px rgba(0,0,0,.22),0 0 0 3px rgba(30,136,229,.08),0 0 90px rgba(100,181,246,.65),0 0 140px rgba(30,136,229,.35);}
+    .blue-frame__inner{background:#fff;border-radius: var(--r);padding: clamp(10px, 1.4vw, 18px);box-shadow:inset 0 0 0 1px rgba(30,136,229,.12),inset 0 0 42px rgba(100,181,246,.15);}
+    .blue-frame__inner .lightwidget-widget{ display:block;width:100%;border:0;overflow:hidden; }
+
+    /* Modal */
+    .modal{position:fixed;inset:0;display:none;place-items:center;z-index:10000;background:rgba(21,101,192,.14);backdrop-filter:blur(8px)}
+    .modal.open{display:grid}
+    .modal-card{width:min(900px,95vw);max-height:86vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 14px 60px rgba(0,0,0,.15);animation:pop .18s ease-out;position:relative}
+    .modal-hero-wrap{position:relative;display:flex;align-items:center;justify-content:center;background:#eef3ff}
+    .modal-hero{max-width:100%;max-height:70vh;width:auto;height:auto;display:block;object-fit:contain}
+    .modal-body{padding:22px}
+    .modal-title{color:#0f3a7a;font-weight:800;font-size:26px;line-height:1.25;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere}
+    .modal-date{color:#6b7280;font:500 12px/1.2 system-ui;margin-bottom:14px}
+    .modal-desc{color:#222;font-size:15.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+    .modal-actions{margin-top:16px}
+    .modal-close{position:absolute;top:14px;right:16px;border:0;background:#1976d2;color:#fff;width:42px;height:42px;border-radius:50%;font-size:22px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;z-index:10}
+    .modal-close:hover{background:#1565c0;transform:scale(1.1)}
+    .modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:2px solid #1e40af;background:#3b82f6;color:#fff;font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 20px rgba(30,64,175,.35);transition:all .2s}
+    .modal-nav:hover{background:#1e40af;transform:translateY(-50%) scale(1.1)}
+    .modal-prev{left:12px}
+    .modal-next{right:12px}
+    @keyframes pop{from{transform:translateY(10px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+    @media (max-width:900px){.modal-hero{max-height:60vh}.modal-card{width:95vw;margin:2.5vh}.modal-nav{width:40px;height:40px;font-size:20px}}
+    @media (max-width:480px){.modal-nav{display:none}.modal-title{font-size:22px}}
+
+    /* === RESPONSIVE === */
+    @media (max-width:992px){
+      .hero h1{font-size:2.2rem}
+      .hero p{font-size:1.1rem}
+      .cta-buttons{flex-direction:column;align-items:center}
+      .features-grid,.news-grid{grid-template-columns:1fr}
+      .support-container{flex-direction:column;text-align:center}
+      .support-btn{margin-top:1rem}
+      .hero .hero-content{padding-left:1rem;padding-right:1rem}
+      .president-wrapper { flex-direction: column; text-align: center; }
+      .president-photo { flex: 0 0 auto; width: 250px; }
+      .president-content { width: 100%; border-left: none; border-top: 5px solid var(--marmara-gold); }
+      .president-content::before { display: none; }
+    }
+    @media (max-width:768px){
+      .pinned-paper { padding: 1.5rem; }
+      .notice-text { font-size: 1rem; }
+    }
+    @media (max-width:480px){
+      .hero h1,.section-title{font-size:1.5rem}
+      .news-img-wrap{height:150px}
+      .news-title{font-size:18px}
+      .support-text h2{font-size:1.5rem}
+      .support-text p{font-size:1rem}
+      .support-btn{padding:0.9rem 2rem;font-size:1rem}
+      .president-content h2 { font-size: 1.8rem; }
+    }
+
+    /* Loader Styles */
+    .loader-container{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#003366 0%,#006699 100%);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1.5s ease-in-out}
+    .loader-container.fade-out{opacity:0}
+    .loader-container.hidden{display:none}
+    .particles{position:absolute;top:0;left:0;width:100%;overflow:hidden}
+    .particle{position:absolute;background:rgba(255,255,255,0.1);border-radius:50%;animation:floatParticles 12s infinite linear}
+    @keyframes floatParticles{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%,90%{opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
+    .logo-animation{text-align:center;position:relative;z-index:2}
+    .university-icon{font-size:4rem;margin-bottom:2rem;animation:bounceIn 2.5s ease-out;filter:drop-shadow(0 0 20px rgba(255,255,255,0.3))}
+    @keyframes bounceIn{0%{transform:scale(0) rotate(-180deg);opacity:0}50%{transform:scale(1.1) rotate(-90deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+    .main-title{font-size:2.5rem;color:#fff;margin-bottom:1rem;animation:slideInUp 1.5s ease-out 1s both}
+    .sub-title{font-size:1.5rem;color:rgba(255,255,255,0.9);margin-bottom:2rem;opacity:0;transform:translateY(30px);animation:slideInUp 1.5s ease-out 2s forwards}
+    @keyframes slideInUp{to{opacity:1;transform:translateY(0)}}
+    .loading-container{width:300px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden;margin:2rem auto;opacity:0;animation:fadeIn 0.5s ease-out 2.5s forwards}
+    .loading-bar{height:100%;background:linear-gradient(90deg,#fff,#e3f2fd);border-radius:2px;width:0%;animation:loadProgress 1s ease-out 2.5s forwards;box-shadow:0 0 10px rgba(255,255,255,0.8)}
+    @keyframes loadProgress{0%{width:0%}20%{width:15%}40%{width:40%}60%{width:65%}80%{width:85%}100%{width:100%}}
+    @keyframes fadeIn{to{opacity:1}}
+    #particles-js{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Ana içeriğe geç</a>
+
+  <div id="particles-js" aria-hidden="true"></div>
+
+  <div id="loader" class="loader-container" role="status" aria-label="Sayfa yükleniyor">
+    <div class="particles" id="particles" aria-hidden="true"></div>
+    <div class="logo-animation">
+      <div class="university-icon" role="img" aria-label="Üniversite ikonu">🎓</div>
+      <h1 class="main-title">Marmara Üniversitesi Mezunları</h1>
+      <p class="sub-title">Yükleniyor...</p>
+      <div class="loading-container" role="progressbar" aria-label="Yükleme ilerlemesi">
+        <div class="loading-bar"></div>
+      </div>
+      <p class="loading-text">Sayfa hazırlanıyor...</p>
+    </div>
+  </div>
+
+  <div id="main-content" style="display:none;">
+    <div id="navbar-placeholder"></div>
+    
+    <section class="hero" role="banner" style="background-color: #003057;">
+      <video class="hero-video-background"
+             autoplay
+             muted 
+             loop 
+             playsinline 
+             webkit-playsinline 
+             preload="auto" 
+             fetchpriority="high"
+             id="bgVideo"
+             poster="image/Anasayfa/video-kapak.webp">
+          
+          <source src="image/Anasayfa/Energy%20Vortex%20Intro_free.mp4" type="video/mp4">
+          Tarayıcınız video etiketini desteklemiyor.
+      </video>
+
+      <div class="hero-content">
+        <h1>MÜMDER Ailesine Hoş Geldiniz</h1>
+        
+        <div class="cta-buttons">
+          <div class="social-inline" aria-label="Sosyal Medya Bağlantıları">
+            <a href="https://www.instagram.com/mumderorgtr/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.75a1.25 1.25 0 1 0 0 2.5 1.25 1.25 1.25 0 0 0 0-2.5zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/mumderorgtr/?locale=tr_TR" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 22v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3V2h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/mumderorgtr/?originalSubdomain=tr" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM3 8h2.9v12H3V8zm5.5 0H12v1.9h.1c.6-1.1 2-2.3 4.1-2.3 4.4 0 5.2 2.9 5.2 6.6V20h-3V14c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V20H8.5V8z"/></svg>
+            </a>
+            <a href="https://x.com/mumderorgtr" target="_blank" rel="noopener" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h4.6l5.2 6.9L18.9 3H21l-7 9.3L21 21h-4.6l-5.4-7.2L5.1 21H3l7.2-9.6L3 3z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pinned-notice-section render-lazy" role="region" aria-labelledby="notice-title">
+      <div class="pinned-container">
+        
+        <div class="pinned-paper paper-left">
+          <h2 id="notice-title" class="notice-title">BİLGİLENDİRME</h2>
+          <p class="notice-text">
+Derneğimizin müracaatına binaen, 5253 Sayılı Dernekler Kanununun 27.maddesine göre, 26.06.2019 tarih ve 1265 sayılı T.C. Cumhurbaşkanlığı kararı ile Derneğimiz, “Kamu Yararına Çalışan Dernekler Statüsü” kazanmıştır.        </p>
+          </p>
+        </div>
+
+        <div class="pinned-paper paper-right">
+          <h2 class="notice-title">Üyemiz Ol</h2>
+          <p class="notice-text">
+            Faaliyetlerimizde sizleri aramızda görmek bizlere onur verir
+          </p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScX2kxoFoT6d-59ulkokPb9QlsBsuKMSVXhM9HnQos1QrOmqg/viewform" target="_blank" rel="noopener noreferrer" class="pin-btn">
+  Üyelik Formu <span style="font-size:1.2em">✍️</span>
+</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="president-message render-lazy" role="region" aria-labelledby="president-title">
+      <div class="president-wrapper">
+        
+        <div class="president-photo animate-on-scroll">
+          <img loading="lazy" src="image/Anasayfa/mehmet-genc.webp" alt="MÜMDER Başkanı Mehmet Genç" width="450" height="600" />
+          
+          <div class="president-card-info">
+            <h3>Mehmet Genç</h3>
+            <p>YÖNETİM KURULU BAŞKANI</p>
+          </div>
+        </div>
+
+        <div class="president-content animate-on-scroll">
+          <h2 id="president-title">Başkandan Mesaj</h2>
+          
+          <span class="president-motto">"İddialı ve inançlı nesiller için..."</span>
+
+          <div class="president-text">
+            <p>
+              Marmara Üniversitesi Mezun ve Mensupları Derneği (MÜMDER) olarak, Marmara Üniversitesi’nin köklü geçmişinden aldığımız güçle, mezunlarımız arasındaki bağları kuvvetlendirmek, yeni mezunlarımıza kariyer yolculuklarında rehberlik etmek ve üniversitemizin marka değerine katkı sağlamak amacıyla yola çıktık...
+            </p>
+          </div>
+          <a href="baskanmesaj.html" class="read-more-btn">
+            Devamını Oku 
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+      <section class="social-media-section render-lazy" role="region" aria-labelledby="social-title">
+      <div class="container">
+        <h2 id="social-title" class="section-title">Sosyal Medyada MÜMDER</h2>
+
+        <div class="blue-frame">
+          <div class="blue-frame__inner">
+            
+            <div style="padding:40px; text-align:center; color:#003366; background:#f0f7ff; border-radius:12px;">
+              <h3></h3>
+              <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/9f2cf84b8eae5fc1b9e5851b06d18dbd.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
+            </div>
+
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features render-lazy" role="region" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="section-title">Neler Sunuyoruz?</h2>
+        <div class="features-grid">
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/istockphoto-1955455765-612x612.webp" class="card-bg" alt="Burs Görseli"> <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Eğitim ikonu"></span>
+              <h3>Burs Programları</h3>
+              <p>İhtiyaç sahibi öğrencilerimize eğitim hayatlarında destek sağlıyoruz.</p>
+            </div>
+          </article>
+          
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/kariyer.webp" class="card-bg" alt="Kariyer Görseli">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Kariyer ikonu"></span>
+              <h3>Kariyer Desteği</h3>
+              <p>Mezunlarımızın iş hayatına başlamaları için rehberlik ve network imkanı sunuyoruz.</p>
+            </div>
+          </article>
+          
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/Networking.webp" class="card-bg" alt="Network Görseli">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Network ikonu"></span>
+              <h3>Networking</h3>
+              <p>Güçlü bir mezun ağı ile profesyonel bağlantılar kurmanıza yardımcı oluyoruz.</p>
+            </div>
+          </article>
+
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/education.webp" class="card-bg" alt="Akademi Görseli">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Akademi ikonu"></span>
+              <h3>Akademi & Eğitim</h3>
+              <p>Sertifika programları ve teknik eğitimlerle gelişiminize katkı sunuyoruz.</p>
+            </div>
+          </article>
+
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/social_activity.webp" class="card-bg" alt="Sosyal Etkinlik Görseli">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Etkinlik ikonu"></span>
+              <h3>Sosyal Etkinlikler</h3>
+              <p>Geziler ve buluşmalarla mezunlarımız arasındaki bağları güçlendiriyoruz.</p>
+            </div>
+          </article>
+
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/atolye-calismlari.webp" class="card-bg" alt="Atölye Çalışmaları">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Atölye Çalışmaları"></span>
+              <h3>Atölye Çalışmaları</h3>
+              <p>Derneğimiz, belirli bir konuda bilgi paylaşım ya da uygulamaların yapıldığı, temelinde paylaşım ve etkileşime dayalı,  bir süre devam eden atölye çalışmaları düzenlemektedir.</p>
+            </div>
+          </article>
+
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/konferans.webp" class="card-bg" alt="Konferanslar & Seminerler">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Konferanslar & Seminerler"></span>
+              <h3>Konferanslar & Seminerler</h3>
+              <p>Derneğimiz, tüm üniversite öğrencilerini ve mezunlarını kapsayan, alanında en iyi isimleri organize ederek üniversite içinde ve dışında konferans ve seminerler düzenlemektedir</p>
+            </div>
+          </article>
+
+          <article class="feature-card animate-on-scroll" tabindex="0">
+            <img loading="lazy" src="image/Anasayfa/üyeanlasmalari.webp" class="card-bg" alt="ÜYE Anantaj Anlaşmaları">
+            <div class="card-overlay"></div>
+            <div class="feature-content">
+              <span class="feature-icon" role="img" aria-label="Üye Avantaj Anlaşmaları"></span>
+              <h3>Üye Avantaj Anlaşmaları</h3>
+              <p>Derneğimiz, mezun ve mensuplarına yüzdelik veya belli bir tutarda indirim ve fırsat sunacak kurumlar ile anlaşmalar düzenler. Bu vesile ile mezun ve mensuplarımız anlaşmalı kurumdan alışveriş yaptıklarında indirim ve fırsatlar kazanırlar.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="support-block render-lazy" role="region" aria-labelledby="support-title">
+      <div class="support-container">
+        <div class="support-text">
+          <h2 id="support-title">Faaliyetlerimize Destek Olabilirsiniz</h2>
+          <p>"Taşı delen suyun gücü değil, damlaların sürekliliğidir"</p>
+        </div>
+        <a href="Projeler.html" target="_blank" rel="noopener noreferrer" class="support-btn">
+          SPONSOR OL <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="news render-lazy" role="region" aria-labelledby="news-title">
+      <div class="container">
+        <h2 id="news-title" class="section-title">Son Haberler</h2>
+        <div class="news-grid" id="homeNewsGrid">
+          <div id="home-news-loading" style="color:#1976d2;font:500 14px system-ui;text-align:center;grid-column:1/-1;" role="status" aria-live="polite">
+            Haberler yükleniyor...
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:2rem;">
+          <a href="mediacenter.html" class="view-all-news-btn">Tüm Haberleri Gör</a>
+        </div>
+      </div>
+    </section>
+
+  
+  
+    <div id="footer-placeholder"></div>
+  </div>
+
+  <div class="modal" id="newsModal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Modalı kapat" type="button">×</button>
+      <div class="modal-hero-wrap">
+        <button class="modal-nav modal-prev" id="modalPrev" aria-label="Önceki görsel" style="display:none" type="button">‹</button>
+        <img loading="lazy" id="modalImg" class="modal-hero" alt="" loading="lazy" decoding="async">
+        <button class="modal-nav modal-next" id="modalNext" aria-label="Sonraki görsel" style="display:none" type="button">›</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalDate" class="modal-date"></div>
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <div id="modalDesc" class="modal-desc"></div>
+        <div class="modal-actions">
+          <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="news-btn-link" style="display:none">Haberi Aç</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "MÜMDER",
+    "alternateName": "Marmara Üniversitesi Mezun ve Mensupları Derneği",
+    "url": "https://mumder.org",
+    "logo": "https://mumder.org/image/logo.webp",
+    "description": "Marmara Üniversitesi mezunları için burs programları, kariyer desteği ve networking imkanları sunan dernek",
+    "foundingDate": "2015",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "İstanbul",
+      "addressCountry": "TR"
+    },
+    "sameAs": [
+      "https://www.facebook.com/mumder",
+      "https://www.instagram.com/mumder",
+      "https://www.linkedin.com/company/mumder",
+      "https://x.com/mumder"
+    ]
+  }
+  </script>
+
+  <script>
+  (function(){
+    'use strict';
+
+    const isFirstVisit = !sessionStorage.getItem('visited');
+    const CONFIG = {
+      SHEET_ID_NEWS: "1o-ZE4RIiaKh52E7Y0qlegC1Yq_Dav1ne4N7wW6XL-30",
+      SHEET_ID:      "1xtePM2254wdyiVBler4GAm93lk2ZYF8HjyWW5dDHLWU",
+      NEWS_GID:      "313657530",
+      MAX_NEWS: 3,
+      LOADER_DURATION: isFirstVisit ? 4000 : 0
+    };
+
+    const utils = {
+      throttle(fn, limit){ let ok=true; return (...a)=>{ if(!ok) return; ok=false; fn(...a); setTimeout(()=>ok=true,limit); }; },
+      isInViewport(el){ const r=el.getBoundingClientRect(); return r.top>=0 && r.left>=0 && r.bottom<=innerHeight && r.right<=innerWidth; },
+      norm(s){ if(!s) return ""; return String(s).toLowerCase()
+        .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+        .replace(/[^a-z0-9]+/g,' ').trim(); },
+      sanitize: str => String(str??"").replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    };
+
+    const updateNavbarOffset = () => {
+      const root = document.documentElement;
+      const nav = document.querySelector('#navbar-placeholder nav, #navbar-placeholder .navbar');
+      const ph  = document.getElementById('navbar-placeholder');
+      const h = Math.max( (nav && nav.offsetHeight)||0, (ph && ph.offsetHeight)||0, 80 );
+      root.style.setProperty('--navbar-height', h + 'px');
+    };
+
+    const menuWatcher = {
+      init(){
+        const root = document.getElementById('navbar-placeholder'); if(!root) return;
+        const attrObs = new MutationObserver(()=> this.update());
+        const treeObs = new MutationObserver(()=> scan());
+        const scan = ()=>{
+          root.querySelectorAll('[aria-expanded]').forEach(el=> attrObs.observe(el,{attributes:true,attributeFilter:['aria-expanded']}));
+          this.update();
+        };
+        treeObs.observe(root,{childList:true,subtree:true});
+        root.addEventListener('click', ()=> setTimeout(()=> this.update(), 60));
+        scan();
+      },
+      update(){
+        const root = document.getElementById('navbar-placeholder'); if(!root) return;
+        const expanded = !!Array.from(root.querySelectorAll('[aria-expanded]')).find(el => el.getAttribute('aria-expanded')==='true');
+        document.body.classList.toggle('menu-open', expanded);
+      }
+    };
+
+    const loader = {
+      el:null,
+      init(){
+        if(!isFirstVisit){ this.forceShow(); return; }
+        this.el = document.getElementById('loader');
+        if(this.el){
+          this.createParticles();
+          setTimeout(()=>this.hide(), CONFIG.LOADER_DURATION);
+        } else { this.forceShow(); }
+      },
+      createParticles(){ const pc=document.getElementById('particles'); if(!pc) return;
+        for(let i=0;i<50;i++){ const p=document.createElement('div'); p.className='particle';
+          const s=Math.random()*4+2; p.style.width=s+'px'; p.style.height=s+'px';
+          p.style.left=(Math.random()*100)+'%'; p.style.animationDelay=(Math.random()*8)+'s';
+          p.style.animationDuration=(Math.random()*4+6)+'s'; pc.appendChild(p); }
+      },
+      forceShow(){ const l=document.getElementById('loader'); if(l) l.classList.add('hidden');
+        const mc=document.getElementById('main-content'); if(mc) mc.style.display='block';
+        sessionStorage.setItem('visited','true'); 
+        
+        const v = document.getElementById('bgVideo'); if(v) v.play();
+        setTimeout(() => startHeroAnimations(), 5000);
+      },
+      hide(){ 
+        if(!this.el) return; 
+        const v = document.getElementById('bgVideo');
+        if(v) { v.muted = true; v.currentTime = 0; }
+        this.el.classList.add('fade-out'); 
+        if(v) {
+            var playPromise = v.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => { console.log("Mobilde otomatik oynatma engellendi."); });
+            }
+        }
+        setTimeout(()=>{ 
+            this.el.classList.add('hidden'); 
+            const mc=document.getElementById('main-content');
+            if(mc) mc.style.display='block'; 
+            sessionStorage.setItem('visited','true'); 
+            setTimeout(() => { startHeroAnimations(); }, 5000);
+        }, 1500); 
+      }
+    };
+
+    function startHeroAnimations() {
+        const container = document.querySelector('.hero-content');
+        if(container) container.classList.add('hero-anim-container');
+        setTimeout(() => {
+            const h1 = document.querySelector('.hero-content h1');
+            if(h1) h1.classList.add('hero-anim-text');
+        }, 300);
+        setTimeout(() => {
+            const btn = document.querySelector('.cta-btn');
+            if(btn) btn.classList.add('hero-anim-btn');
+        }, 800);
+        const icons = document.querySelectorAll('.social-inline a');
+        icons.forEach((icon, index) => {
+            setTimeout(() => { icon.classList.add('hero-anim-social'); }, 800 + (index * 200)); 
+        });
+    }
+
+    const scrollAnimations = {
+      els:[],
+      init(){ this.els=document.querySelectorAll('.animate-on-scroll'); this.check(); addEventListener('scroll', utils.throttle(()=>this.check(),16)); },
+      check(){ this.els.forEach(el=>{ if(!el.classList.contains('animated') && utils.isInViewport(el)) el.classList.add('animated'); }); }
+    };
+
+    const homeNews = {
+      els:{ grid:null, loading:null },
+      rowsRef: [],
+      modalEls: {},
+      modalIdx: 0,
+      imgIdx: 0,
+      init(){
+        this.els.grid=document.getElementById('homeNewsGrid');
+        this.els.loading=document.getElementById('home-news-loading');
+        this.modalEls = {
+          root: document.getElementById('newsModal'),
+          img:  document.getElementById('modalImg'),
+          title:document.getElementById('modalTitle'),
+          date: document.getElementById('modalDate'),
+          desc: document.getElementById('modalDesc'),
+          link: document.getElementById('modalLink'),
+          close:document.getElementById('modalClose'),
+          prev: document.getElementById('modalPrev'),
+          next: document.getElementById('modalNext')
+        };
+        if (this.els.grid && this.els.loading){ this.load(); }
+        this.bindModal();
+      },
+      openModal(i){
+        const item=this.rowsRef[i]; if(!item) return;
+        this.modalIdx=i; this.imgIdx=0;
+        this.modalEls.img.src = item.images[0] || '';
+        this.modalEls.img.alt = (item.baslik||'Haber görseli');
+        this.modalEls.title.textContent = item.baslik || '';
+        this.modalEls.date.textContent = item.tarih ? this.humanDate(item.tarih) : '';
+        this.modalEls.desc.textContent = item.ozet || '';
+        if (item.link){ this.modalEls.link.href=item.link; this.modalEls.link.style.display='inline-block'; }
+        else { this.modalEls.link.style.display='none'; }
+        const multi = (item.images||[]).length>1;
+        this.modalEls.prev.style.display = multi ? 'flex' : 'none';
+        this.modalEls.next.style.display = multi ? 'flex' : 'none';
+        this.modalEls.root.classList.add('open');
+        this.modalEls.root.setAttribute('aria-hidden','false');
+        document.body.style.overflow='hidden';
+        this.modalEls.close.focus();
+      },
+      closeModal(){
+        this.modalEls.root.classList.remove('open');
+        this.modalEls.root.setAttribute('aria-hidden','true');
+        document.body.style.overflow='';
+      },
+      showImage(delta){
+        const item=this.rowsRef[this.modalIdx]; if(!item || (item.images||[]).length<2) return;
+        this.imgIdx = (this.imgIdx + delta + item.images.length) % item.images.length;
+        this.modalEls.img.src = item.images[this.imgIdx];
+        this.modalEls.img.alt = `${item.baslik||'Haber görseli'} - Görsel ${this.imgIdx+1}`;
+      },
+      bindModal(){
+        const M=this.modalEls;
+        M.close?.addEventListener('click', ()=>this.closeModal());
+        M.root?.addEventListener('click', (e)=>{ if(e.target===M.root) this.closeModal(); });
+        document.addEventListener('keydown',(e)=>{
+          if (M.root.classList.contains('open')){
+            if(e.key==='Escape') this.closeModal();
+            if(e.key==='ArrowLeft') this.showImage(-1);
+            if(e.key==='ArrowRight') this.showImage(1);
+          }
+        });
+        M.prev?.addEventListener('click', ()=>this.showImage(-1));
+        M.next?.addEventListener('click', ()=>this.showImage(1));
+        M.img?.addEventListener('click', ()=>{
+          if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+          else if (M.img.requestFullscreen) M.img.requestFullscreen().catch(()=>{});
+        });
+      },
+      humanDate:d=> d ? d.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }) : "",
+      parseDate(raw){ 
+        if(!raw) return new Date(); 
+        if(typeof raw==='object'&&('f'in raw||'v'in raw)) raw=raw.f||raw.v; 
+        const s=String(raw).trim(); 
+        let date=null;
+        const a=s.match(/^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4})$/); 
+        if(a) date=new Date(+a[3],+a[2]-1,+a[1]);
+        const b=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); 
+        if(b) date=new Date(+b[1],+b[2]-1,+b[3]);
+        if(!date){ try { date=new Date(s); if(isNaN(date.getTime())) date=null; } catch(e){ date = null; } } 
+        if(!date) date = new Date(); 
+        return date; 
+      },
+      parseImages(v){ 
+        if(!v) return []; 
+        return String(v).split(",").map(s=>s.trim()).filter(Boolean); 
+      },
+      normalize(json){
+        if (!json.table || !json.table.rows) return [];
+        const cols = (json.table.cols || []).map(c => utils.norm(c.label||""));
+        const find=(...names)=>{ for(const n of names){ const i=cols.indexOf(utils.norm(n)); if(i>=0) return i; } return -1; };
+
+        const idx = {
+          baslik:  find("başlık","baslik","haber başlığı","haber basligi","title"),
+          ozet:    find("özet","ozet","haber özeti","haber ozeti","açıklama","aciklama","summary","icerik"),
+          gorsel:  find("görsel","gorsel","görsel url","gorsel url","resim","image","images","foto","foto url"),
+          link:    find("link","bağlantı","baglanti","url","haber linki"),
+          tarih:   find("tarih","date","yayın tarihi","yayin tarihi","kayıt tarihi","eklenme tarihi","olusturma tarihi"),
+          yayinla: find("yayınla","yayinla","publish","aktif","durum","status","yayinda")
+        };
+
+        const rows = json.table.rows.map(r => {
+          const c = r.c || [];
+          const get = i => (i < 0 || !c[i]) ? "" : (c[i].f || c[i].v || "");
+          const rawImages = get(idx.gorsel);
+          return {
+            baslik: String(get(idx.baslik) ?? "").trim(),
+            ozet:   String(get(idx.ozet) ?? "").trim(),
+            images: this.parseImages(rawImages),
+            link:   String(get(idx.link) ?? "").trim(),
+            tarih:  this.parseDate(get(idx.tarih)),
+            yayinla: utils.norm(String(get(idx.yayinla) || "evet"))
+          };
+        })
+        .filter(x => {
+          const no = ["hayir","hayr","false","0","no","kapali","pasif"];
+          const ok = !no.includes(x.yayinla);
+          return ok && x.baslik.length > 0;
+        })
+        .sort((a,b) => (b.tarih || new Date(0)) - (a.tarih || new Date(0)))
+        .slice(0, CONFIG.MAX_NEWS);
+
+        return rows;
+      },
+      render(rows){
+        const grid=this.els.grid;
+        this.rowsRef = rows.slice();
+        if(!rows.length){
+          grid.innerHTML=`<div class="news-empty"><h3>Henüz haber yok</h3><p>Yakında yeni haberlerimizi burada görebileceksiniz.</p></div>`;
+          return;
+        }
+        grid.innerHTML = rows.map((item,i)=>`
+          <article class="news-card animate-on-scroll" data-idx="${i}" tabindex="0" role="button" aria-label="${utils.sanitize(item.baslik)}">
+            <div class="news-card-content">
+              <div class="news-img-wrap">
+                ${item.images[0]?`<img loading="lazy" src="${utils.sanitize(item.images[0])}" alt="${utils.sanitize(item.baslik)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<div style="opacity:.5;font:600 16px system-ui" role="img" aria-label="Görsel yok">📰</div>`}
+              </div>
+              <div class="news-date">${item.tarih?this.humanDate(item.tarih):""}</div>
+              <h3 class="news-title">${utils.sanitize(item.baslik)}</h3>
+              <p class="news-description">${utils.sanitize(item.ozet||'Detaylar için tıklayın...')}</p>
+              ${item.link&&item.link!=='#'?`<a class="news-btn-link" href="${utils.sanitize(item.link)}" target="_blank" rel="noopener noreferrer">Haberi Aç</a>`:""}
+            </div>
+          </article>`).join('');
+        
+        grid.querySelectorAll('.news-card').forEach((card,i)=>{
+          const open=(e)=>{ if(e.target.closest('a')) return; e.preventDefault(); this.openModal(i); };
+          card.addEventListener('click', open);
+          card.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(e); }});
+        });
+        scrollAnimations.init();
+      },
+      error(){ 
+        this.els.grid.innerHTML=`<div class="news-empty"><h3>Haberler yüklenirken bir hata oluştu</h3><p>Lütfen Google E-Tablolar paylaşım ayarlarını kontrol edip sayfayı yenileyin.</p></div>`; 
+      },
+      load(){
+        const url=`https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID_NEWS}/gviz/tq?tqx=out:json&gid=${CONFIG.NEWS_GID}&headers=1`;
+        fetch(url,{cache:'no-store'})
+          .then(r=>{ if(!r.ok) throw new Error(r.statusText); return r.text(); })
+          .then(t=>{ 
+            const m=t.match(/setResponse\(([\s\S]+)\)/); 
+            if(!m) throw new Error('format');
+            const json=JSON.parse(m[1]);
+            const rows=this.normalize(json);
+            const loading=document.getElementById('home-news-loading'); 
+            if(loading) loading.remove();
+            this.render(rows);
+          })
+          .catch((err)=>{ 
+            console.error("Haberler yüklenemedi:", err); 
+            const loading=document.getElementById('home-news-loading'); 
+            if(loading) loading.remove(); 
+            this.error(); 
+          });
+      }
+    };
+
+    function keepVideoAlive(){
+      const v = document.getElementById('bgVideo');
+      if(!v) return;
+      v.muted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
+      v.addEventListener('pause', function() { if(v.currentTime < v.duration && !v.seeking) { v.play().catch(e => {}); } });
+      const forcePlay = function() { if(v.paused) { v.play().catch(e => {}); } document.removeEventListener('touchstart', forcePlay); document.removeEventListener('click', forcePlay); };
+      document.addEventListener('touchstart', forcePlay, { passive: true });
+      document.addEventListener('click', forcePlay);
+    }
+   
+    const initParticles = () => {
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+          particles:{ number:{ value:60, density:{ enable:true, value_area:800 } }, color:{ value:"#42a5f5" }, shape:{ type:"circle" }, opacity:{ value:0.5, random:true }, size:{ value:3, random:true }, line_linked:{ enable:true, distance:150, color:"#1976d2", opacity:0.4, width:1 }, move:{ enable:true, speed:1, direction:"none", out_mode:"out" } },
+          interactivity:{ detect_on:"canvas", events:{ onhover:{ enable:true, mode:"repulse" }, onclick:{ enable:true, mode:"push" } }, modes:{ repulse:{ distance:100, duration:0.4 }, push:{ particles_nb:4 } } },
+          retina_detect:true
+        });
+      }
+    };
+
+    const app = {
+      init(){
+        try{
+          loader.init();
+          homeNews.init();
+          updateNavbarOffset();
+          const navPH=document.getElementById('navbar-placeholder');
+          if(navPH){
+            const mo=new MutationObserver(()=>{ updateNavbarOffset(); menuWatcher.update(); });
+            mo.observe(navPH,{childList:true,subtree:true});
+          }
+          addEventListener('resize', utils.throttle(updateNavbarOffset,150));
+          setTimeout(updateNavbarOffset,400);
+          setTimeout(updateNavbarOffset,1200);
+          setTimeout(()=>{ scrollAnimations.init(); keepVideoAlive(); const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js'; s.onload=()=>initParticles(); document.head.appendChild(s); },100);
+          setTimeout(()=> menuWatcher.init(), 200);
+        } catch(e){ console.error('init error',e); }
+      }
+    };
+
+    if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', app.init); } else { app.init(); }
+    if(isFirstVisit){
+      document.addEventListener('click',()=>{ const L=document.getElementById('loader'); if(L&&!L.classList.contains('fade-out')) loader.hide(); });
+      document.addEventListener('keydown',(e)=>{ if(e.code==='Space'||e.code==='Enter'){ const L=document.getElementById('loader'); if(L&&!L.classList.contains('fade-out')) loader.hide(); } });
+    }
+  })();
+  </script>
+  <script src="js/loadcomponents.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Kurulu - MÜMDER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* * ==============================================
+         * TEMEL STİLLER VE DEĞİŞKENLER
+         * ==============================================
+         */
+        :root {
+            --primary-color: #1565c0;
+            --secondary-color: #1976d2;
+            --background-gradient: linear-gradient(135deg, #f4f8fc 0%, #e3f2fd 100%);
+            --card-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
+            --header-font: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            background: var(--background-gradient);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        #particles-js {
+            position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none;
+        }
+
+        /* * ==============================================
+         * HERO BÖLÜMÜ
+         * ==============================================
+         */
+        .hero-section {
+            min-height: 40vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 2rem; position: relative; overflow: hidden; background: transparent;
+        }
+
+        .hero-content {
+            animation: heroFadeIn 1s ease-out 0.5s both; position: relative; z-index: 1;
+        }
+
+        .hero-title {
+            font-family: var(--header-font); font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 4vw, 1.5rem); color: var(--secondary-color); margin-bottom: 2.5rem;
+        }
+
+        /* * ==============================================
+         * ANA İÇERİK
+         * ==============================================
+         */
+        .main-content {
+            padding: 4rem 1rem; position: relative; z-index: 0; background-color: #ffffff60;
+        }
+
+        .section-title {
+            font-family: var(--header-font); font-weight: 900;
+            font-size: clamp(2.2rem, 6vw, 3.5rem); text-align: center; margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .president-section { margin-bottom: 5rem; display: flex; justify-content: center; }
+        
+        .members-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem; max-width: 1400px; margin: 0 auto;
+        }
+
+        /* * ==============================================
+         * KART STİLLERİ
+         * ==============================================
+         */
+        .member-card-container {
+            perspective: 1500px; min-height: 420px; opacity: 0;
+            animation: fadeInUp 0.8s ease-out both; animation-delay: var(--delay, 0s); position: relative;
+        }
+
+        .member-card-container::before {
+            content: ""; position: absolute; inset: -6px; border: 2.5px solid var(--secondary-color);
+            border-radius: 24px; opacity: 0.6; pointer-events: none;
+        }
+
+        .member-flip-card {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); transform-style: preserve-3d;
+        }
+        
+        .member-flip-card.flipped { transform: rotateY(180deg) !important; }
+
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; background: #fff; box-shadow: var(--card-shadow);
+            border: 1px solid #e3f2fd; display: flex; flex-direction: column;
+            align-items: center; justify-content: space-between; text-align: center;
+            padding: 1.5rem; overflow: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg); justify-content: space-around;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: #fff;
+        }
+
+        .member-image {
+            width: 140px; height: 140px; object-fit: cover; border-radius: 50%;
+            border: 5px solid #fff; margin-bottom: 1rem;
+            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+            transition: all 0.4s ease; background-color: #e3f2fd;
+        }
+        
+        .member-name {
+            font-family: var(--header-font); font-size: 1.3rem; font-weight: 700;
+            color: var(--primary-color); margin-bottom: 0.5rem;
+        }
+        .card-back .member-name { color: #fff; }
+
+        .member-position {
+            color: var(--secondary-color); font-weight: 500; font-size: 1rem; margin-bottom: 1rem;
+        }
+        .card-back .member-position { color: rgba(255,255,255,0.8); }
+
+        .member-description { font-size: 0.9rem; line-height: 1.6; color: #fff; }
+
+        .action-button {
+            background: transparent; border: 2px solid var(--secondary-color);
+            padding: 0.6rem 1.5rem; border-radius: 50px; color: var(--secondary-color);
+            font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-top: 1rem;
+        }
+        .action-button:hover { background: var(--secondary-color); color: #fff; }
+        .card-back .action-button { border-color: #fff; color: #fff; }
+        .card-back .action-button:hover { background: #fff; color: var(--secondary-color); }
+
+        /* * ==============================================
+         * MODAL
+         * ==============================================
+         */
+        .modal {
+            display: none; position: fixed; z-index: 3000; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(244, 248, 252, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .modal.active {
+            display: flex; align-items: center; justify-content: center; animation: modalFadeIn 0.5s ease-out;
+        }
+        .modal-content {
+            background: #fff; border-radius: 20px; max-width: 600px;
+            width: 90%; max-height: 90vh; overflow-y: auto; position: relative;
+            border: 1px solid #e3f2fd; box-shadow: 0 20px 60px rgba(21, 101, 192, 0.2);
+            animation: modalSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-header { padding: 1.5rem; text-align: center; }
+        .modal-image {
+            width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
+            margin: 0 auto 1.5rem; border: 4px solid var(--secondary-color); background-color: #e3f2fd;
+        }
+        .modal-name { font-family: var(--header-font); font-size: 1.8rem; color: var(--primary-color); }
+        .modal-position { color: var(--secondary-color); font-size: 1.1rem; margin: 0.5rem 0; }
+        
+        /* Biyografi alanı için satır arası düzenlemesi */
+        .modal-bio { 
+            line-height: 1.8; 
+            font-size: 0.95rem; 
+            text-align: justify; 
+            padding: 0 2rem 2rem 2rem; 
+            color: #444;
+        }
+        
+        .close-modal {
+            position: absolute; top: 1rem; right: 1rem; background: #f0f6ff; border: none;
+            color: var(--primary-color); width: 40px; height: 40px; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease;
+        }
+        .close-modal:hover { background: var(--secondary-color); color: #fff; transform: rotate(90deg); }
+
+        /* * ==============================================
+         * ANİMASYONLAR
+         * ==============================================
+         */
+        @keyframes heroFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalSlideIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 4rem 2rem; }
+            .hero-section { min-height: 40vh; margin-bottom: -5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="navbar-placeholder"></div>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Yönetim Kurulu</h1>
+            <p class="hero-subtitle">MÜMDER'in Geleceğini Şekillendiren Lider Kadro</p>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <section class="president-section">
+            <div class="member-card-container" style="width: 100%; max-width: 320px; --delay: 0s;"></div>
+        </section>
+
+        <section class="members-section">
+            <h2 class="section-title">Yönetim Kurulu Üyeleri</h2>
+            <div class="members-grid" id="membersGrid"></div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            <div class="modal-header">
+                <img loading="lazy" id="modalImage" src="" alt="" class="modal-image">
+                <h3 id="modalName" class="modal-name"></h3>
+                <p id="modalPosition" class="modal-position"></p>
+            </div>
+            <div class="modal-bio" id="modalBio"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    
+    <script>
+        // ==============================================
+        //  VERİ BÖLÜMÜ - PARAGRAFLARA AYRILMIŞ HALİ
+        // ==============================================
+        const presidentData = {
+            id: 'president',
+            name: "MEHMET GENÇ",
+            position: "MÜMDER BAŞKANI",
+            image: "image/Kurumsal/yonetim-kurulu/mehmet-genc-başkanımız2.webp",
+            bio: "1997 yılında aynı üniversitenin Türkiyat Araştırmaları Enstitüsü Yeniçağ Tarihi Bölümü’nde Yüksek Lisansı tamamlayıp 2003 yılında Yeditepe Üniversitesi Sosyal Bilimler Enstitüsü’nde MBA ve İnsan Kaynakları Yönetimi’nde ayrıca Yüksek Lisans yaptı.<br><br>Okan Üniversitesi’nde Öğretim Görevlisi olan GENÇ, İktisat, İşletme ve İnsan Kaynakları Yönetimi dersleri verdi. Halen aynı üniversitenin Sosyal Bilimler Enstitüsü İşletme Bölümü’nde Doktora çalışmalarına devam etmektedir.<br><br>Çeşitli gazete ve dergilerde yayımlanan makalelerinin yanı sıra, 2001 yılında İGDAŞ Yayınlarından çıkan; ‘Fotoğraf ve Belgeler Işığında İstanbul Depremleri’ isimli bir de eseri bulunmaktadır.<br><br>BELBİM AŞ’de başlayan çalışma hayatı, 1997 yılında girdiği İGDAŞ’ta sırasıyla; Özel Kalem Müdürlüğü, Genel Müdür Danışmanlığı ve İç Denetim Kurulu Üyeliği ile devam etti. 2009 Mahalli İdareler Seçimlerinin ardından göreve başladığı Sancaktepe Belediyesi’nde Özel Kalem Müdürlüğü yapan Genç, 2014-2019 yılları arasında Sancaktepe Belediye Başkan Yardımcılığı görevini yürütmüştür.<br><br>Lise yıllarında tanıştığı Milli Gençlik Vakfı’nda Marmara Üniversitesi Fakülte Başkanlığı ve Üniversite Başkanlığı ile Erenköy ve Kadıköy İlçe Başkan Yardımcılığı yapan GENÇ, Refah Partisi, Fazilet Partisi ve AK Parti’de siyasi çalışmalar içerisinde yer aldı. 2003 yılından itibaren; AK Parti Kadıköy İlçe Yönetim Kurulu Üyeliği, İlçe Yerel Yönetimler Birim Başkanlığı, Ataşehir İlçe Kurucu Üyeliği, Siyasi ve Hukuki İşler Birim Başkanlığı ve SKM Başkanlığı yaptı.<br><br>Birçok sivil toplum kuruluşunda aktif rol alan GENÇ; Sadakataşı Derneği Yönetim Kurulu Üyesi, Türkiye Dil ve Edebiyat Derneği Dış İlişkilerden Sorumlu Genel Başkan Yardımcısı, Deniz Feneri Derneği Genel Kurul Delegesi ve Cihannüma Derneği Üyesi’dir. Aynı zamanda Sivas Platformu İcra Kurulu Üyesi ve İstanbul Sivas İlbeyliler Derneği Başkanı olan GENÇ, birçok hemşehri derneğinin de üyesidir.<br><br>Sporla iç içe olan MEHMET GENÇ; 25 Mayıs 2016 yılından beri Sancaktepe Belediyespor Kulüp Başkanlığı görevini sürdürmektedir. Bir dönem Türkiye Güreş Federasyonu Asbaşkanlığı ve Sancaktepe Belediyespor Güreş Şube Başkanlığı görevlerini yürüten Genç ayrıca Fenerbahçe Spor Kulübü Kongre Üyesi’dir.<br><br>Evli, 3 çocuk babası olan GENÇ, Arapça ve iyi derecede İngilizce bilmektedir."
+        };
+
+        const boardMembers = [
+        {
+            id: 1,
+            name: "ŞAHİN AVŞAR",
+            position: "Burs ve Muhasebe Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/Sahin-Avsar.webp",
+            bio: "05 Ağustos 1969 ‘da Sivas ’da doğdu. Babasının adı Bahattin, annesinin adı Ünzile ’dir. Bağımsız Denetçi, Mali Müşavir; Marmara Üniversitesi iktisadi ve idari Bilimler Fakültesi Çalışma Ekonomisi ve Endüstri İlişkiler bölümünü bitirdi. Marmara Üniversitesi Bankacılık ve Sigortaclık Enstitüsü Sigortacılık Bölümünde Sosyal Güvenlik alanında yüksek lisans yaptı.<br><br>Halen Bağımsız Denetçi /Ortak olarak ve SMMM olarak çalışma hayatını sürdürmektedir. Çeşitli dernek ve platformlarda yöneticilik yapan Avşar siyasi parti programların da İşsizlik ve Sosyal Güvenliğe Devlet Katkısı konularında tez çalışmaları bulunmaktadır.<br><br>Halen Müşavirlik / Bağımsız Denetçi görevini yürüten Avşar, İngilizce ve Arapça bilmekte olup, evli ve üç çocuk babasıdır."
+        },
+        {
+            id: 2,
+            name: "ADEM DOĞAN",
+            position: "ANKARA TEMSİLCİSİ",
+            image: "image/Kurumsal/yonetim-kurulu/ADEM-DOGAN.webp",
+            bio: "Isparta Eğirdir ilçe nüfusuna kayıtlı olan Adem DOĞAN, 1971 yılında doğdu. 1991 yılında Isparta İmam Hatip Lisesi, 1995 yılında Marmara Üniversitesi Rehberlik ve Psikolojik Danışmanlık bölümünde lisans, 2002 Yılında Beykent Üniversitesinde Eğitim Yönetimi alanında yüksek lisansını tamamladı. Yıldız Teknik Üniversitesinden Aile Danışmanlığı Üzmanlığı Sertifikası (475 saat) ve Yeditepe Üniversitesinden bilinçli hipnoz, tıbbi hipnoz uygulayıcı sertifikalarına sahiptir.<br><br>1996 yılından itibaren Özel Öğretim Kurumlarında eğitimcilik ve yöneticilik yapan Doğan, halen TDV 29 Mayıs Okullarında kurucu temsilcisi ve genel müdürlük görevini sürdürmektedir.<br><br>Üniversite yıllarından itibaren Sivil Toplum Kuruluşlarında aktif görev yapmakta Doğan, Cihannüma Derneği Genel Merkez Yönetim Kurulu Üyesi , Önder Üyeliği, Eyad genel merkez yönetim kurulu üyeliği ve 1996’dan itibaren Mümder derneğimizin yönetiminde yer almaktadır. Halen Mümder Genel Başkan Yardımcısı ve Ankara İl Temsilciliği görevini yürütmektedir.<br><br>Doğan, evli iki kız babasıdır. İstanbul Beykoz ve Ankara Etimesgutta ikamet etmektedir."
+        },
+        {
+            id: 3,
+            name: "Ufukhan ÖZER",
+            position: "KURUMSAL İLİŞKİLER BİRİM BAŞKANI",
+            image: "image/Kurumsal/yonetim-kurulu/Ufukhan-OZER.webp",
+            bio: "1973 yılında İstanbul'da doğdu. 1999 yılında Marmara Üniversitesi İ.İ.B.F. İktisat fakültesinden mezun oldu.<br><br>Bir çok sivil toplum kuruluşunda halen daha aktif olarak görev almaktadır.<br><br>Ticaretle iştigal etmekte olup , Hizmet ve sanayi sektöründe faaliyet göstermektedir.<br><br>Evli ve üç evladı bulunmaktadır ."
+        },
+        {
+            id: 4,
+            name: "Abdullah ALTUNKES",
+            position: "Teşkilatlanma ve Üye İlişkileri Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Abdullah-ALTUNKES-e1732324225943.webp",
+            bio: "1980 yılında Sivas'ta dünyaya geldi.İlkokulu köyde ortaokulu şehirde okudu. Liseyi Sivas Anadolu Öğretmen Lisesinde tamamladı. Marmara Üniversitesinden Yüksek lisans derecesiyle 2003 tarihinde mezun oldu. Ardından markacılık ve reklamcılık alanında bir lisans eğitimi daha aldı.<br><br>12 yıl öğretmenlik ve yöneticilik yaptı. Bu dönemde radyo - TV programcılığı ve köşe yazarlığı da yaptı. 2002 yılında MÜMDER'de genel sekreter olarak göreve başladı. Sonraki dönemlerde çeşitli görevler aldı.<br><br>2016 yılından itibaren iş hayatında THY Havacılık Akademisinde eğitimci ve yönetici olarak devam etmektedir. ICF onaylı yönetici koçu ve danışmandır. Kurumsal gelişim alanında eğitimler vermektedir.<br><br>Evli ve iki çocuk babasıdır."
+        },
+        {
+            id: 5,
+            name: "Yusuf GÜRLEK",
+            position: "Genel Sekreter",
+            image: "image/Kurumsal/yonetim-kurulu/yusuf-gurlek01.webp",
+            bio: ""
+        },
+        {
+            id: 6,
+            name: "Salih GÜZEL",
+            position: "Proje Geliştirme Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/salih-guzel.webp",
+            bio: ""
+        },
+        {
+            id: 7,
+            name: "Dr. Ümit DOĞAN",
+            position: "Dış İlişkiler Birim Başkanı",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 8,
+            name: "Esra UZUN",
+            position: "Kadın Kolları Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/esra-uzun01.webp",
+            bio: ""
+        },
+        {
+            id: 9,
+            name: "Ezgi Kayacan TOK",
+            position: "Akademik Faaliyetler/Üniversite Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/Ezgi-kayacan.webp",
+            bio: "19 Şubat 1972’de Isparta’da doğdu. İlk, orta ve lise öğrenimini aynı şehirde tamamladı. Anadolu Üniversitesi İşletme Fakültesini bitirdi.<br><br>1991-1993 Isparta Gülses Gazetesi Haber Müdürlüğü, 1992-1993 Tercüman Gazetesi Isparta Temsilciliği Muhabir(Antalya), 1993-1993 Süleyman Demirel Üniversitesi Basın Danışmanı Radyo Tv, 1993-1999 Süleyman Demirel Üniversitesi Özel Kalemi, 1999-2006 Marmara Üniversitesi Özel Kalem görevini yapmıştır.<br><br>2007- 2018 Marmara Üniversitesi Sağlık Bilimleri Enstitüsü Enstitü Sekreterliği, 2018-2024 Marmara Üniversitesi Adalet MYO Yüksekokul Sekreterliği yapmıştır. Ayrıca Profesyonel Sağlık Yöneticileri Platformunda Başkan Yardımcılığı ve 2024 Marmara Üniversitesi Hukuk Fakültesi Fakülte Sekreterliği görevini halen yürütmektedir.<br><br>Evli ve 1 çocuk annesidir."
+        },
+        {
+            id: 10,
+            name: "Av. Hasan Hamdullah Kadıoğlu",
+            position: "Hukuk İşleri Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/Hasan-Hamidul.webp",
+            bio: "1997 doğumlu, memleketi Mersin Anamur’dur. Lise eğitimini 2015 yılında Beyoğlu Anadolu İmam Hatip Lisesinde tamamlamıştır. Üniversite eğitimini ise Marmara Üniversite Hukuk Fakültesinde tamamlamıştır.<br><br>Evli ve bir çocuk babası olup serbest avukatlık yapmaktadır."
+        },
+        {
+            id: 11,
+            name: "Av. Mehmet Eren",
+            position: "Hukuk İşleri Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Av-Mehmet-Eren.webp",
+            bio: ""
+        },
+        {
+            id: 12,
+            name: "Av. Ahmet ÖZCAN",
+            position: "Hukuk İşleri Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 13,
+            name: "Yusuf Ziya ÇATAKLI",
+            position: "Tanıtım Medya ve İletişim Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/yusufziya.webp",
+            bio: "1978 Rize-Çayeli Evli ve 4 çocuğu var. İlk, orta ve liseyi İstanbul Kasımpaşa’da okudu. 2000 Marmara Üniversitesi İletişim Fakültesi mezunu.<br><br>Lise, Üniversite ve sonrasında Milli Gençlik Vakıfında çeşitli alanlarda görevler yaptı. 2001-2004 yılları arasında eğitim amacı ile Almanya Berlin’de bulundu.<br><br>2006-2010 yıllarında İstanbul Büyükşehir Belediyesi Kültür Müdürlüğünde çalıştı. 2010 yılında TRT Haber’de muhabir olarak göreve başladı. 2013-2015 yılları arasında TRT Haber İstanbul Müdürlüğü ve Bölge Müdür Yardımcılığı yaptı. 2015-2019 yılları arasında TRT Köln Temsilciliği yaptı. 2019-2023 arasında TRT Uluslararası Dijital Kanal Koordinatörlüğünde Müdür olarak görev yaptı.<br><br>İletişim Platformu Derneği Başkanıdır."
+        },
+        {
+            id: 14,
+            name: "Hacı ALTUN",
+            position: "Bilişim ve Teknoloji Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/hacialt.webp",
+            bio: "1971 Sivas Doğumlu<br><br>- Hatay Dörtyol Anadolu Lisesi<br>- Cumhuriyet Üniversitesi MYO, Bilgisayar Programcılığı, Ön Lisans<br>- Marmara Üniversitesi, İktisadi ve İdari Bilimler Fakültesi -İktisat, Lisans<br>- Medeniyet Üniversitesi, Sosyal Bilimler Enstitüsü, İktisat Ana Bilim Dalı Yönetim Ekonomisi, Yüksek Lisans<br>- İstanbul Üniversitesi AUZEF Yönetim Bilişim Sistemleri, Lisans<br><br>~ 1996-1999 - İstanbul Büyükşehir Belediyesi- Bilgi İşlem Daire Başkanlığı, Bilgisayar Programcısı<br>~ 1999-2007 - İstanbul Büyükşehir Belediyesi İSFALT A.Ş Bilgi İşlem Şefi<br>~ 2007-2016 -İstanbul Büyükşehir Belediyesi İSFALT A.Ş Bilgi Sistemleri Müdürü<br>~ 2007- 2016 İstanbul Büyükşehir Belediyesi Elektronik Sistemler Müdürü<br>~ 2016 – 2020 İstanbul Büyükşehir Belediyesi Coğrafi Bilgi Sistemi Müdürü _Vekaleten_<br>~ 2020-2022 Hazine ve Maliye Bakanlığı Darphane ve Damga Matbaası Genel Müdürlüğü, Uygulama, Daire Başkanı<br>~ 2022- Türkiye Maarif Vakfı Bilgi Teknolojileri Daire Başkanı olarak çalışmaya devam ediyor.<br><br>Aynı zamanda kendi girişimleri olan;<br>- İsabet Reklam _açık hava ve iç mekan baskı ve uygulamaları yapan firmanın kurucu ortağı_<br>- miningaa.com _Çocuk güvenlik ve anne çocuk araç ve gereçleri üzerine miningaa markası ile üretimini yaptırıp, e-ticaret platformları, perakende ve toptan ürün satışı yapan yatırımları var._<br><br>- SADAKATAŞI Uluslararası İnsani Yardım Derneği Yönetim Kurulu Üyesi,<br>- İlim Yayma Cemiyeti Üyeliği,<br>- MÜMDER üyeliği,<br>- İstanbul İlbeyliler Derneği Üyeliği,<br>- Söğütcük Yardımlaşma ve Dayanışma Derneği Başkanlığı,<br>- Cihannuma Derneği Üyeliği.<br><br>Evli ve 3 genç babası."
+        },
+        {
+            id: 15,
+            name: "Hasan Hilmi HAKYEMEZ",
+            position: "Bilişim Teknoloji Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Hasan-Hilmi-Hakyemez.webp",
+            bio: ""
+        },
+        {
+            id: 16,
+            name: "Veysi AKAY",
+            position: "Eğitim ve Organizasyon Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/veysi.webp",
+            bio: "1976 Mardin doğumlu olan Veysi Akay orta ve lise eğitimini Hatay'da tamamladı. Marmara Üniversitesi Fen-Edebiyat Fakültesi Tarih bölümünü bitirdi. Yüksek lisansını aynı üniversitenin Türkiyat Araştırmaları Enstitüsünde “Mardin Şeriyye Sicili” tezi ile tamamladı. İngilizce, Kürtçe ve Arapça bilmektedir.<br><br>Özel Kurumlar Derneği (Öz-Kur) Yönetim Kurulu Üyeliği, İstanbul Ticaret Odası (İTO) Eğitim Komisyonu Üyeliği, Mardinliler Eğitim Yardımlaşma Vakfı (MAREV) Üyeliği, İstanbul Eğitim Vakfı Yönetim Kurulu Üyeliği, İmdat Vakfı Başkan Vekilliği gibi birçok sivil toplum ve meslek örgütlerinde aktif görevler üstlenmiştir.<br><br>Siyasi çalışmalarına üniversite yıllarında başlayan Veysi Akay; Adalet ve Kalkınma Partisinin kuruluşunda Kadıköy-Maltepe İlçelerinde ve İstanbul İl Yönetiminde aktif görevlerde bulunduktan sonra 2019 yılında kurulan Gelecek Partisi'nin Kurucular Kurulunda yer aldı. Partinin Teşkilat ve Eğitim Başkanlıklarında görev yapan Veysi Akay 15.05.2023 tarihinde Gelecek Partisindeki tüm görevlerinden istifa etti.<br><br>Derin bir tarih bilgisine sahip olmasının yanı sıra edebiyata yatkınlığı olan AKAY tarihi romanlara ilgi duymaktadır. Hat, minyatür ve eski Osmanlıca el yazmalarına ilgisi olmasının yanı sıra voleybol ve bisiklet sporları ile ilgilenmektedir.<br><br>Veysi Akay Akay Okulları Kurucu Temsilciliğini yürütmektedir. Evli ve 2 çocuk babasıdır."
+        },
+        {
+            id: 17,
+            name: "Hüseyin Seyda Ertuğrul",
+            position: "Eğitim ve Organizasyon Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 18,
+            name: "Av. Said CEYLAN",
+            position: "Kaynak Geliştirme Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 19,
+            name: "Erhan ÇAVGA",
+            position: "İdari ve Sosyal İşler Birim Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/erhan-cavga01.webp",
+            bio: "1968 İstanbul Kasımpaşa doğumlu. Aslen trabzonlu Beyoğlu ticaret lisesi mezunu 1994 marmara Üniversitesi özel sigortacılık yüksek lisans mezunu.<br><br>Aktif siyasetle ilgileniyor. Birçok stk da yönetim kurulu üyelikleri mevcuttur.<br><br>Bir Brokerlik firmasında Sigorta danışmanlığı yapmaktadır. Evli ve 3 çocuk sahibi."
+        },
+        {
+            id: 20,
+            name: "Sedat KURT",
+            position: "BASIN SÖZCÜSÜ",
+            image: "image/Kurumsal/yonetim-kurulu/sedat-kurt01.webp",
+            bio: "1985 Erzincan/Refahiye ilçesinde doğdu. Beyoğlu Ticaret Meslek Lisesi’ni müteakip, Marmara Üniversitesi SBMYO okulu ve Anadolu Üniversitesi İşletme Fakültesi’nden mezun oldu.<br><br>Sırasıyla inşaat ve yönetim firmalarında uzun süre mali ve idari işler uzmanı ve yönetici pozisyonunda çalıştı. Son beş yıldır ortağı olduğu basın, yayın ve danışmanlık şirketinde faal ticaret hayatının yanı sıra, son dört yıldır aktif gazeteci olarak ‘Basın Kartı’ sahibidir. Hali hazırda ulusal çapta yayın yapan Abone Haber çatısı altında Genel Yayın Yönetmeni olarak görev almaktadır.<br><br>20 yıldır çeşitli dernek ve vakıflarda yönetim kurulu üyesi, başkan yardımcısı düzeyinde fiili vazifelerde bulunmuş ve halen çalışmalarına devam etmektedir.<br><br>Evli ve iki kız çocuğu babasıdır.<br><br>Faaliyette bulunduğu dernek ve vakıflar;<br>• Türkiye Futbol Vakfı Yönetim Kurulu Üyesi<br>• Marmara Üniversitesi Mezun ve Mensupları Derneği Yönetim Kurulu Üyesi<br>• Beyoğlu Birlik Platformu Kurucu Üyesi ve Genel Sekreteri<br>• Erzincan Dostluk Birliği Kurucu Başkanı<br>• Mecra Kültür ve Düşünce Derneği Kurucu Yönetim Kurulu Üyesi<br>• Erzincanlı Sanayici ve İş İnsanları Derneği Üyesi<br>• Genç Ersiad Kurucu Başkan Vekili<br>• ⁠Topağaç Köyü 2005-2007 Dönem Dernek Başkanı<br>• Erzincan Kültür ve Eğitim Vakfı Gençlik Gönüllüsü<br>• Özel Özel Eğitim Dernekleri Federasyonu Gönüllüsü<br>• ⁠Türkiye Sakatlar Derneği Gönüllüsü"
+        },
+        {
+            id: 21,
+            name: "Dr. Eymen NAMAZCI",
+            position: "İşletme iştirakler Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/eymen-namazci01.webp",
+            bio: "1983 yılında İstanbul’un Beyoğlu ilçesinde doğdu. İlk ve orta öğrenimini İstanbul’da tamamladı. 2007 yılında Sakarya Üniversitesi Kamu Yönetimi bölümünden mezun oldu. Çalışma hayatına 2006 yılında Murat Eğitim Kurumları bünyesinde öğretmen olarak başladı ve 2018 yılına kadar bu görevini ifa etti. Marmara Üniversitesi Mahalli İdareler ve Yerinden Yönetim Tezli Yüksek Lisans programından 2013 yılında başarı ile mezun oldu. Aynı yıl İstanbul Ayvansaray Üniversitesi’nde Öğretim Görevlisi olarak çalışmaya başladı ve 2019 yılının Ağustos ayında buradan ayrıldı. 2023 yılı itibariyle İstanbul Üniversitesi Kamu Yönetimi ve Siyaset Bilimi programında doktorasını tamamlamıştır.<br><br>2016 - 2019 yılları arasında (BIG) Beyoğlu İş Adamları Grubu’nun Genel Sekreterlik görevini yürütmüştür. Eymen Namazcı, 10 Ekim 2017 tarihinde yapılan Beyoğlu Kent Konseyi Yürütme Kurulu toplantısında Beyoğlu Kent Konseyi Genel Sekreteri seçildi, 2019 Yerel Yönetim Seçimleri ile bu görevinden ayrıldı. 2019 yılında açılan Akademi Beyoğlu’nun kurucu müdürlüğünü yaptı.<br><br>Medeniyet Derneği’nin 21 Mayıs 2018 tarihinde yapılan Genel Kurulu ile Yönetim Kurulu üyesi seçilen Eymen Namazcı aynı zamanda Araştırma Dayanışma ve Eğitim Vakfının (ARDEV) müdürlüğünü de yürütmektedir. Ülkemizdeki üniversitelerin yurt dışında tanıtımı ve yurt dışından yabancı uyruklu öğrencilerin ülkemize yönlendirilmesi adına çalışan Find And Study’nin kurucusudur. 2021 Haziran ayında yapılan genel kuruldan bu yana MÜMDER (Marmara Üniversitesi Mezun ve Mensupları Derneği) Yönetim Kurulu üyesi seçilmiştir.<br><br>Şeyma Demircan Namazcı ile 2018 yılında evlenen Eymen Namazcı, Yusuf Safi’nin babasıdır.<br><br>https://www.findandstudy.com"
+        },
+        {
+            id: 22,
+            name: "Mehmet TUNÇ",
+            position: "İşletme İştirakler Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 23,
+            name: "Av. Saffet ÖZ",
+            position: "Kaynak Geliştirme Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 24,
+            name: "Ferhat ÖZTÜRK",
+            position: "Teşkilatlanma ve Üye İlişkileri Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/ferhat.webp",
+            bio: "30.09.1978 Ordu / Ünye doğumludur.Öğrenim hayatına 1984’te Ünye Pelitliyatak İlkokulu’nda başladı. Ortaokul ve liseyi 1995’de Ünye İmam Hatip Lisesi’nde tamamladı.2000 yılında Marmara Üniversitesi Fen-Edebiyat Fakültesi Tarih bölümünü bitiren Öztürk, 2010 yılında Marmara Üniversitesi Sosyal Bilimler Enstitüsü İktisat Anabilim Dalı İktisat Tarihinde yüksek lisansını tamamladı. Ayrıca Anadolu Üniversitesi İktisat Fakültesi İktisat Bölümü´nden 06.09.2021 tarihinde mezun oldu.<br><br>2002 yılında Bağcılar Münir Nurettin Selçuk İlköğretim Okulu´nda başladığı öğretmenlik hayatına, 2005 yılında Güngören 75.Yıl İlköğretim Okulu´nda, 2007 yılında ise Güngören Ticaret Meslek Lisesi´nde devam etti.Güngören Ticaret Meslek Lisesi´nde başladığı Müdür Yardımcılığına, Güngören Lisesi´nin açılmasıyla beraber 2008 yılında Müdür Yardımcısı olarak atandı.30.11.2013 - 22.12.2014 tarihleri arasinda Gençosman Ortaokulu Müdürü, 22.12.2014 – 02.03.2020 tarihleri arasında ise Güngören Tuncay Azaphan Mesleki ve Teknik Anadolu Lisesi Müdürü olarak görev yaptı.02.03.2020 tarihinden itibaren Güngören İlçe Milli Eğitim Müdürü olarak görev yapmaktadır.<br><br>Ferhat Öztürk çeşitli sivil toplum örgütlerinde yönetici ve gönüllü olarak bulunmuş olup; evli , bir kız ve bir erkek çocuk babasıdır."
+        },
+        {
+            id: 25,
+            name: "Ömer Faruk ŞAFAK",
+            position: "Burs ve Muhasebe Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/omer-faruk-safak01.webp",
+            bio: ""
+        },
+        {
+            id: 26,
+            name: "Nazım TAŞKIN",
+            position: "Eğitim Organizasyon Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/nazim-taskin01.webp",
+            bio: "1975 yılında Adıyaman'da doğdu. İlk, orta ve lise öğretimini aynı şehirde tamamladı. Marmara Üniversitesi Eğitim Fakültesi Sınıf Öğretmenliği bölümünü 1999 yılında tamamladı. Istanbul'da Özel Birikim Okullarında 4 yıl öğretmenlik yaptıktan sonra 2002 yılında devlet okulunda öğretmenliğe başladı. 2008 yılından itibaren İstanbul Ümraniye ve Şile'de okul müdürlüğü ve müdür yardımcılığı yaptı.<br><br>Ataşehir Şehit Akın Sertçelik Anadolu İmam Hatip Lisesi'nde Türkçe öğretmenliği STK'larda gençlik, insanî yardım , sendikal çalışma ve izcilik faaliyetlerinde yer almaktadır.<br><br>Evli ve 3 çocuk babasıdır."
+        },
+        {
+            id: 27,
+            name: "Mehmet METE",
+            position: "Dış İlişkiler Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 28,
+            name: "Av. Hüseyin ŞAHİN",
+            position: "Eğitim ve Organizasyon Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 29,
+            name: "Fatih Türkmen",
+            position: "Burs ve Muhasebe Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/fatih-t.webp",
+            bio: "2015 yılında Nuri Cıngıllıoğlu Lisesinden birincilikle mezun oldu. Aynı yıl Türk Alman Üniversitesi Endüstri Mühendisliği bölümünü kazandı. 2017 yılında Marmara Üniversitesi Metalurji ve Malzeme Mühendisliği bölümüne geçiş yaptı. 2018 yılında Uluslararası Metalurji ve Malzeme Kongresinde makalesi yayınlandı.<br><br>2019 yılında Uluslararası İnsansız Hava Araçları Yarışmasında kaptanlığını yaptığı takımı ile finale kaldı. 2020 yılında Roketsan tarafından düzenlenen Roket yarışmasına katılarak finalde yarıştılar.<br><br>Anadolu Gençlik Derneği Marmara Üniversitesi Başkanlığı, Anadolu Gençlik Derneği İstanbul Üniversiteler Başkanlığı başta olmak üzere Teknik Elemanlar Derneği, İlim Yayma Cemiyeti gibi Sivil toplum kuruluşlarında görevler aldı. Derneğimiz yönetim kurulunda 3. Dönemine devam etmektedir."
+        },
+        {
+            id: 30,
+            name: "Av. Emir AVCI",
+            position: "Eğitim Organizasyon Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 31,
+            name: "Hamdi KOCAKAYA",
+            position: "Teşkilatlanma ve Üye İlişkileri Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Hamdi-Kocakaya.webp",
+            bio: ""
+        },
+        {
+            id: 32,
+            name: "Muhammed AVCI",
+            position: "Genel Sekreterlik",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 33,
+            name: "Mahmut AKAY",
+            position: "Eğitim ve Organizasyon Birim",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 34,
+            name: "Doğancan GÜR",
+            position: "Proje Geliştirme Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Dogancan-GUR-e1732319765420.webp",
+            bio: "Rize İli Güneysu ilçesi nüfusuna kayıtlı olan Doğancan Gür İstanbul’da doğdu. Dilnihat Özyeğin Anadolu Lisesi fen bölümünü bitirdikten sonra Marmara Üniversitesi Spor bilimleri fakültesini bitirdikten sonra başladığı Anadolu üniversitesi İnsan kaynakları bölümü bitirmiş ardından başladığı Siyaset Bilimi ve Uluslararası ilişkiler bölümünde yüksek lisans Bor madeninin ülkemizin stratejik gücüne etkisi adlı tez çalışması ile yüksek onu öğrencisi olarak tamamlamıştır.<br><br>Lise yıllarında başladığı Galatasaray Kürek takımı ile spor hayatına başlayan GÜR bu süre zarfında birçok defa Türkiye Şampiyonu olmuş Milli takımda yer almış ve Dünya 9. su olarak profesyonel spor hayatını noktalamıştır.<br><br>Profesyonel spor hayatının ardından iş hayatına atıldıktan sonra etkinlik ve organizasyon alanında kendini geliştirmiş ve birçok görev üstlenmiştir. İBB İSMEK te tesis müdürü olarak tam zamanlı başladığı iş hayatına göstermiş olduğu başarıların ardından İBB Spor İstanbul Şirketinde İş Geliştirme ve Özel Projeler yöneticisi olarak atandı. 2020 yılında Başladığı Turkcell iç iletişim ve işveren Markası yöneticisi görevini hala sürdürmektedir.<br><br>Galatasaray Kongre üyesi, Türkiye Karate Federasyonu Proje kurulu ve ilk sen ol gençlik hareketi üyesi olan Gür Evli ve iki çocuk babası dır."
+        },
+        {
+            id: 35,
+            name: "Dr. Azad OSMANLI",
+            position: "Yurtdışı İlişkiler Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Azad-Osmanli01.webp",
+            bio: ""
+        },
+        {
+            id: 36,
+            name: "Recep BOLAT",
+            position: "İdari ve Sosyal İşler Birimi",
+            image: "",
+            bio: ""
+        },
+        {
+            id: 37,
+            name: "Erhan KAYA",
+            position: "Kaynak Geliştirme Birimi",
+            image: "image/Kurumsal/yonetim-kurulu/Erhan-Kaya.webp",
+            bio: "Marmara Üniversitesi Siyasal Bilgiler Fakültesi Fransızca Kamu Yönetimi bölümünü kazanarak eğitim almak için İstanbul’a yerleşti. Mezuniyet ile birlikte Marmara üniversitesi Sosyal Bilimler Enstitüsü Yönetişim ve Sivil Toplum Kuruluşları bölümünde Yüksek Lisansını yaptı. Marmara üniversitesinde lisans eğitimi alırken bir yandan da Sosyolojiye merakı nedeniyle Sosyoloji lisansına başladı. Her iki lisanstan da aynı yıl mezun oldu. Akabinde meslek hayatında Siyaset Bilimi ile birlikte multidisipliner bir bakış açısı geliştirmek için Psikoloji - Sosyoloji bilgisine daha çok ihtiyaç duyacağı düşüncesiyle üçüncü lisans olarak Psikoloji lisans eğitimi alarak Psikolog oldu.<br><br>2009-2014 yılları arasında birçok Sivil Toplum Kuruluşunda Yöneticilik yaparak 30’a yakın ulusal ve uluslararası Avrupa Birliği ve yerel projeler uygulamıştır. Uygulanmış olan projelerin 7 tanesi Brüksel temaslı projeler olup Avrupa Birliği-Türkiye ilişkilerine katkı sunacak çalışmalar çerçevesinde gelişmiştir.<br><br>Aynı yıllar arasında Almanya, Lüksemburg, Hollanda ve Fransa’da eğitim sistemleri üzerine çalışmalar yapan Kaya, edinmiş olduğu tecrübeleri, kurduğu ve üyesi olduğu Sivil Toplum Kuruluşları aracılığıyla öğrencilerin ve gençlerin faydalanması amacıyla sivil toplum çalışmalarına, 10 yıldır üzerinde çalıştığı Hakimlik Akademisi, Hukuk Meslekleri Akademisi, Kaymakamlık Akademisi markaları ile eğitim alanındaki, İlkuzem ve İlken Yayınları/Hukuk Meslek Yayınları markalarıyla da dijital eğitim ve basılı yayın alanında girişimlerine devam etmektedir.<br><br>Marmara Üniversitesi Mezun ve Mensupları Derneği Yüksek İstişare Kurulu Üyesi ve Beşiktaş Kongre Üyesi olan Kaya, evli ve bir çocuk babasıdır."
+        },
+        {
+            id: 38,
+            name: "Sebahattin KIRTAY",
+            position: "Genç MÜMDER Başkanı",
+            image: "image/Kurumsal/yonetim-kurulu/SebahatinKirtay.webp",
+            bio: "Marmara Üniversitesi Makine Mühendisliği bölümünde öğrenim görmekteyim. 3D tasarım ve imalat alanında edindiğim bilgi ve deneyimle, çeşitli firmalara teknik destek sağlamaktayım. Talaşlı imalat ve kaynaklı imalat süreçlerinde aktif olarak görev aldım ve bu alanlarda pratik beceriler kazandım.<br><br>Kurucu ortaklarından biri olduğum ASK firması bünyesinde, makine imalatı ve endüstriyel çözümler üzerine faaliyet göstermekteyiz. Uluslararası firmalara yenilikçi çözümler sunarak projelerinde verimlilik ve kalite artışı sağlama hedefiyle çalışıyoruz.<br><br>Ayrıca, Marmara Teknoloji Takımı’nın kaptanlığını üstlendim ve bu görev kapsamında Teknofest yarışmalarına katılım sağladık. Takım çalışması, proje yönetimi ve teknoloji odaklı çözümler geliştirme konularında önemli deneyimler kazandım.<br><br>İlgilendiğim alanlar arasında makine tasarımı, üretim teknolojileri ve proje yönetimi yer almakta olup, kendimi bu alanlarda sürekli geliştirmekteyim."
+        },
+        {
+            id: 39,
+            name: "Ahmet Faruk GÜLDEŞ",
+            position: "Genç MÜMDER Başkan Yardımcısı",
+            image: "image/Kurumsal/yonetim-kurulu/Ahmett.webp",
+            bio: "Marmara Üniversitesi Tıp Fakültesi beşinci sınıf öğrencisi ve 24 yaşında bir intörn doktor olarak Ortopedi ve Travmatoloji alanına, özellikle Ortopedik Onkoloji ve El Cerrahisi üzerine ilgi duymaktayım.<br><br>Son bir yıl içerisinde polikliniklerde cerrahları yakından gözlemleyerek, yaklaşık 85-90 ameliyata katılarak ve hem cerrahi hem de konservatif tedavilerde deneyim kazanarak kendimi geliştirdim.<br><br>Kararlı ve odaklı çalışma tarzım, mükemmel el becerim ve baskı altında sakin kalabilme yeteneğim, bir cerrah için gerekli temel özelliklere sahip olduğumu göstermektedir. Hızlı öğrenme kapasitem, yaratıcı problem çözme becerilerim ve kişisel/mesleki gelişime olan güçlü bağlılığım sayesinde cerrahi yetkinliğimi ileriye taşımaya kararlıyım."
+        }
+    ];
+
+        // ==============================================
+        //  FONKSİYONLAR BÖLÜMÜ
+        // ==============================================
+
+        function createCardHTML(member) {
+            // Kart arkası için HTML etiketlerini temizleyip kısa özet gösterelim
+            const strippedBio = member.bio.replace(/<br\s*\/?>/gi, ' '); 
+            
+            return `
+                <div class="member-flip-card" id="memberCard_${member.id}">
+                    <div class="card-face card-front">
+                        <div>
+                            <img loading="lazy" src="${member.image}" alt="${member.name}" class="member-image" onerror="this.src='https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER';">
+                            <h3 class="member-name">${member.name}</h3>
+                            <p class="member-position">${member.position}</p>
+                        </div>
+                        <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')"><i class="fas fa-info-circle"></i> Hakkında</button>
+                    </div>
+                    <div class="card-face card-back">
+                        <h3 class="member-name">${member.name}</h3>
+                        <p class="member-description">${strippedBio.substring(0, 140)}...</p>
+                        <div>
+                            <button class="action-button" onclick="event.stopPropagation(); openModal('${member.id}')"><i class="fas fa-expand"></i> Detaylar</button>
+                            <button class="action-button" onclick="event.stopPropagation(); flipCard('memberCard_${member.id}')" style="margin-top: 10px;"><i class="fas fa-arrow-left"></i> Geri</button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function createAllMemberCards() {
+            const grid = document.getElementById('membersGrid');
+            const presidentContainer = document.querySelector('.president-section .member-card-container');
+            
+            if (presidentContainer) {
+                presidentContainer.innerHTML = createCardHTML(presidentData);
+            }
+            
+            if (grid) {
+                grid.innerHTML = '';
+                boardMembers.forEach((member, index) => {
+                    const cardContainer = document.createElement('div');
+                    cardContainer.className = 'member-card-container';
+                    cardContainer.style.setProperty('--delay', ((index + 1) * 0.05) + 's');
+                    cardContainer.innerHTML = createCardHTML(member);
+                    grid.appendChild(cardContainer);
+                });
+            }
+        }
+
+        function flipCard(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) card.classList.toggle('flipped');
+        }
+
+        function openModal(memberId) {
+            const allMembers = [presidentData, ...boardMembers];
+            const member = allMembers.find(m => m.id == memberId);
+            if (!member) return;
+            
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = member.image;
+            modalImage.onerror = () => { modalImage.src = 'https://placehold.co/180x180/e3f2fd/1565c0?text=MÜMDER'; };
+            document.getElementById('modalName').textContent = member.name;
+            document.getElementById('modalPosition').textContent = member.position;
+            
+            // ÖNEMLİ DEĞİŞİKLİK: textContent yerine innerHTML kullanıyoruz ki <br> etiketleri işlesin
+            document.getElementById('modalBio').innerHTML = member.bio;
+            
+            document.getElementById('memberModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('memberModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleCardTilt() {
+            document.querySelectorAll('.member-card-container').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -15;
+                    const rotateY = (x / width - 0.5) * 15;
+                    const flipCardEl = card.querySelector('.member-flip-card');
+
+                    if (flipCardEl && !flipCardEl.classList.contains('flipped')) {
+                        flipCardEl.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const flipCardEl = card.querySelector('.member-flip-card');
+                    if(flipCardEl) flipCardEl.style.transform = '';
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            createAllMemberCards();
+            handleCardTilt();
+            
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('memberModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            particlesJS('particles-js', {
+                "particles": { "number": { "value": 40, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#1976d2" }, "opacity": { "value": 0.4 }, "size": { "value": 3 }, "line_linked": { "enable": true, "opacity": 0.3 }, "move": { "speed": 1 } },
+                "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" } } }
+            });
+        });
+    </script>
+    <script src="js/loadcomponents.js"></script>
+</body>
+</html>
